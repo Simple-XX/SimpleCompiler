@@ -8,7 +8,7 @@ DIY Compiler
 
 - 自己动手写编译器、连接器，王博俊 张宇 清华大学出版社
 
-- [知乎-大学生如何实现一个数据库？](https://www.zhihu.com/question/35382593/answer/102269843)
+- [怎样写一个解释器](http://www.yinwang.org/blog-cn/2012/08/01/interpreter)
 
 
 
