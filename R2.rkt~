@@ -32,18 +32,18 @@
           [(not v)
            (error "undefined variable" x)]
           [else v]))]      
-      [(? number? x) x]                                 ; 数字直接返回
+      [(? number? x) x]                                 ; 数字
       [`(lambda (,x) ,e)                                ; 函数
        (Closure exp env)]
       [`(let ([,x ,e1]) ,e2)                            ; 绑定
        (let ([v1 (interp e1 env)])
          (interp e2 (ext-env x v1 env)))]
       [`(,e1 ,e2)                                       ; 调用
-       (let ([v1 (interp e1 env)]                       ; 计算函数 e1 的值
-             [v2 (interp e2 env)])                      ; 计算参数 e2 的值
+       (let ([v1 (interp e1 env)]
+             [v2 (interp e2 env)])
          (match v1
-           [(Closure `(lambda (,x) ,e) env-save)        ; 用模式匹配的方式取出闭包里的各个子结构
-            (interp e (ext-env x v2 env-save))]))]      ; 在闭包的环境env-save中把x绑定到v2,解释函数体
+           [(Closure `(lambda (,x) ,e) env-save)
+            (interp e (ext-env x v2 env-save))]))]
       [`(,op ,e1 ,e2)                                   ; 算术表达式
        (let ([v1 (interp e1 env)]                       ; 递归调用 interp 自己,得到 e1 的值
              [v2 (interp e2 env)])                      ; 递归调用 interp 自己,得到 e2 的值
