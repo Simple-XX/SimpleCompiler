@@ -91,15 +91,14 @@ public:
 	virtual string toString();
 };
 
-
-struct string_hash {
-size_t operator()(const string & str) const {
-	return __stl_hash_string(str.c_str() );
-};
-};
-
 class Keywords {
 private:
+	struct string_hash {
+size_t operator() (const string & str) const {
+	return __stl_hash_string(str.c_str() );
+};
+	};
+
 	hash_map<string, Tag, string_hash> keywords;
 
 public:

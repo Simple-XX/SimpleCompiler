@@ -22,10 +22,10 @@ extern int optind, opterr, optopt;
 extern char * optarg;
 static const int LEXICAL_OPT = 256;
 static struct option long_options[] = {
-	{ "help", no_argument, NULL, 'h' },
-	{ "version", no_argument, NULL, 'v' },
-	{ "output", required_argument, NULL, 'o' },
-	{ "lexical", optional_argument, NULL, LEXICAL_OPT },
+	{ "help",    no_argument,        NULL,        'h'             },
+	{ "version", no_argument,        NULL,        'v'             },
+	{ "output",  required_argument,  NULL,        'o'             },
+	{ "lexical", optional_argument,  NULL,        LEXICAL_OPT     },
 };
 
 int init(int &argc, char * * &argv) {
