@@ -7,13 +7,12 @@
 #define _LEXICAL_H_
 
 #include "string"
-#include <ext/hash_map>
+#include "unordered_map"
 
 using namespace std;
-using namespace __gnu_cxx;
 
 enum Tag {
-	// 关键字
+	// 关键字 keyword
 	KW_INT,  // int
 	KW_CHAR,  // char
 	KW_VOID,  // void
@@ -30,7 +29,8 @@ enum Tag {
 	ID,  // 变量名
 	NUM,  // int
 	CH,  // char
-	// 符号
+	// 操作符 operato
+	ASSIGN,  // =
 	ADD,  // +
 	SUB,  // -
 	MUL,  // *
@@ -45,6 +45,7 @@ enum Tag {
 	AND,  // &&
 	OR,  // ||
 	NOT,  // !
+	// 分界符 separator
 	LPAREN,  // (
 	RPAREN,  // )
 	LBRACE,  // {
@@ -52,9 +53,11 @@ enum Tag {
 	COMMA,  // ,
 	COLON,  // :
 	SEMICON,  // ;
-	ASSIGN,  // =
+	// 字面值 literal
+	// 1, 2, 3, a, b, c, true, flase, test, 233, 666, ...
 };
 
+// 基类
 class Token {
 public:
 	Tag tag;
@@ -63,6 +66,7 @@ public:
 	virtual ~Token();
 };
 
+// 标识符
 class Id : public Token {
 public:
 	string name;
@@ -70,6 +74,7 @@ public:
 	virtual string toString();
 };
 
+// 数字
 class Num : public Token {
 public:
 	int val;
@@ -77,6 +82,7 @@ public:
 	virtual string toString();
 };
 
+// 字符
 class Char : public Token {
 public:
 	char ch;
@@ -84,6 +90,7 @@ public:
 	virtual string toString();
 };
 
+// 字符串
 class Str : public Token {
 public:
 	string str;
@@ -91,15 +98,10 @@ public:
 	virtual string toString();
 };
 
+// 关键字
 class Keywords {
 private:
-	struct string_hash {
-size_t operator() (const string & str) const {
-	return __stl_hash_string(str.c_str() );
-};
-	};
-
-	hash_map<string, Tag, string_hash> keywords;
+	unordered_map<string, Tag, hash<string> > keywords;
 
 public:
 	Keywords();

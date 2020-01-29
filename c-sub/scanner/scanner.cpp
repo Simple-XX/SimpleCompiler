@@ -3,7 +3,7 @@
 //
 // scanner.cpp for MRNIU/SimpleCompiler.
 
-#include "common.h"
+#include "scanner.h"
 
 // 扫描器
 // 输入：程序文本
@@ -14,31 +14,34 @@
 // 输入：扫描器产生的字符序列
 // 输出：词法记号序列
 
-// 前一个字符
-char prev_char;
-// 当前读到的字符
-char curr_char;
-// 下一个字符
-char next_char;
+Scanner::Scanner(const std::string &filename) {
+	fin.open(filename, ios::in);
+	prev_char = ' ';
+	curr_char = ' ';
+	next_char = ' ';
+	real_buf_len = 0;
+	pos_read_buf = -1;
+	return;
+}
 
-const int SCAN_BUFFER = 128;
-char scan_buf[SCAN_BUFFER];
-// 实际读取到的字节数
-int real_buf_len = 0;
-// 缓冲区读取位置
-int pos_read_buf = -1;
+Scanner::~Scanner() {
+	if(fin.is_open() ) {
+		fin.close();
+	}
+	return;
+}
 
-// 逐个扫描字符
-char scanner(ifstream &in) {
+// 扫描
+char Scanner::scan() {
 	// 缓冲区已经读取完
 	if(pos_read_buf == real_buf_len - 1) {
 		// 重新读取
-		in.read(scan_buf, SCAN_BUFFER);
+		fin.read(scan_buf, SCAN_BUFFER);
 		// 读到了多少数据
-		real_buf_len = in.gcount();
+		real_buf_len = fin.gcount();
 		// 文件读完了
 		if(real_buf_len == 0) {
-			in.close();
+			fin.close();
 			// 重置读取位置
 			pos_read_buf = -1;
 			return -1;
@@ -52,12 +55,19 @@ char scanner(ifstream &in) {
 	curr_char = scan_buf[pos_read_buf];
 	// 如果为结束符则返回
 	if(curr_char == EOF) {
-		cout << 6 << endl;
-		in.close();
+		fin.close();
 		return -1;
 	}
 	// 否则设置 prev_char
 	prev_char = curr_char;
 	// 然后返回
 	return curr_char;
+}
+
+char Scanner::get_prev_char() {
+	return prev_char;
+}
+
+bool Scanner::is_open() {
+	return fin.is_open();
 }
