@@ -25,7 +25,6 @@ all: $(SUB_DIR)
     	do $(MAKE) -C $$subdir all || exit 1; \
     done
 	@$(MAKE) $(patsubst %.cpp, %.o, $(wildcard *.cpp))
-	# @$(MAKE) $(patsubst %.s, %.o, $(wildcard *.c))
 	@echo Leave $(CURR_DIR)
 
 .PHONY: remake

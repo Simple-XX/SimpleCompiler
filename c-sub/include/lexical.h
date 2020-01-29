@@ -13,48 +13,40 @@ using namespace std;
 using namespace __gnu_cxx;
 
 enum Tag {
+	// 关键字
 	KW_INT,  // int
 	KW_CHAR,  // char
 	KW_VOID,  // void
-	KW_EXTERN,  // extern
 	KW_IF,  // if
 	KW_ELSE,  // else
-	KW_SWITCH,  // switch
-	KW_CASE,  // case
-	KW_DEFAULT,  // default
 	KW_WHILE,  // while
-	KW_DO,  // do
 	KW_FOR,  // for
 	KW_BREAK,  // break
 	KW_CONTINUE,  // continue
 	KW_RETURN,  // return
-	ERR,
-	END,
-	ID,
-	NUM,
-	CH,
-	STR,
-	NOT,  // !
-	LEA,
+	// 类型标识
+	ERR,  // 错误
+	END,  // 结束标识
+	ID,  // 变量名
+	NUM,  // int
+	CH,  // char
+	// 符号
 	ADD,  // +
 	SUB,  // -
 	MUL,  // *
 	DIV,  // /
 	MOD,  // %
-	INC,  // ++
-	DEC,  // --
-	GT,
-	GE,
-	LT,
-	LE,
+	GT,  // >
+	GE,  // >=
+	LT,  // <
+	LE,  // <=
 	EQU,  // ==
 	NEQU,  // !=
 	AND,  // &&
 	OR,  // ||
+	NOT,  // !
 	LPAREN,  // (
 	RPAREN,  // )
-	LBRACK,  // [
-	RBRACK,  // ]
 	LBRACE,  // {
 	RBRACE,  // }
 	COMMA,  // ,
@@ -65,39 +57,40 @@ enum Tag {
 
 class Token {
 public:
-Tag tag;
-Token(Tag t);
-virtual string toString();
-virtual ~Token();
+	Tag tag;
+	Token(Tag t);
+	virtual string toString();
+	virtual ~Token();
 };
 
 class Id : public Token {
 public:
-string name;
-Id(string n);
-virtual string toString();
+	string name;
+	Id(string n);
+	virtual string toString();
 };
 
 class Num : public Token {
 public:
-int val;
-Num(int v);
-virtual string toString();
+	int val;
+	Num(int v);
+	virtual string toString();
 };
 
 class Char : public Token {
 public:
-char ch;
-Char(char c);
-virtual string toString();
+	char ch;
+	Char(char c);
+	virtual string toString();
 };
 
 class Str : public Token {
 public:
-string str;
-Str(string s);
-virtual string toString();
+	string str;
+	Str(string s);
+	virtual string toString();
 };
+
 
 struct string_hash {
 size_t operator()(const string & str) const {
@@ -107,10 +100,11 @@ size_t operator()(const string & str) const {
 
 class Keywords {
 private:
-hash_map<string, Tag, string_hash> keywords;
+	hash_map<string, Tag, string_hash> keywords;
+
 public:
-Keywords();
-Tag getTag(string name);
+	Keywords();
+	Tag getTag(string name);
 };
 
 #endif /* _LEXICAL_H_ */
