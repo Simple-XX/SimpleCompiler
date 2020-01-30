@@ -36,7 +36,7 @@ using namespace std;
 	else if(IS_TAG(token, NUM) ) { \
 		token = (Num *)token; \
 	} \
-	else if(IS_TAG(token, CH) ) { \
+	else if(IS_TAG(token, CHAR) ) { \
 		token = (Char *)token; \
 	} \
 	else if(IS_TAG(token, STR) ) { \
@@ -51,13 +51,29 @@ private:
 	static Keywords keywords;
 	// 当前字符
 	char ch;
-	// 扫描
-	bool scan(void);
+	// 保存结果
 	Token * token;
+	// 扫描
+	bool scan(char need = 0);
+	// 空白字符
+	void blank(void);
+	// 标识符，包括关键字
+	void identifier(void);
+	// 数字
+	void number(void);
+	// 字符
+	void character(void);
+	// 字符串
+	void str(void);
+	// 分界符
+	void separator(void);
+	// 操作符
+	void operation(void);
 
 public:
 	Lexer(Scanner &sc);
 	~Lexer(void);
+
 	Token * lexing(void);
 	bool is_done(void);
 };

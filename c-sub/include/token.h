@@ -28,7 +28,7 @@ enum Tag {
 	// 类型标识
 	ID,  // 标识符
 	NUM,  // int
-	CH,  // char
+	CHAR,  // char
 	STR,  // str
 	// 操作符 operator
 	ASSIGN,  // =

@@ -28,7 +28,7 @@ const char * tokenName[] = {
 	"IF", "ELSE",
 	"WHILE", "FOR",
 	"BREAK", "CONTINUE", "RETURN",
-	"ID", "NUM", "CH", "STR"
+	"ID", "NUM", "CH", "STR",
 	"ASSIGN",
 	"ADD", "SUB", "MUL", "DIV", "MOD",
 	"ORBIT", "ANDBIT", "EORBIT",
@@ -58,4 +58,28 @@ Id::Id(string n) : Token(ID), name(n) {
 
 string Id::toString() {
 	return Token::toString() + ": " + name;
+}
+
+Num::Num(int v) : Token(NUM), val(v) {
+	return;
+}
+
+string Num::toString() {
+	return Token::toString() + ": " + to_string(val);
+}
+
+Char::Char(char c) : Token(CHAR), ch(c) {
+	return;
+}
+
+string Char::toString() {
+	return Token::toString() + ": " + to_string(ch);
+}
+
+Str::Str(string s) : Token(STR), str(s) {
+	return;
+}
+
+string Str::toString() {
+	return Token::toString() + ": "  + str;
 }
