@@ -6,106 +6,60 @@
 #ifndef _LEXICAL_H_
 #define _LEXICAL_H_
 
-#include "string"
-#include "unordered_map"
+#include "token.h"
+#include "scanner.h"
 
 using namespace std;
 
-enum Tag {
-	// 关键字 keyword
-	KW_INT,  // int
-	KW_CHAR,  // char
-	KW_VOID,  // void
-	KW_IF,  // if
-	KW_ELSE,  // else
-	KW_WHILE,  // while
-	KW_FOR,  // for
-	KW_BREAK,  // break
-	KW_CONTINUE,  // continue
-	KW_RETURN,  // return
-	// 类型标识
-	ERR,  // 错误
-	END,  // 结束标识
-	ID,  // 变量名
-	NUM,  // int
-	CH,  // char
-	// 操作符 operato
-	ASSIGN,  // =
-	ADD,  // +
-	SUB,  // -
-	MUL,  // *
-	DIV,  // /
-	MOD,  // %
-	GT,  // >
-	GE,  // >=
-	LT,  // <
-	LE,  // <=
-	EQU,  // ==
-	NEQU,  // !=
-	AND,  // &&
-	OR,  // ||
-	NOT,  // !
-	// 分界符 separator
-	LPAREN,  // (
-	RPAREN,  // )
-	LBRACE,  // {
-	RBRACE,  // }
-	COMMA,  // ,
-	COLON,  // :
-	SEMICON,  // ;
-	// 字面值 literal
-	// 1, 2, 3, a, b, c, true, flase, test, 233, 666, ...
-};
+#define TAG_KW \
+	(KW_INT || KW_CHAR || KW_VOID || KW_IF || KW_ELSE || KW_WHILE || KW_FOR \
+	|| KW_BREAK || KW_CONTINUE || KW_RETURN)
 
-// 基类
-class Token {
-public:
-	Tag tag;
-	Token(Tag t);
-	virtual string toString();
-	virtual ~Token();
-};
+#define TAG_TYPE \
+	(ID || NUM || CH)
 
-// 标识符
-class Id : public Token {
-public:
-	string name;
-	Id(string n);
-	virtual string toString();
-};
+#define TAG_OP \
+	(ASSIGN || ADD || SUB || MUL || DIV || MOD || ORBIT || ANDBIT || EORBIT || \
+	AND || OR || NOT || GT || GE || LT || LE || EQU || NEQU)
 
-// 数字
-class Num : public Token {
-public:
-	int val;
-	Num(int v);
-	virtual string toString();
-};
+#define TAG_SEP \
+	(LPAREN || RPAREN || LBRACE || RBRACE || COMMA || COLON || SEMICON)
 
-// 字符
-class Char : public Token {
-public:
-	char ch;
-	Char(char c);
-	virtual string toString();
-};
 
-// 字符串
-class Str : public Token {
-public:
-	string str;
-	Str(string s);
-	virtual string toString();
-};
+// 判断 token 是否为 t 类型
+#define IS_TAG(token, t)  (token->tag == t)
+// 将 token 转换为实际的类型
+#define TOKEN_CAST(token) \
+	if(IS_TAG(token, ID) ) { \
+		token = (Id *)token; \
+	} \
+	else if(IS_TAG(token, NUM) ) { \
+		token = (Num *)token; \
+	} \
+	else if(IS_TAG(token, CH) ) { \
+		token = (Char *)token; \
+	} \
+	else if(IS_TAG(token, STR) ) { \
+		token = (Str *)token; \
+	}
 
-// 关键字
-class Keywords {
+class Lexer {
 private:
-	unordered_map<string, Tag, hash<string> > keywords;
+	// 扫描器对象
+	Scanner &scanner;
+	// 关键字
+	static Keywords keywords;
+	// 当前字符
+	char ch;
+	// 扫描
+	bool scan(void);
+	Token * token;
 
 public:
-	Keywords();
-	Tag getTag(string name);
+	Lexer(Scanner &sc);
+	~Lexer(void);
+	Token * lexing(void);
+	bool is_done(void);
 };
 
 #endif /* _LEXICAL_H_ */

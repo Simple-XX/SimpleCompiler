@@ -4,18 +4,13 @@
 // scanner.cpp for MRNIU/SimpleCompiler.
 
 #include "scanner.h"
-
-// 扫描器
-// 输入：程序文本
-// 输出：线性字符序列
-// 自动机设计
-// 设计词法状态转移自动机
-// 解析器（词法分析器）
-// 输入：扫描器产生的字符序列
-// 输出：词法记号序列
+#include "iostream"
 
 Scanner::Scanner(const std::string &filename) {
 	fin.open(filename, ios::in);
+	if(fin.is_open() == false) {
+		std::cout << "File not open!" << endl;
+	}
 	prev_char = ' ';
 	curr_char = ' ';
 	next_char = ' ';
@@ -44,7 +39,7 @@ char Scanner::scan() {
 			fin.close();
 			// 重置读取位置
 			pos_read_buf = -1;
-			return -1;
+			return EOF;
 		}
 		// 重置读取位置
 		pos_read_buf = -1;
@@ -54,9 +49,9 @@ char Scanner::scan() {
 	// 获取对应位置的字符
 	curr_char = scan_buf[pos_read_buf];
 	// 如果为结束符则返回
-	if(curr_char == EOF) {
+	if(curr_char == -1) {
 		fin.close();
-		return -1;
+		return EOF;
 	}
 	// 否则设置 prev_char
 	prev_char = curr_char;
@@ -68,6 +63,8 @@ char Scanner::get_prev_char() {
 	return prev_char;
 }
 
-bool Scanner::is_open() {
-	return fin.is_open();
+// 若文件关闭则视为已完成
+// 已完成返回 true
+bool Scanner::is_done() {
+	return !fin.is_open();
 }

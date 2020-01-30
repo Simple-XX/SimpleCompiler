@@ -37,7 +37,7 @@ public:
 	char scan(void);
 	// 返回前一个字符
 	char get_prev_char(void);
-	bool is_open(void);
+	bool is_done(void);
 };
 
 

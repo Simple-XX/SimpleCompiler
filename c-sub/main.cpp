@@ -3,7 +3,12 @@
 //
 // main.cpp for MRNIU/SimpleCompiler.
 
+#include "iostream"
+#include "string"
+#include "vector"
 #include "common.h"
+
+using namespace std;
 
 // 源文件
 std::vector<std::string> src_files;
@@ -17,10 +22,23 @@ int main(int argc, char * * argv) {
 	initer.init(argc, argv);
 	// 逐个打开文件
 	for(const auto &i:src_files) {
+		cout << "Open file: " << i << endl;
 		Scanner scanner(i);
-		while(scanner.is_open() ) {
-			auto ch = scanner.scan();
-			cout << ch;
+		Lexer lexer(scanner);
+		while(lexer.is_done() == false) {
+			auto ch = lexer.lexing();
+			if(ch->tag < 0) {
+				if(ch->tag == EOF) {
+					cout << "File done: " << i << endl;
+				}
+				else {
+					cout << "Err: " << ch->tag << endl;
+				}
+			}
+			else {
+				TOKEN_CAST(ch);
+				cout << ch->toString() << endl;
+			}
 		}
 	}
 
