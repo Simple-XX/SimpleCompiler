@@ -23,6 +23,7 @@ int main(int argc, char * * argv) {
 	// 逐个打开文件
 	for(const auto &i:src_files) {
 		cout << "Open file: " << i << endl;
+		error = new Error(i);
 		Scanner scanner(i);
 		Lexer lexer(scanner);
 		while(lexer.is_done() == false) {

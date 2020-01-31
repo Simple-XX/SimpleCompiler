@@ -11,6 +11,8 @@
 
 using namespace std;
 
+extern Error * error;
+
 #define TAG_KW \
 	(KW_INT || KW_CHAR || KW_VOID || KW_IF || KW_ELSE || KW_WHILE || KW_FOR \
 	|| KW_BREAK || KW_CONTINUE || KW_RETURN)

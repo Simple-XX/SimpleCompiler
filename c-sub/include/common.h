@@ -11,7 +11,10 @@
 #include "lexical.h"
 
 class Init;
+class Error;
 class Lexer;
 class Scanner;
+
+Error * error = NULL;
 
 #endif  /* _COMMON_H_ */

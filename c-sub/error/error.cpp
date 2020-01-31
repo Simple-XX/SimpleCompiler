@@ -15,7 +15,7 @@ Pos::~Pos() {
 
 Error::Error(const string &f) : filename(f) {
 	err_no = 0;
-	pos = new Pos(0, 0);
+	pos = new Pos(1, 1);
 	return;
 }
 
@@ -50,7 +50,9 @@ Pos * Error::get_pos() const {
 }
 
 void Error::display_err() const {
-	cout	<< "File: " << filename << ", Line: " << pos->line << ", COL: " << pos->col
-	        << ", Err: " << err_no << endl;
+	cout	<< "\033[;31mErr:\033[0m " << err_no << ", \033[;31mFile:\033[0m "
+	        << filename << ", \033[;31mLine:\033[0m " << pos->line
+	        << ", \033[;31mCOL:\033[0m " << pos->col
+	        << endl;
 	return;
 }

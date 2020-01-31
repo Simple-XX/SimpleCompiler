@@ -3,7 +3,6 @@
 //
 // test_lexical.c for MRNIU/SimpleCompiler.
 
-// right
 // keywords
 int
 char
@@ -49,31 +48,10 @@ fa_efa _fwf2_
 :
 ;
 
-// error
-// keywords
-int2
-charvoid
-if3 else2
-whilefor
+// combination
+int a = 124;
+char bb = 's';
+int c = 2;
+int d = a*b;
 
-// identifier
-2ddd 0312dsfs
-
-// operator
-+|
--d
-*_
-//
-|=
-+=
-&c
-&& c| |\n| s^
-++
---
-
-// separator
-\n(
-s)
-{ s}
-[
-]
+2s[]

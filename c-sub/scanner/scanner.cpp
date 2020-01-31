@@ -6,7 +6,7 @@
 #include "scanner.h"
 #include "iostream"
 
-Scanner::Scanner(const std::string &f) : Error(f) {
+Scanner::Scanner(const std::string &f) {
 	fin.open(f, ios::in);
 	if(fin.is_open() == false) {
 		std::cout << "File not open!" << endl;
@@ -48,17 +48,18 @@ char Scanner::scan() {
 	// 获取对应位置的字符
 	curr_char = scan_buf[pos_read_buf];
 	// 如果为结束符则返回
-	if(curr_char == -1) {
+	if(curr_char == EOF) {
 		fin.close();
 		return EOF;
 	}
-	// 如果是换行符，就把当前行 +1
+	// 如果是换行符，就把当前行 +1，列重置
 	if(curr_char == '\n') {
-		Error::set_line(get_pos()->line++);
+		error->set_line(++(error->get_pos()->line) );
+		error->set_col(1);
 	}
 	// 否则列 +1
 	else {
-		Error::set_col(get_pos()->col++);
+		error->set_col(++(error->get_pos()->col) );
 	}
 	// 否则设置 prev_char
 	prev_char = curr_char;

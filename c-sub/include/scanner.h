@@ -12,7 +12,9 @@
 
 using namespace std;
 
-class Scanner : public Error {
+extern Error * error;
+
+class Scanner {
 private:
 	// 输入流
 	ifstream fin;

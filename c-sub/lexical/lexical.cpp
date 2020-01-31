@@ -100,6 +100,8 @@ void Lexer::character() {
 		// 文件结束或换行
 		else if( (ch == '\n') || (ch == EOF) ) {
 			t = new Token(ERR);
+			error->set_err_no(ERR);
+			error->display_err();
 			break;
 		}
 		// 转义字符
@@ -122,6 +124,8 @@ void Lexer::character() {
 			}
 			else if( (ch == EOF) || (ch == '\n') ) {
 				t = new Token(ERR);
+				error->set_err_no(ERR);
+				error->display_err();
 				break;
 			}
 			// 其它的不转义
@@ -149,6 +153,8 @@ void Lexer::str() {
 		// 直接结束
 		else if( (ch == '\n') || (ch == EOF) ) {
 			t = new Token(ERR);
+			error->set_err_no(ERR);
+			error->display_err();
 			break;
 		}
 		// 转义字符
@@ -174,6 +180,8 @@ void Lexer::str() {
 			}
 			else if(ch == EOF) {
 				t = new Token(ERR);
+				error->set_err_no(ERR);
+				error->display_err();
 				break;
 			}
 			// 其它的不转义
@@ -294,6 +302,8 @@ void Lexer::operation() {
 	    // 除此以外是错误的
 	    default:
 		    t = new Token(ERR);
+		    error->set_err_no(ERR);
+		    error->display_err();
 		    scan();
 	}
 	token = t;
@@ -331,8 +341,8 @@ Token * Lexer::lexing() {
 		}
 		else {
 			token = new Token(ERR);
-			scanner.set_err_no(ERR);
-			scanner.display_err();
+			error->set_err_no(ERR);
+			error->display_err();
 			return token;
 		}
 		// 更新 token 内容
@@ -345,5 +355,5 @@ Token * Lexer::lexing() {
 }
 
 bool Lexer::is_done() {
-	return scanner.is_done() || (scanner.get_err_no() < 0);
+	return scanner.is_done() || (error->get_err_no() < 0);
 }
