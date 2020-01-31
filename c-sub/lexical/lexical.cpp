@@ -81,16 +81,11 @@ void Lexer::number() {
 	Token * t = NULL;
 	int val = 0;
 	// 十进制数
-	while(
-	    ( (ch >= '1') && (ch <= '9') ) ) {
-		do {
-			// 计算数字
-			val = val * 10 + ch - '0';
-			scan();
-		} while(
-		    (ch >= '0' && ch <= '9') );
-		t = new Num(val);
-	}
+	do {
+		// 计算数字
+		val = val * 10 + ch - '0';
+	} while(scan(), (ch >= '0' && ch <= '9') );
+	t = new Num(val);
 	token = t;
 	return;
 }
@@ -138,7 +133,7 @@ void Lexer::character() {
 		else {
 			t = new Char(ch);
 		}
-	} while(scan(), ch != '\'');
+	} while(scan('\'') == false);
 	token = t;
 	return;
 }
@@ -190,7 +185,7 @@ void Lexer::str() {
 		else {
 			s.push_back(ch);
 		}
-	} while(scan(), ch != '"');
+	} while(scan('"') == false);
 	// 最终字符串
 	if(t == NULL) {
 		t = new Str(s);
@@ -239,12 +234,15 @@ void Lexer::operation() {
 		    break;
 	    case '+':
 		    t = new Token(ADD);
+		    scan();
 		    break;
 	    case '-':
 		    t = new Token(SUB);
+		    scan();
 		    break;
 	    case '*':
 		    t = new Token(MUL);
+		    scan();
 		    break;
 	    case '/':
 		    scan();
@@ -272,6 +270,7 @@ void Lexer::operation() {
 		    break;
 	    case '%':
 		    t = new Token(MOD);
+		    scan();
 		    break;
 	    case '|':
 		    t = new Token(scan('|') ? OR : ORBIT);
@@ -281,6 +280,7 @@ void Lexer::operation() {
 		    break;
 	    case '^':
 		    t = new Token(EORBIT);
+		    scan();
 		    break;
 	    case '!':
 		    t = new Token(scan('=') ? NEQU : NOT);
@@ -294,8 +294,8 @@ void Lexer::operation() {
 	    // 除此以外是错误的
 	    default:
 		    t = new Token(ERR);
+		    scan();
 	}
-	scan();
 	token = t;
 	return;
 }
@@ -305,23 +305,24 @@ Token * Lexer::lexing() {
 	while(is_done() == false) {
 		if( (ch == ' ') || (ch == '\n') || (ch == '\t') )
 			blank();
-		if( (ch >= 'a' && ch <= 'z') ||
+		else if( (ch >= 'a' && ch <= 'z') ||
 		    (ch >= 'A' && ch <= 'Z') ||
 		    (ch == '_') )
 			identifier();
-		if( ( (ch >= '1') && (ch <= '9') ) )
+		else if( ( (ch >= '1') && (ch <= '9') ) ) {
 			number();
-		if( (ch == '\'') ) {
+		}
+		else if( (ch == '\'') ) {
 			character();
 		}
-		if(ch == '"')
+		else if(ch == '"')
 			this->str();
-		if(
+		else if(
 		    (ch == '(') || (ch == ')') || (ch == '{') || (ch == '}') || (ch == ',')
 		    || (ch == ':') || (ch == ';') ) {
 			separator();
 		}
-		if(
+		else if(
 		    (ch == '=') || (ch == '+') || (ch == '-') || (ch == '*') || (ch == '/')
 		    || (ch == '%') || (ch == '|') || (ch == '&') || (ch == '^')
 		    || (ch == '!')

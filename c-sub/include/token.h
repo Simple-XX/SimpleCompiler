@@ -71,7 +71,7 @@ public:
 };
 
 // 标识符
-class Id: public Token {
+class Id : public Token {
 public:
 	string name;
 	Id(string n);
@@ -79,7 +79,7 @@ public:
 };
 
 // 数字
-class Num: public Token {
+class Num : public Token {
 public:
 	int val;
 	Num(int v);
@@ -87,7 +87,7 @@ public:
 };
 
 // 字符
-class Char: public Token {
+class Char : public Token {
 public:
 	char ch;
 	Char(char c);
@@ -95,7 +95,7 @@ public:
 };
 
 // 字符串
-class Str: public Token {
+class Str : public Token {
 public:
 	string str;
 	Str(string s);
@@ -105,7 +105,7 @@ public:
 // 关键字
 class Keywords {
 private:
-	unordered_map < string, Tag, hash < string >> keywords;
+	unordered_map<string, Tag, hash<string> > keywords;
 
 public:
 	Keywords();

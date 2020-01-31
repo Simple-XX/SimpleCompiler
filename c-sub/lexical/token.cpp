@@ -57,7 +57,7 @@ Id::Id(string n) : Token(ID), name(n) {
 }
 
 string Id::toString() {
-	return Token::toString() + ": " + name;
+	return Token::toString() + "(" + name + ")";
 }
 
 Num::Num(int v) : Token(NUM), val(v) {
@@ -65,7 +65,7 @@ Num::Num(int v) : Token(NUM), val(v) {
 }
 
 string Num::toString() {
-	return Token::toString() + ": " + to_string(val);
+	return Token::toString() + "(" + to_string(val) + ")";
 }
 
 Char::Char(char c) : Token(CHAR), ch(c) {
@@ -73,7 +73,7 @@ Char::Char(char c) : Token(CHAR), ch(c) {
 }
 
 string Char::toString() {
-	return Token::toString() + ": " + to_string(ch);
+	return Token::toString() + "(" + to_string(ch) + ")";
 }
 
 Str::Str(string s) : Token(STR), str(s) {
@@ -81,5 +81,5 @@ Str::Str(string s) : Token(STR), str(s) {
 }
 
 string Str::toString() {
-	return Token::toString() + ": "  + str;
+	return Token::toString() + "("  + str + ")";
 }
