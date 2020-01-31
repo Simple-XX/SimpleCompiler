@@ -6,14 +6,13 @@
 #include "scanner.h"
 #include "iostream"
 
-Scanner::Scanner(const std::string &filename) {
-	fin.open(filename, ios::in);
+Scanner::Scanner(const std::string &f) : Error(f) {
+	fin.open(f, ios::in);
 	if(fin.is_open() == false) {
 		std::cout << "File not open!" << endl;
 	}
 	prev_char = ' ';
 	curr_char = ' ';
-	next_char = ' ';
 	real_buf_len = 0;
 	pos_read_buf = -1;
 	return;
@@ -52,6 +51,14 @@ char Scanner::scan() {
 	if(curr_char == -1) {
 		fin.close();
 		return EOF;
+	}
+	// 如果是换行符，就把当前行 +1
+	if(curr_char == '\n') {
+		Error::set_line(get_pos()->line++);
+	}
+	// 否则列 +1
+	else {
+		Error::set_col(get_pos()->col++);
 	}
 	// 否则设置 prev_char
 	prev_char = curr_char;

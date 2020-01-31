@@ -301,8 +301,8 @@ void Lexer::operation() {
 }
 
 Token * Lexer::lexing() {
-	// 字符不为空时
-	while(is_done() == false) {
+	// 字符不为空且没有出错时
+	while( (is_done() == false) ) {
 		if( (ch == ' ') || (ch == '\n') || (ch == '\t') )
 			blank();
 		else if( (ch >= 'a' && ch <= 'z') ||
@@ -329,6 +329,12 @@ Token * Lexer::lexing() {
 		    || (ch == '>') || (ch == '<') ) {
 			operation();
 		}
+		else {
+			token = new Token(ERR);
+			scanner.set_err_no(ERR);
+			scanner.display_err();
+			return token;
+		}
 		// 更新 token 内容
 		if(token != NULL && token->tag != ERR) {
 			return token;
@@ -339,5 +345,5 @@ Token * Lexer::lexing() {
 }
 
 bool Lexer::is_done() {
-	return scanner.is_done();
+	return scanner.is_done() || (scanner.get_err_no() < 0);
 }

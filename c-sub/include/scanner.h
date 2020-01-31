@@ -8,19 +8,18 @@
 
 #include "string"
 #include "fstream"
+#include "error.h"
 
 using namespace std;
 
-class Scanner {
+class Scanner : public Error {
 private:
 	// 输入流
 	ifstream fin;
-	// 前一个字符
+	// 前一个读到的字符
 	char prev_char;
 	// 当前读到的字符
 	char curr_char;
-	// 下一个字符
-	char next_char;
 	// 扫描缓冲区长度
 	static const int SCAN_BUFFER = 128;
 	// 扫描缓冲区

@@ -55,6 +55,8 @@ private:
 	Token * token;
 	// 扫描
 	bool scan(char need = 0);
+	// 返回错误号
+	int err(void);
 	// 空白字符
 	void blank(void);
 	// 标识符，包括关键字
@@ -71,7 +73,7 @@ private:
 	void operation(void);
 
 public:
-	Lexer(Scanner &sc);
+	Lexer(Scanner & sc);
 	~Lexer(void);
 
 	Token * lexing(void);

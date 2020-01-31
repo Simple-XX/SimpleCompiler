@@ -31,9 +31,6 @@ int main(int argc, char * * argv) {
 				if(ch->tag == EOF) {
 					cout << "File done: " << i << endl;
 				}
-				else {
-					cout << "Err: " << ch->tag << endl;
-				}
 			}
 			else {
 				TOKEN_CAST(ch);
