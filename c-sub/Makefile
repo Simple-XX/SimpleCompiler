@@ -53,7 +53,7 @@ c-sub: $(OBJ)
 
 .PHONY: code_line_count
 code_line_count:
-	find . -type f -name "*.[c|cpp|s|S|h|hpp]" -exec cat {} \; | wc -l
+	cloc ./
 
 .PHONY: info
 info:
