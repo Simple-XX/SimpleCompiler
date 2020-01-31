@@ -7,6 +7,7 @@
 #define _COMMON_H_
 
 #include "init.h"
+#include "error.h"
 #include "scanner.h"
 #include "lexical.h"
 

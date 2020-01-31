@@ -6,6 +6,7 @@
 #ifndef _LEXICAL_H_
 #define _LEXICAL_H_
 
+#include "error.h"
 #include "token.h"
 #include "scanner.h"
 

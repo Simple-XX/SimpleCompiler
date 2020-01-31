@@ -41,5 +41,4 @@ public:
 	bool is_done(void);
 };
 
-
 #endif /* _SCANNER_H_ */
