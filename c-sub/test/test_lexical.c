@@ -53,5 +53,3 @@ int a = 124;
 char bb = 's';
 int c = 2;
 int d = a*b;
-
-2s[]

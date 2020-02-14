@@ -40,7 +40,7 @@ void Lexer::blank() {
 	// 跳过空字符
 	do {
 		scan();
-	} while( (ch == ' ') || (ch == '\n') || (ch == '\t') );
+	} while(COND_BLANK);
 	token = t;
 	return;
 }
@@ -48,20 +48,13 @@ void Lexer::blank() {
 void Lexer::identifier() {
 	Token * t = NULL;
 	// 标识符
-	while(
-	    (ch >= 'a' && ch <= 'z') ||
-	    (ch >= 'A' && ch <= 'Z') ||
-	    (ch == '_') ) {
+	while(COND_IDENTIFIER) {
 		string name = "";
 		do {
 			// 记录字符
 			name.push_back(ch);
 			scan();
-		} while(
-		    (ch >= 'a' && ch <= 'z') ||
-		    (ch >= 'A' && ch <= 'Z') ||
-		    (ch == '_') ||
-		    (ch >= '0' && ch <= '9') );
+		} while(COND_IDENTIFIER || (ch >= '0' && ch <= '9') );
 		// 判断是不是关键字
 		Tag tag = keywords.getTag(name);
 		// 如果不是，则为标识符
@@ -313,13 +306,11 @@ void Lexer::operation() {
 Token * Lexer::lexing() {
 	// 字符不为空且没有出错时
 	while( (is_done() == false) ) {
-		if( (ch == ' ') || (ch == '\n') || (ch == '\t') )
+		if(COND_BLANK)
 			blank();
-		else if( (ch >= 'a' && ch <= 'z') ||
-		    (ch >= 'A' && ch <= 'Z') ||
-		    (ch == '_') )
+		else if(COND_IDENTIFIER)
 			identifier();
-		else if( ( (ch >= '1') && (ch <= '9') ) ) {
+		else if(COND_NUMBER) {
 			number();
 		}
 		else if( (ch == '\'') ) {
@@ -327,16 +318,10 @@ Token * Lexer::lexing() {
 		}
 		else if(ch == '"')
 			this->str();
-		else if(
-		    (ch == '(') || (ch == ')') || (ch == '{') || (ch == '}') || (ch == ',')
-		    || (ch == ':') || (ch == ';') ) {
+		else if(COND_SEPARATOR) {
 			separator();
 		}
-		else if(
-		    (ch == '=') || (ch == '+') || (ch == '-') || (ch == '*') || (ch == '/')
-		    || (ch == '%') || (ch == '|') || (ch == '&') || (ch == '^')
-		    || (ch == '!')
-		    || (ch == '>') || (ch == '<') ) {
+		else if(COND_OPERATION) {
 			operation();
 		}
 		else {
@@ -354,6 +339,6 @@ Token * Lexer::lexing() {
 	return token;
 }
 
-bool Lexer::is_done() {
+bool Lexer::is_done() const {
 	return scanner.is_done() || (error->get_err_no() < 0);
 }

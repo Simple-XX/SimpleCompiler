@@ -46,6 +46,24 @@ extern Error * error;
 		token = (Str *)token; \
 	}
 
+// blank 条件
+#define COND_BLANK ( (ch == ' ') || (ch == '\n') || (ch == '\t') )
+// identifier 条件
+#define COND_IDENTIFIER ( (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_') )
+// number 条件
+#define COND_NUMBER ( ( (ch >= '1') && (ch <= '9') ) )
+// separator 条件
+#define COND_SEPARATOR  ( \
+	(ch == '(') || (ch == ')') || (ch == '{') || (ch == '}') \
+	|| (ch == ',') || (ch == ':') || (ch == ';') \
+	)
+// operation 条件
+#define COND_OPERATION ( \
+	(ch == '=') || (ch == '+') || (ch == '-') || (ch == '*') \
+	|| (ch == '/') || (ch == '%') || (ch == '|') || (ch == '&') \
+	|| (ch == '^') || (ch == '!') || (ch == '>') || (ch == '<') \
+	)
+
 class Lexer {
 private:
 	// 扫描器对象
@@ -80,7 +98,7 @@ public:
 	~Lexer(void);
 
 	Token * lexing(void);
-	bool is_done(void);
+	bool is_done(void) const;
 };
 
 #endif /* _LEXICAL_H_ */
