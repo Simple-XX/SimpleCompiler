@@ -5,8 +5,14 @@
 
 # 设置 make 环境
 CURR_DIR := $(shell pwd)
-ROOT_DIR := $(CURR_DIR)
+ROOT_DIR := $(CURR_DIR)/..
 include $(ROOT_DIR)/Makefile.env
+
+exclude_dirs :=
+subdirs := $(shell find . -maxdepth 1 -type d)
+subdirs := $(basename $(patsubst ./%, %, $(subdirs)))
+subdirs := $(filter-out $(exclude_dirs), $(subdirs))
+SUB_DIR := $(subdirs)
 
 .PHONY: default
 default:
@@ -18,7 +24,7 @@ all: $(SUB_DIR)
 	@for subdir in $(SUB_DIR); \
     	do $(MAKE) -C $$subdir all || exit 1; \
     done
-	$(MAKE) c-sub
+	@$(MAKE) $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	@echo Leave $(CURR_DIR)
 
 .PHONY: remake
@@ -46,22 +52,15 @@ S_SOURCES := $(shell find . -name "*.s")
 OBJ := $(patsubst %.cpp, %.o, $(CXX_SOURCES)) \
 	   $(patsubst %.s, %.o, $(S_SOURCES))
 
-.PHONY: c-sub
-c-sub: $(OBJ)
-	@echo 正在生成编译器... $<
-	@$(LD) $(LDFLAGS) $^ -o $@
+%.o: %.s
+	@echo 编译汇编文件 $< ...
+	@$(AS) $(ASFLAGS) $< -o $@
+	@echo 编译完成
 
-.PHONY: test
-test:
-	@echo Test lexical.
-	./c-sub ./test/test_lexical.c -o test_lexical.o
-	@echo Lexical test done.
-	@echo Test parser
-	@echo Parser test done.
-
-.PHONY: code_line_count
-code_line_count:
-	cloc ./
+%.o: %.cpp
+	@echo 编译 C++ 文件 $< ...
+	@$(CXX) $(CXXFLAGS) $< -o $@
+	@echo 编译完成
 
 .PHONY: info
 info:

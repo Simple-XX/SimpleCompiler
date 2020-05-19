@@ -316,8 +316,9 @@ Token * Lexer::lexing() {
 		else if( (ch == '\'') ) {
 			character();
 		}
-		else if(ch == '"')
+		else if(ch == '"') {
 			this->str();
+		}
 		else if(COND_SEPARATOR) {
 			separator();
 		}

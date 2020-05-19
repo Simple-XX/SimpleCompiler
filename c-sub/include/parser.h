@@ -28,6 +28,13 @@ private:
 	// 匹配指定 Token
 	bool match_token(Tag tag);
 
+	// 程序
+	void program(void);
+	// 代码段
+	void segment(void);
+
+	//
+
 public:
 	Parser(Lexer &lex);
 	~Parser(void);

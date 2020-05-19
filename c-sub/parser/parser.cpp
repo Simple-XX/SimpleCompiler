@@ -32,7 +32,26 @@ bool Parser::match_token(Tag tag) {
 
 // 进行解析，返回解析结果(AST)
 void Parser::parsing(void) {
+	this->next();
+	program();
+}
 
+// 程序由代码片段与程序组成
+void Parser::program(void) {
+	if(is_done() ) {
+		return;
+	}
+	else {
+		segment();
+		program();
+	}
+	return;
+}
+
+// 代码片段由声明与定义组成
+void Parser::segment(void) {
+
+	return;
 }
 
 bool Parser::is_done(void) const {
