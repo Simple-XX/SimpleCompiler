@@ -19,7 +19,7 @@ Keywords::Keywords() {
 	keywords["return"] = KW_RETURN;
 }
 
-Tag Keywords::getTag(string name) {
+Tag Keywords::getTag(std::string name) {
 	return keywords.find(name) != keywords.end() ? keywords[name] : ID;
 }
 
@@ -44,7 +44,7 @@ Token::Token(Tag t) : tag(t) {
 	return;
 }
 
-string Token::toString() {
+std::string Token::toString() {
 	return tokenName[tag];
 }
 
@@ -52,11 +52,11 @@ Token::~Token() {
 	return;
 }
 
-Id::Id(string n) : Token(ID), name(n) {
+Id::Id(std::string n) : Token(ID), name(n) {
 	return;
 }
 
-string Id::toString() {
+std::string Id::toString() {
 	return Token::toString() + "(" + name + ")";
 }
 
@@ -64,22 +64,22 @@ Num::Num(int v) : Token(NUM), val(v) {
 	return;
 }
 
-string Num::toString() {
-	return Token::toString() + "(" + to_string(val) + ")";
+std::string Num::toString() {
+	return Token::toString() + "(" + std::to_string(val) + ")";
 }
 
 Char::Char(char c) : Token(CHAR), ch(c) {
 	return;
 }
 
-string Char::toString() {
-	return Token::toString() + "(" + to_string(ch) + ")";
+std::string Char::toString() {
+	return Token::toString() + "(" + std::to_string(ch) + ")";
 }
 
-Str::Str(string s) : Token(STR), str(s) {
+Str::Str(std::string s) : Token(STR), str(s) {
 	return;
 }
 
-string Str::toString() {
+std::string Str::toString() {
 	return Token::toString() + "("  + str + ")";
 }

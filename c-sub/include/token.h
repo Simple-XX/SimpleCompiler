@@ -9,8 +9,6 @@
 #include "string"
 #include "unordered_map"
 
-using namespace std;
-
 enum Tag {
 	ERR = -2,  // 错误
 	END = EOF,  // 结束标识
@@ -66,16 +64,16 @@ class Token {
 public:
 	Tag tag;
 	Token(Tag t);
-	virtual string toString();
+	virtual std::string toString();
 	virtual ~Token();
 };
 
 // 标识符
 class Id : public Token {
 public:
-	string name;
-	Id(string n);
-	virtual string toString();
+	std::string name;
+	Id(std::string n);
+	virtual std::string toString();
 };
 
 // 数字
@@ -83,7 +81,7 @@ class Num : public Token {
 public:
 	int val;
 	Num(int v);
-	virtual string toString();
+	virtual std::string toString();
 };
 
 // 字符
@@ -91,25 +89,25 @@ class Char : public Token {
 public:
 	char ch;
 	Char(char c);
-	virtual string toString();
+	virtual std::string toString();
 };
 
 // 字符串
 class Str : public Token {
 public:
-	string str;
-	Str(string s);
-	virtual string toString();
+	std::string str;
+	Str(std::string s);
+	virtual std::string toString();
 };
 
 // 关键字
 class Keywords {
 private:
-	unordered_map<string, Tag, hash<string> > keywords;
+	std::unordered_map<std::string, Tag, std::hash<std::string> > keywords;
 
 public:
 	Keywords();
-	Tag getTag(string name);
+	Tag getTag(std::string name);
 };
 
 #endif /* _TOKEN_H_ */

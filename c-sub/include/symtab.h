@@ -7,5 +7,10 @@
 #define _SYMTAB_H_
 
 // 符号表
+class SymTab {
+private:
+
+public:
+};
 
 #endif /* _SYMTAB_H_ */
