@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// TODO: 由 init 处理
 // 源文件
 std::vector<std::string> src_files;
 // 输出文件
@@ -39,6 +40,7 @@ int main(int argc, char **argv) {
                 }
             }
             else {
+                // 输出到控制台
                 TOKEN_CAST(ch);
                 cout << ch->to_string() << endl;
             }

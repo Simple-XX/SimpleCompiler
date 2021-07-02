@@ -33,12 +33,14 @@ private:
     int pos_read_buf;
 
 public:
+    // 读一个文件
     Scanner(const std::string &filename);
     ~Scanner(void);
     // 扫描并返回字符
     char scan(void);
     // 返回前一个字符
     char get_prev_char(void);
+    // 文件是否结束
     bool is_done(void);
 };
 
