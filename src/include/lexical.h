@@ -15,6 +15,7 @@ using namespace std;
 
 extern Error *error;
 
+// TODO: 宏替换为函数/constexpr
 #define TAG_KW                                                                 \
     (KW_INT || KW_CHAR || KW_VOID || KW_IF || KW_ELSE || KW_WHILE || KW_FOR || \
      KW_BREAK || KW_CONTINUE || KW_RETURN)
@@ -64,7 +65,7 @@ extern Error *error;
 
 class Lexer {
 private:
-    // 扫描器对象
+    // 扫描器对象，用于从文件中获取字符
     Scanner &scanner;
     // 关键字
     static Keywords keywords;
