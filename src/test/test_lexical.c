@@ -45,6 +45,8 @@ fa_efa _fwf2_
 )
 {
 }
+[
+]
 ,
 :
 ;
@@ -54,3 +56,16 @@ int  a  = 124;
 char bb = 's';
 int  c  = 2;
 int  d  = a * b;
+
+// real program
+int main()
+{
+	int num1 = 12;
+    int arr [114514];
+    int *pointer;
+	scanf("%d", &num1);
+    for (int i = 0; i < 10; i++) {
+	    printf("num1 = %d\n", num1);
+    }
+	return 0;
+}

@@ -30,7 +30,7 @@ const char *tokenName[] = {
     "ASSIGN", "ADD",      "SUB",    "MUL",     "DIV",    "MOD",    "ORBIT",
     "ANDBIT", "EORBIT",   "AND",    "OR",      "NOT",    "GT",     "GE",
     "LT",     "LE",       "EQU",    "NEQU",    "LPAREN", "RPAREN", "LBRACE",
-    "RBRACE", "COMMA",    "COLON",  "SEMICON",
+    "RBRACE", "LBRACKET", "RBRACKET","COMMA",  "COLON",  "SEMICON",
 };
 
 Token::Token(Tag t) : tag(t) {
