@@ -27,7 +27,7 @@ extern Error *error;
      AND || OR || NOT || GT || GE || LT || LE || EQU || NEQU)
 
 #define TAG_SEP                                                                \
-    (LPAREN || RPAREN || LBRACE || RBRACE || COMMA || COLON || SEMICON)
+    (LPAREN || RPAREN || LBRACE || RBRACE || LBRACKET || RBRACKET || COMMA || COLON || SEMICON)
 
 // 判断 token 是否为 t 类型
 #define IS_TAG(token, t) (token->tag == t)
@@ -47,16 +47,16 @@ extern Error *error;
     }
 
 // blank 条件
-#define COND_BLANK ((ch == ' ') || (ch == '\n') || (ch == '\t'))
+#define COND_BLANK ((ch == ' ') || (ch == '\n') || (ch == '\t') || (ch == '\r'))
 // identifier 条件
 #define COND_IDENTIFIER                                                        \
     ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_'))
 // number 条件
-#define COND_NUMBER (((ch >= '1') && (ch <= '9')))
+#define COND_NUMBER (((ch >= '0') && (ch <= '9')))
 // separator 条件
 #define COND_SEPARATOR                                                         \
     ((ch == '(') || (ch == ')') || (ch == '{') || (ch == '}') ||               \
-     (ch == ',') || (ch == ':') || (ch == ';'))
+     (ch == ',') || (ch == ':') || (ch == ';') || (ch == '[') || (ch == ']'))
 // operation 条件
 #define COND_OPERATION                                                         \
     ((ch == '=') || (ch == '+') || (ch == '-') || (ch == '*') ||               \
