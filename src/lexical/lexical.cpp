@@ -92,7 +92,7 @@ void Lexer::character() {
             continue;
         }
         // 文件结束或换行
-        else if ((ch == '\n') || (ch == EOF)) {
+        else if ((ch == '\n') || (ch == EOF) ) {
             t = new Token(ERR);
             error->set_err_no(ERR);
             error->display_err();
@@ -210,6 +210,12 @@ void Lexer::separator() {
             break;
         case '}':
             t = new Token(RBRACE);
+            break;
+        case '[':
+            t = new Token(LBRACKET);
+            break;
+        case ']':
+            t = new Token(RBRACKET);
             break;
         case ',':
             t = new Token(COMMA);

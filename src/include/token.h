@@ -53,6 +53,8 @@ enum Tag {
     RPAREN,  // )
     LBRACE,  // {
     RBRACE,  // }
+    LBRACKET,// [
+    RBRACKET,// ]
     COMMA,   // ,
     COLON,   // :
     SEMICON, // ;
