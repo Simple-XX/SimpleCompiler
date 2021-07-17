@@ -11,6 +11,7 @@ Keywords::Keywords() {
     keywords["int"]      = KW_INT;
     keywords["char"]     = KW_CHAR;
     keywords["void"]     = KW_VOID;
+    keywords["const"]     = KW_CONST;
     keywords["if"]       = KW_IF;
     keywords["else"]     = KW_ELSE;
     keywords["while"]    = KW_WHILE;
@@ -25,7 +26,7 @@ Tag Keywords::get_tag(std::string name) {
 }
 
 const char *tokenName[] = {
-    "INT",    "CHAR",     "VOID",   "IF",      "ELSE",   "WHILE",  "FOR",
+    "INT",    "CHAR",     "VOID",   "CONST",   "IF",     "ELSE",   "WHILE",  "FOR",
     "BREAK",  "CONTINUE", "RETURN", "ID",      "NUM",    "CH",     "STR",
     "ASSIGN", "ADD",      "SUB",    "MUL",     "DIV",    "MOD",    "ORBIT",
     "ANDBIT", "EORBIT",   "AND",    "OR",      "NOT",    "GT",     "GE",

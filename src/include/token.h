@@ -17,6 +17,7 @@ enum Tag {
     KW_INT = 0,  // int
     KW_CHAR,     // char
     KW_VOID,     // void
+    KW_CONST,    // const
     KW_IF,       // if
     KW_ELSE,     // else
     KW_WHILE,    // while
