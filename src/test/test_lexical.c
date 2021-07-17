@@ -8,6 +8,7 @@
 int
 char
 void
+const
 if
 else
 while
