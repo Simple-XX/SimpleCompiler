@@ -31,20 +31,22 @@ int main(int argc, char **argv) {
         Scanner scanner(i);
         Lexer   lexer(scanner);
         SymTab  symtab(void);
-        // Parser parser(lexer);
-        while (lexer.is_done() == false) {
-            auto ch = lexer.lexing();
-            if (ch->tag < 0) {
-                if (ch->tag == EOF) {
-                    cout << "File done: " << i << endl;
-                }
-            }
-            else {
-                // 输出到控制台
-                TOKEN_CAST(ch);
-                cout << ch->to_string() << endl;
-            }
-        }
+        Parser parser(lexer);
+        ASTPtr prog = parser.parsing();
+        cout << prog->to_string();
+        // while (lexer.is_done() == false) {
+        //     auto ch = lexer.lexing();
+        //     if (ch->tag < 0) {
+        //         if (ch->tag == EOF) {
+        //             cout << "File done: " << i << endl;
+        //         }
+        //     }
+        //     else {
+        //         // 输出到控制台
+        //         TOKEN_CAST(ch);
+        //         cout << ch->to_string() << endl;
+        //     }
+        // }
     }
 
     return 0;

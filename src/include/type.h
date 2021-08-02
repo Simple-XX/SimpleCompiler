@@ -7,6 +7,8 @@
 #ifndef _TYPE_H_
 #define _TYPE_H_
 
+#include "token.h"
+
 using namespace std;
 
 enum Type {
@@ -26,9 +28,9 @@ enum Operator {
     mul_op,
     div_op,
     mod_op,
-    orb_op,
-    andb_op,
-    eorb_op,
+    orbit_op,
+    andbit_op,
+    eorbit_op,
     and_op,
     or_op,
     not_op,
@@ -37,7 +39,8 @@ enum Operator {
     lt_op,
     le_op,
     equ_op,
-    nequ_op
+    nequ_op,
+    ERROR
 };
 
 enum Control {
@@ -45,5 +48,9 @@ enum Control {
     break_c,
     return_c
 };
+
+Operator tag_to_op(Tag t);
+
+string op_to_string(Operator p);
 
 #endif /* _TYPE_H_ */
