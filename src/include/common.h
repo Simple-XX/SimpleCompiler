@@ -11,6 +11,8 @@
 #include "error.h"
 #include "scanner.h"
 #include "lexical.h"
+#include "parser.h"
+#include "ast.h"
 
 class Init;
 class Error;

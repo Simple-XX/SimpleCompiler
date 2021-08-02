@@ -9,8 +9,13 @@
 
 #include "string"
 #include "iostream"
+#include "functional"
+#include <functional>
+#include <initializer_list>
+#include <bits/stdc++.h> 
 #include "token.h"
 #include "lexical.h"
+#include "ast.h"
 #include "error.h"
 
 using namespace std;
@@ -30,17 +35,21 @@ private:
     bool match_token(Tag tag);
 
     // 程序
-    void program(void);
+    ASTPtr program(void);
     // 代码段
-    void segment(void);
-
-    //
+    ASTPtr statement(void);
+    // 一元表达式
+    ASTPtr unary(void);
+    // 二元表达式
+    ASTPtr binary(const function<ASTPtr()> &parser, std::initializer_list<Operator> ops);
+    ASTPtr binary_add(void);
+    ASTPtr binary_mul(void);
 
 public:
     Parser(Lexer &lex);
     ~Parser(void);
     // 进行解析
-    void parsing(void);
+    ASTPtr parsing(void);
     bool is_done(void) const;
 };
 

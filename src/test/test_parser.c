@@ -4,9 +4,7 @@
 //
 // test_parser.c for Simple-XX/SimpleCompiler.
 
-// Assignment
-a = 10;
-b = 10 + 100;
-c = a * b;
+// expression
++(10 + 10) + 10 * 100
 
 // Decl

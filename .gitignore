@@ -31,4 +31,7 @@
 *.out
 *.app
 
+# VSCode
+.vscode
+
 build
