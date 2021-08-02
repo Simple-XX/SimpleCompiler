@@ -15,6 +15,7 @@ using namespace std;
 
 extern Error *error;
 
+// 扫描器
 class Scanner {
 private:
     // 输入流

@@ -22,6 +22,7 @@ typedef std::vector<ASTPtr> ASTPtrList;
 class MetaAST {
     public:
         virtual ~MetaAST() = default;
+        virtual string to_string(void) = 0;
 };
 
 // Compile Unit 编译单元
@@ -37,6 +38,14 @@ class CompUnitAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) {
+            string output;
+            for (auto &unit : units)
+            {
+                output = output + "\n" + unit->to_string();
+            }
+            return "CompUnit: " + output;
+        }
 };
 
 // Statement 语句
@@ -50,6 +59,9 @@ class StmtAST : public MetaAST {
             if (stmt) stmt.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "STMTAST: " + stmt->to_string();
+        }
 };
 
 // FunctionDefinition 函数定义
@@ -73,6 +85,15 @@ class FuncDefAST : public MetaAST {
             if (body) body.reset();
         }
         // destruction
+        string to_string(void) override {
+            string output = "FunctionCall: " + name + ' ';
+            for (auto &param : params)
+            {
+                if (param) output = output + param->to_string();
+            }
+            if (body) output = output + body->to_string();
+            return output;
+        }
 };
 
 // FunctionCall 函数调用
@@ -89,6 +110,9 @@ class FuncCallAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) override {
+            return "FuncCallAST";
+        }
 };
 
 // VarDeclaration 变量声明
@@ -107,6 +131,9 @@ class VarDeclAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) override {
+            return "VarDeclAST";
+        }
 };
 
 // VarDefinition 变量定义
@@ -126,6 +153,9 @@ class VarDefAST : public MetaAST {
             if (initVal) initVal.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "VarDefAST";
+        }
 };
 
 // Ident 变量
@@ -139,6 +169,9 @@ class IdAST : public MetaAST {
         // construction
         ~IdAST() override {}
         // destruction
+        string to_string(void) override {
+            return "IdAST";
+        }
 };
 
 // InitialValue 初始值
@@ -155,6 +188,9 @@ class InitValAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) override {
+            return "InitValAST";
+        }
 };
 
 // Block 块作用域
@@ -171,6 +207,9 @@ class BlockAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) override {
+            return "BlockAST";
+        }
 };
 
 // BinaryExpression 二元表达式 (A op B)
@@ -190,6 +229,9 @@ class BinaryAST : public MetaAST {
             if (right) right.reset();
         }
         // destruction
+        string to_string(void) override {
+            return  '(' + (left->to_string()) + ' ' + op_to_string(op) + ' ' + (right->to_string()) + ')';
+        }
 };
 
 // UnaryExpression 一元表达式 (op A)
@@ -207,6 +249,9 @@ class UnaryAST : public MetaAST {
             if (exp) exp.reset();
         }
         // destruction
+        string to_string(void) override {
+            return op_to_string(op) + ' ' + exp->to_string();
+        }
 };
 
 // Number 数字（int）
@@ -219,6 +264,9 @@ class NumAST : public MetaAST {
         // construction
         ~NumAST() override {}
         // destruction
+        string to_string(void) {
+            return std::to_string(val);
+        }
 };
 
 // If 条件表达式
@@ -239,6 +287,9 @@ class IfAST : public MetaAST {
             if (elseAST) elseAST.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "IfAST";
+        }
 };
 
 // While 循环
@@ -256,6 +307,9 @@ class WhileAST : public MetaAST {
             if (body) body.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "WhileAST";
+        }
 };
 
 // Control 控制语句 (break continue return)
@@ -272,6 +326,9 @@ class ControlAST : public MetaAST {
             if (returnStmt) returnStmt.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "ControlAST";
+        }
 };
 
 // Assignment 赋值语句 (break continue return)
@@ -289,6 +346,9 @@ class AssignAST : public MetaAST {
             if (right) right.reset();
         }
         // destruction
+        string to_string(void) override {
+            return "AssignAST";
+        }
 };
 
 // LeftValue 左值
@@ -306,6 +366,9 @@ class LValAST : public MetaAST {
             }
         }
         // destruction
+        string to_string(void) override {
+            return "LValAST";
+        }
 };
 
 #endif /* _AST_H_ */
