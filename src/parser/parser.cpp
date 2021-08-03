@@ -112,6 +112,8 @@ ASTPtr Parser::unary(void)
         }
         return make_unique<UnaryAST>(Operator::add_op, move(exp));
     }
+    cout << "error 55" << endl;
+    exit(55);
 }
 
 bool Parser::is_done(void) const {

@@ -5,6 +5,6 @@
 // test_parser.c for Simple-XX/SimpleCompiler.
 
 // expression
-+(10 + 10) + 10 * 100
++ (11 + 45) - 14 * 19 / 19 % 810
 
 // Decl
