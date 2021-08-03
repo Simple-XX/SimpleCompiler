@@ -44,7 +44,7 @@ class CompUnitAST : public MetaAST {
             {
                 output = output + "\n" + unit->to_string();
             }
-            return "CompUnit: " + output;
+            return "CompUnit: [" + output + "]\n";
         }
 };
 
@@ -60,7 +60,7 @@ class StmtAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "STMTAST: " + stmt->to_string();
+            return "Statement: {" + stmt->to_string() + "}\n";
         }
 };
 
@@ -250,7 +250,7 @@ class UnaryAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return op_to_string(op) + ' ' + exp->to_string();
+            return '(' +  op_to_string(op) + ' ' + exp->to_string() + ')';
         }
 };
 
