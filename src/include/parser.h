@@ -12,7 +12,7 @@
 #include "functional"
 #include <functional>
 #include <initializer_list>
-#include <bits/stdc++.h> 
+#include <vector> 
 #include "token.h"
 #include "lexical.h"
 #include "ast.h"
