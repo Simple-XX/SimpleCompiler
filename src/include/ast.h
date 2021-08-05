@@ -102,7 +102,7 @@ class FuncCallAST : public MetaAST {
         string name;
         ASTPtrList args;
     public:
-        FuncCallAST(const string &n, ASTPtrList a) : name(n), args(move(a)) {}
+        FuncCallAST(const string &n, ASTPtrList a = ASTPtrList{}) : name(n), args(move(a)) {}
         // construction
         ~FuncCallAST() override {
             for (auto &arg: args) {
@@ -358,7 +358,7 @@ class LValAST : public MetaAST {
         VarType type;
         ASTPtrList position;
     public:
-        LValAST(const string &n, VarType t ,ASTPtrList p) : name(n), type(t), position(move(p)) {}
+        LValAST(const string &n, VarType t ,ASTPtrList p = ASTPtrList{}) : name(n), type(t), position(move(p)) {}
         // construction
         ~LValAST() override {
             for (auto &pos: position) {
