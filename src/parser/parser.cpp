@@ -111,6 +111,67 @@ ASTPtr Parser::unary(void)
             exit(103);
         }
         return make_unique<UnaryAST>(Operator::add_op, move(exp));
+    } else if (match_token(Tag::SUB)){
+        // - EXP
+        next();
+        ASTPtr exp = unary();
+        if (!exp) {
+            exit(104);
+        }
+        return make_unique<UnaryAST>(Operator::sub_op, move(exp));
+    } else if (match_token(Tag::NOT)){
+        // ! EXP
+        next();
+        ASTPtr exp = unary();
+        if (!exp) {
+            exit(105);
+        }
+        return make_unique<UnaryAST>(Operator::not_op, move(exp));
+    } else if (match_token(Tag::ID)){
+        Id* token_casted = (Id*)token;
+        string id_name = token_casted->name;
+        next();
+        // Function call: Id (params)
+        if (match_token(Tag::LPAREN)) {
+            next();
+            // id(): no params
+            if (match_token(Tag::RPAREN)) {
+                ASTPtr function_call = make_unique<FuncCallAST>(id_name);
+                next(); // 消耗右括号
+                return function_call;
+            } else {
+                ASTPtrList params;
+                while (true) {
+                    ASTPtr param = binary_add();
+                    if (!param) {
+                        exit(106);
+                    }
+                    params.push_back(move(param));
+                    // id(a,b,c)
+                    if (match_token(Tag::COMMA) == false) break;
+                    next(); // ,
+                }
+                if (match_token(Tag::RPAREN) == false) {
+                    exit(107);
+                }
+                next(); // )
+                return make_unique<FuncCallAST>(id_name, move(params));
+            }
+        } else if (match_token(Tag::LBRACKET)) { // LVal: array (id[exp])
+            ASTPtrList position;
+            while (match_token(Tag::LBRACKET)) {
+                next(); // [
+                ASTPtr sub_position = binary_add();
+                position.push_back(move(sub_position));
+                if (match_token(Tag::RBRACKET) == false) {
+                    exit(108);
+                }
+                next();
+            }
+            return make_unique<LValAST>(id_name, array_t, move(position));
+        } else { // LVal: var (id)
+            return make_unique<LValAST>(id_name, var_t);
+        }
     }
     cout << "error 55" << endl;
     exit(55);

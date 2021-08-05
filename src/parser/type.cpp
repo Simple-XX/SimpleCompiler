@@ -1,3 +1,9 @@
+// This file is a part of Simple-XX/SimpleCompiler
+// (https://github.com/Simple-XX/SimpleCompiler).
+//
+// type.cpp for Simple-XX/SimpleCompiler.
+
+
 #include <type.h>
 
 // convert tag to operator
