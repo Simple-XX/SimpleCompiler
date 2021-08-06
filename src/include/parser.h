@@ -36,7 +36,7 @@ private:
 
     // 程序
     ASTPtr program(void);
-    // 代码段
+    // 语句
     ASTPtr statement(void);
     // 一元表达式
     ASTPtr unary(void);
