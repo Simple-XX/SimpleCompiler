@@ -320,7 +320,7 @@ class ControlAST : public MetaAST {
         ASTPtr returnStmt;
         // to which statement (destination)
     public:
-        ControlAST(Control t, ASTPtr r) : type(t), returnStmt(move(r)) {}
+        ControlAST(Control t, ASTPtr r = nullptr) : type(t), returnStmt(move(r)) {}
         // construction
         ~ControlAST() override {
             if (returnStmt) returnStmt.reset();
@@ -347,7 +347,7 @@ class AssignAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "AssignAST";
+            return " AssignAST: { " + left->to_string() + " = " + right->to_string() + " }";
         }
 };
 
@@ -367,7 +367,7 @@ class LValAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "LValAST";
+            return "LValAST: { " + name + " }";
         }
 };
 

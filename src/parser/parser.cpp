@@ -38,7 +38,7 @@ ASTPtr Parser::parsing(void) {
     return prog;
 }
 
-// 程序由代码片段与程序组成
+// 程序由代码片段组成，代码片段由声明与定义组成
 ASTPtr Parser::program(void) {
     ASTPtrList nodes;
     while (is_done() == false) {
@@ -46,12 +46,6 @@ ASTPtr Parser::program(void) {
         nodes.push_back(move(node));
     }
     return make_unique<CompUnitAST>(move(nodes));
-}
-
-// 代码片段由声明与定义组成
-ASTPtr Parser::statement(void) {
-    ASTPtr stmt = binary_add();
-    return make_unique<StmtAST>(move(stmt));
 }
 
 // 二元表达式
@@ -176,6 +170,85 @@ ASTPtr Parser::unary(void)
     cout << "error 55" << endl;
     exit(55);
 }
+
+ASTPtr Parser::statement(void) {
+    if (match_token(Tag::SEMICON)) {
+        next(); // ;
+        return make_unique<StmtAST>(nullptr);
+    }
+    else if (match_token(Tag::KW_BREAK) || match_token(Tag::KW_CONTINUE) || match_token(Tag::KW_RETURN)) {
+        Tag temp = token->tag;
+        next();
+        ASTPtr stmt;
+        if (token->tag == Tag::SEMICON)
+        { // break; return; continue;
+            Control command;
+            switch (temp) {
+                case Tag::KW_BREAK: {
+                    command = Control::break_c;
+                    break;
+                }
+                case Tag::KW_CONTINUE: {
+                    command = Control::continue_c;
+                    break;
+                }
+                case Tag::KW_RETURN: {
+                    command = Control::return_c;
+                    break;
+                }
+                default: break;
+            }
+            stmt = make_unique<ControlAST>(command);
+        } else { // return exp;
+            ASTPtr return_exp = binary_add();
+            if (!return_exp) {
+                exit(109);
+            }
+            if (!match_token(Tag::SEMICON)) {
+                exit(110);
+            }
+            stmt = make_unique<ControlAST>(Control::return_c, move(return_exp));
+        }
+        next(); // ;
+        return make_unique<StmtAST>(move(stmt));
+    } else {
+        ASTPtr exp = binary_add();
+        if (!exp) {
+            exit(111);
+        }
+        if (dynamic_cast<LValAST *>(exp.get())) {
+            // LVal = exp;
+            if (match_token(Tag::ASSIGN)) {
+                next(); // =
+                ASTPtr rhs = binary_add();
+                if (!rhs) {
+                    exit(112);
+                }
+                ASTPtr stmt = make_unique<AssignAST>(move(exp), move(rhs));
+                if (!match_token(Tag::SEMICON)) {
+                    exit(113);
+                }
+                next(); // ;
+                return make_unique<StmtAST>(move(stmt));
+            } else if (match_token(Tag::SEMICON)) {
+                // exp;
+                next(); // ;
+                return make_unique<StmtAST>(move(exp));
+            } else {
+                exit(114);
+            }
+        } else {
+            // exp;
+            if (!match_token(Tag::SEMICON)) {
+                exit(113);
+            }
+            next(); // ;
+            return make_unique<StmtAST>(move(exp));
+        }
+    }
+    exit(56);
+}
+
 
 bool Parser::is_done(void) const {
     return lexer.is_done();
