@@ -279,7 +279,7 @@ class IfAST : public MetaAST {
         ASTPtr elseAST;
         // else branch 
     public:
-        IfAST(ASTPtr c, ASTPtr t, ASTPtr e) : conditionExp(move(c)), thenAST(move(t)), elseAST(move(e)) {}
+        IfAST(ASTPtr c, ASTPtr t, ASTPtr e = nullptr) : conditionExp(move(c)), thenAST(move(t)), elseAST(move(e)) {}
         // construction
         ~IfAST() override {
             if (conditionExp) conditionExp.reset();
@@ -288,7 +288,9 @@ class IfAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "IfAST";
+            if (elseAST)
+                return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " + thenAST->to_string() + ") else (" + elseAST->to_string() + " ) }";
+            else return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " + thenAST->to_string() + " ) }";
         }
 };
 
@@ -368,6 +370,18 @@ class LValAST : public MetaAST {
         // destruction
         string to_string(void) override {
             return "LValAST: { " + name + " }";
+        }
+};
+
+// 空指令 
+class EmptyAST : public MetaAST {
+    public:
+        EmptyAST() {}
+        // construction
+        ~EmptyAST() override {}
+        // destruction
+        string to_string(void) override {
+            return "EmptyAST";
         }
 };
 
