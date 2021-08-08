@@ -44,7 +44,12 @@ private:
     ASTPtr binary(const function<ASTPtr()> &parser, std::initializer_list<Operator> ops);
     ASTPtr binary_add(void);
     ASTPtr binary_mul(void);
-
+    ASTPtr binary_relation(void);
+    ASTPtr binary_eq(void);
+    ASTPtr binary_and(void);
+    ASTPtr binary_or(void);
+    // If then else
+    ASTPtr if_else(void);
 public:
     Parser(Lexer &lex);
     ~Parser(void);

@@ -68,6 +68,16 @@ ASTPtr Parser::binary(const function<ASTPtr()> &parser, initializer_list<Operato
     return lhs;
 }
 
+ASTPtr Parser::binary_relation(void){
+    return binary([this]
+                  { return binary_add(); }, {Operator::gt_op, Operator::ge_op,  Operator::le_op, Operator::le_op});
+}
+
+ASTPtr Parser::binary_eq(void){
+    return binary([this]
+                  { return binary_relation(); }, {Operator::equ_op, Operator::nequ_op});
+}
+
 ASTPtr Parser::binary_add(void){
     return binary([this]
                   { return binary_mul(); }, {Operator::add_op, Operator::sub_op});
@@ -76,6 +86,16 @@ ASTPtr Parser::binary_add(void){
 ASTPtr Parser::binary_mul(void){
     return binary([this]
                   { return unary(); }, {Operator::mul_op, Operator::div_op, Operator::mod_op});
+}
+
+ASTPtr Parser::binary_and(void){
+    return binary([this]
+                  { return binary_eq(); }, {Operator::and_op});
+}
+
+ASTPtr Parser::binary_or(void){
+    return binary([this]
+                  { return binary_and(); }, {Operator::or_op});
 }
 
 // 一元表达式
@@ -174,7 +194,14 @@ ASTPtr Parser::unary(void)
 ASTPtr Parser::statement(void) {
     if (match_token(Tag::SEMICON)) {
         next(); // ;
-        return make_unique<StmtAST>(nullptr);
+        return make_unique<StmtAST>(make_unique<EmptyAST>());
+    }
+    else if (match_token(Tag::KW_IF)) {
+        ASTPtr stmt = if_else();
+        if (!stmt) {
+            exit(108);
+        }
+        return make_unique<StmtAST>(move(stmt));
     }
     else if (match_token(Tag::KW_BREAK) || match_token(Tag::KW_CONTINUE) || match_token(Tag::KW_RETURN)) {
         Tag temp = token->tag;
@@ -240,7 +267,7 @@ ASTPtr Parser::statement(void) {
         } else {
             // exp;
             if (!match_token(Tag::SEMICON)) {
-                exit(113);
+                exit(115);
             }
             next(); // ;
             return make_unique<StmtAST>(move(exp));
@@ -249,6 +276,36 @@ ASTPtr Parser::statement(void) {
     exit(56);
 }
 
+ASTPtr Parser::if_else(void) {
+    next(); // if () then else
+    if (!match_token(Tag::LPAREN)) {
+        exit(116);
+    }
+    next(); // (
+    ASTPtr condition = binary_or();
+    if (!condition) {
+        exit(117);
+    }
+    if (!match_token(Tag::RPAREN)) {
+        exit(118);
+    }
+    next(); // )
+    ASTPtr thenStatement = statement();
+    if (!thenStatement) {
+        exit(118);
+    }
+    if (match_token(Tag::KW_ELSE)) {
+        next(); // else
+        ASTPtr elseStatement = statement();
+        if (!elseStatement) {
+            exit(119);
+        }
+        return make_unique<IfAST>(move(condition), move(thenStatement), move(elseStatement));
+    } else {
+        return make_unique<IfAST>(move(condition), move(thenStatement));
+    }
+    exit(57);
+}
 
 bool Parser::is_done(void) const {
     return lexer.is_done();
