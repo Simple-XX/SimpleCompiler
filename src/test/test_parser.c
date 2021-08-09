@@ -21,3 +21,37 @@ else simple = compiler;
 
 if (a && b == true)
     simple = xx;
+
+// while
+while (a && b == true)
+    simple = xx;
+
+// block
+{} 
+
+{
+    int a[10][10], b;
+    int a[10][10] = {1};
+    simple = xx;
+    return simple + xx;
+}
+
+{
+    int a = 1;
+    const int a1 = 1;
+}
+
+// All test
+
+{
+    const int a[3] = {1, 2, 3};
+    while (a != 0) {
+        if (a == 1) {
+            a = 2;
+        } else {
+            a = 3;
+        }
+        a = 1;
+    }
+    
+}
