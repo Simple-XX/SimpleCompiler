@@ -123,7 +123,7 @@ class VarDeclAST : public MetaAST {
         bool isConst;
         // const or not
     public:
-        VarDeclAST(ASTPtrList v, bool i) : vars(move(v)), isConst(i) {}
+        VarDeclAST(bool i, ASTPtrList v) : vars(move(v)), isConst(i) {}
         // construction
         ~VarDeclAST() override {
             for (auto &var: vars) {
@@ -132,7 +132,12 @@ class VarDeclAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "VarDeclAST";
+            string output;
+            for (auto &unit : vars)
+            {
+                output = output + "\n" + unit->to_string();
+            }
+            return "VarDeclAST: {" + output + "}";
         }
 };
 
@@ -146,7 +151,7 @@ class VarDefAST : public MetaAST {
         bool isConst;
         // const or not
     public:
-        VarDefAST(ASTPtr v, ASTPtr init, bool i) : var(move(v)), initVal(move(init)), isConst(i) {}
+        VarDefAST(bool i, ASTPtr v, ASTPtr init = nullptr) : var(move(v)), initVal(move(init)), isConst(i) {}
         // construction
         ~VarDefAST() override {
             if (var) var.reset();
@@ -154,7 +159,7 @@ class VarDefAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "VarDefAST";
+            return "VarDefAST: { " + var->to_string() + " }";
         }
 };
 
@@ -163,14 +168,20 @@ class IdAST : public MetaAST {
     private:
         string name;
         VarType type;
+        ASTPtrList dim;
         bool isConst;
+
     public:
-        IdAST(const string &n, VarType t, bool i) : name(n), type(t), isConst(i) {}
+        IdAST(const string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{}) : name(n), type(t), isConst(i), dim(move(d)) {}
         // construction
-        ~IdAST() override {}
+        ~IdAST() override {
+            for (auto &d : dim) {
+                d.reset();
+            }
+        }
         // destruction
         string to_string(void) override {
-            return "IdAST";
+            return "IdAST: " + name;
         }
 };
 
@@ -208,7 +219,12 @@ class BlockAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "BlockAST";
+            string output;
+            for (auto &unit : stmts)
+            {
+                output = output + "\n" + unit->to_string();
+            }
+            return "BlockAST: {" + output + "}";
         }
 };
 
@@ -310,7 +326,7 @@ class WhileAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "WhileAST";
+            return "WhileAST: { while (" + conditionExp->to_string() + " ) do ( " + body->to_string() + " ) }";
         }
 };
 

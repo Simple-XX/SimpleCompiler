@@ -9,7 +9,6 @@
 
 #include "string"
 #include "iostream"
-#include "functional"
 #include <functional>
 #include <initializer_list>
 #include <vector> 
@@ -38,6 +37,7 @@ private:
     ASTPtr program(void);
     // 语句
     ASTPtr statement(void);
+
     // 一元表达式
     ASTPtr unary(void);
     // 二元表达式
@@ -48,8 +48,21 @@ private:
     ASTPtr binary_eq(void);
     ASTPtr binary_and(void);
     ASTPtr binary_or(void);
+
     // If then else
     ASTPtr if_else(void);
+    // while loop
+    ASTPtr while_loop(void);
+    // block
+    ASTPtr block(void);
+
+    // var declare
+    ASTPtr var_decl(void);
+    // var definition
+    ASTPtr var_def(bool);
+    // initial value
+    ASTPtr init_val(void);
+
 public:
     Parser(Lexer &lex);
     ~Parser(void);
