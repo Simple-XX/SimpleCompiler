@@ -196,6 +196,20 @@ ASTPtr Parser::statement(void) {
         next(); // ;
         return make_unique<StmtAST>(make_unique<EmptyAST>());
     }
+    else if (match_token(Tag::LBRACE)) {
+        ASTPtr body = block();
+        if (!body) {
+            exit(106);
+        }
+        return make_unique<StmtAST>(move(body));
+    }
+    else if (match_token(Tag::KW_WHILE)) {
+        ASTPtr stmt = while_loop();
+        if (!stmt) {
+            exit(107);
+        }
+        return make_unique<StmtAST>(move(stmt));
+    }
     else if (match_token(Tag::KW_IF)) {
         ASTPtr stmt = if_else();
         if (!stmt) {
@@ -305,6 +319,168 @@ ASTPtr Parser::if_else(void) {
         return make_unique<IfAST>(move(condition), move(thenStatement));
     }
     exit(57);
+}
+
+ASTPtr Parser::while_loop(void) {
+    next(); // while () stmt
+    if (!match_token(Tag::LPAREN)) {
+        exit(116);
+    }
+    next(); // (
+    ASTPtr condition = binary_or();
+    if (!condition) {
+        exit(117);
+    }
+    if (!match_token(Tag::RPAREN)) {
+        exit(118);
+    }
+    next(); // )
+    ASTPtr stmt = statement();
+    if (!stmt) {
+        exit(119);
+    }
+    return make_unique<WhileAST>(move(condition), move(stmt));
+}
+
+ASTPtr Parser::init_val(void) {
+    if (match_token(Tag::LBRACE)) {
+        next();
+        if (match_token(Tag::RBRACE)) {
+            next();
+            return make_unique<InitValAST>(VarType::array_t, ASTPtrList{});
+        } else {
+            ASTPtrList inits;
+            while (true) {
+                ASTPtr init = init_val();
+                if (!init) {
+                    cout << "error 999" << endl;
+                    exit(999);
+                }
+                inits.push_back(move(init));
+                if (!match_token(Tag::COMMA))
+                    break;
+                next(); // ,
+            }
+            if (!match_token(RBRACE)) {
+                exit(998);
+            }
+            next(); // }
+            return make_unique<InitValAST>(VarType::array_t, move(inits));
+        }
+    } else {
+        ASTPtr exp = binary_add();
+        if (!exp) {
+            cout << "error 1000" << endl;
+            exit(1000);
+        }
+        ASTPtrList expList;
+        expList.push_back(move(exp));
+        return make_unique<InitValAST>(VarType::var_t, move(expList));
+    }
+}
+
+ASTPtr Parser::var_decl() {
+    bool isConst = false;
+    if (match_token(Tag::KW_CONST)) {
+        isConst = true;
+        next();
+    }
+    
+    // TODO: only support int here
+    if (!match_token(Tag::KW_INT)) {
+        cout << "Only Support Type 'int'." << endl;
+        exit(450);
+    }
+    next();
+
+    ASTPtrList vars;
+    ASTPtr varDef = var_def(isConst);
+    if (!varDef) {
+        exit(451);
+    }
+    vars.push_back(move(varDef));
+
+    while (match_token(Tag::COMMA)) {
+        next(); // ,
+        ASTPtr varDef = var_def(isConst);
+        if (!varDef) {
+            exit(451);
+        }
+        vars.push_back(move(varDef));
+    }
+    
+    if (!match_token(Tag::SEMICON)) {
+        exit(452);
+    }
+    next();
+    return make_unique<VarDeclAST>(isConst, move(vars));
+}
+
+ASTPtr Parser::var_def(bool isConst) {
+    if (!match_token(Tag::ID)) {
+        exit(452);
+    }
+    Id* token_casted = (Id*)token;
+    string id_name = token_casted->name;
+    ASTPtrList dims;
+    next(); // id
+    while (match_token(Tag::LBRACKET)) {
+        next(); // [
+        ASTPtr exp = binary_add();
+        if (!exp) {
+            exit(453);
+        }
+        dims.push_back(move(exp));
+        if (!match_token(Tag::RBRACKET)) {
+            exit(454);
+        }
+        next(); // ]
+    }
+    ASTPtr var;
+    if (dims.empty())
+        var = make_unique<IdAST>(id_name, VarType::var_t, isConst);
+    else 
+        var = make_unique<IdAST>(id_name, VarType::array_t, isConst, move(dims));
+    if (match_token(Tag::ASSIGN)) {
+        next(); // =
+        ASTPtr init = init_val();
+        if (!init) {
+            exit(456);
+        }
+        return make_unique<VarDefAST>(isConst, move(var), move(init));
+    } else {
+        if (isConst) {
+            exit(457);
+        }
+        return make_unique<VarDefAST>(isConst, move(var));
+    }
+}
+
+ASTPtr Parser::block(void) {
+    next(); // {
+    if (match_token(Tag::RBRACE)) {
+        next(); // }
+        return make_unique<BlockAST>(ASTPtrList{});
+    } else {
+        ASTPtrList stmts;
+        while (!match_token(Tag::RBRACE)) {
+            if (match_token(Tag::KW_CONST) || match_token(Tag::KW_INT)) {
+                ASTPtr var = var_decl();
+                if (!var) {
+                    exit(460);
+                }
+                stmts.push_back(move(var));
+            } else {
+                ASTPtr stmt = statement();
+                if (!stmt) {
+                    exit(461);
+                }
+                stmts.push_back(move(stmt));
+            }
+        }
+        next(); // }
+        return make_unique<BlockAST>(move(stmts));
+    }
 }
 
 bool Parser::is_done(void) const {
