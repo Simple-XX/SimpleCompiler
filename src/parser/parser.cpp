@@ -483,6 +483,81 @@ ASTPtr Parser::block(void) {
     }
 }
 
+ASTPtr Parser::function_def(void) {
+    // function type
+    Type type;
+    if (match_token(Tag::KW_INT)) type = Type::int_t;
+    if (match_token(Tag::KW_CHAR)) type = Type::char_t;
+    if (match_token(Tag::KW_VOID)) type = Type::void_t;
+    next(); // type
+    if (!match_token(Tag::ID)) {
+        exit(999);
+    }
+    // function name
+    Id* token_casted = (Id*)token;
+    string id_name = token_casted->name;
+    next(); // id
+    if (!match_token(Tag::LPAREN)) {
+        exit(998);
+    }
+    next(); // (
+    ASTPtrList args;
+    if (!match_token(Tag::RPAREN)) {
+        while (true) {
+            // TODO: only support int
+            if ((!match_token(Tag::KW_INT))) {
+                exit(996);
+            }
+            next(); // type
+            if (!match_token(Tag::ID)) {
+                exit(998);
+            }
+            // arg name
+            Id* token_casted = (Id*)token;
+            string arg_name = token_casted->name;
+            next(); // id
+            if (match_token(Tag::LBRACKET)) // [
+            {
+                ASTPtrList dim;
+                dim.push_back(std::make_unique<NumAST>(0));
+                next(); // [
+                if (!match_token(Tag::RBRACKET))
+                {
+                    exit(997);
+                }
+                next(); // ]
+                while (match_token(Tag::LBRACKET))
+                {
+                    next(); // [
+                    ASTPtr _dim = binary_add();
+                    if (!_dim)
+                    {
+                        exit(995);
+                    }
+                    dim.push_back(std::move(_dim));
+                    if (!match_token(Tag::RBRACKET))
+                    {
+                        exit(994);
+                    }
+                    next(); // ]
+                }
+                args.push_back(std::make_unique<IdAST>(arg_name, VarType::array_t, false, move(dim)));
+            } else {
+                args.push_back(std::make_unique<IdAST>(arg_name, VarType::var_t, false));
+            }
+            if (!match_token(Tag::COMMA))
+                break;
+            next(); // ,
+        }
+        if (!match_token(Tag::RPAREN)) {
+            exit(993);
+        }
+    }
+    next(); // )
+    ASTPtr body = block();
+    return std::make_unique<FuncDefAST>(type, id_name, move(args), move(body));
+}
+
 bool Parser::is_done(void) const {
     return lexer.is_done();
 }
