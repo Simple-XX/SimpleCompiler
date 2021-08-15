@@ -63,6 +63,9 @@ private:
     // initial value
     ASTPtr init_val(void);
 
+    // function def
+    ASTPtr function_def(void);
+
 public:
     Parser(Lexer &lex);
     ~Parser(void);
