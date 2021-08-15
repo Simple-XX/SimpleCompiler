@@ -38,7 +38,7 @@ class CompUnitAST : public MetaAST {
             }
         }
         // destruction
-        string to_string(void) {
+        string to_string(void) override {
             string output;
             for (auto &unit : units)
             {
@@ -86,7 +86,7 @@ class FuncDefAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            string output = "FunctionCall: " + name + ' ';
+            string output = "FunctionDef(" + type_to_string(type) + "): " + name + ' ';
             for (auto &param : params)
             {
                 if (param) output = output + param->to_string();
@@ -137,6 +137,9 @@ class VarDeclAST : public MetaAST {
             {
                 output = output + "\n" + unit->to_string();
             }
+            if (isConst) {
+                return "VarDeclAST (CONST): {" + output + "}";
+            }
             return "VarDeclAST: {" + output + "}";
         }
 };
@@ -159,6 +162,9 @@ class VarDefAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
+            if (isConst) {
+                return "VarDefAST (CONST): {" + var->to_string() + "}";
+            }
             return "VarDefAST: { " + var->to_string() + " }";
         }
 };
@@ -172,7 +178,7 @@ class IdAST : public MetaAST {
         bool isConst;
 
     public:
-        IdAST(const string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{}) : name(n), type(t), isConst(i), dim(move(d)) {}
+        IdAST(const string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{}) : name(n), type(t), dim(move(d)), isConst(i) {}
         // construction
         ~IdAST() override {
             for (auto &d : dim) {
@@ -181,7 +187,10 @@ class IdAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "IdAST: " + name;
+            if (isConst) {
+                return "IdAST (CONST) (" + vartype_to_string(type) + "): " + name;
+            }
+            return "IdAST(" + vartype_to_string(type) + "): " + name;
         }
 };
 
@@ -200,7 +209,7 @@ class InitValAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "InitValAST";
+            return "InitValAST(" + vartype_to_string(type) + ")";
         }
 };
 
@@ -280,7 +289,7 @@ class NumAST : public MetaAST {
         // construction
         ~NumAST() override {}
         // destruction
-        string to_string(void) {
+        string to_string(void) override {
             return std::to_string(val);
         }
 };
@@ -345,7 +354,19 @@ class ControlAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "ControlAST";
+            if (type == Control::break_c) {
+                return "ControlAST: BREAK";
+            }
+            if (type == Control::continue_c) {
+                return "ControlAST: CONTINUE";
+            }
+            if (type == Control::return_c) {
+                if (returnStmt) {
+                    return "ControlAST: RETURN (" + returnStmt->to_string() + ")";
+                }
+                return "ControlAST: RETURN ";
+            }
+            return "ERROR";
         }
 };
 
@@ -385,7 +406,7 @@ class LValAST : public MetaAST {
         }
         // destruction
         string to_string(void) override {
-            return "LValAST: { " + name + " }";
+            return "LValAST:(" + vartype_to_string(type) + "):  { " + name + " }";
         }
 };
 

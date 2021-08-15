@@ -50,6 +50,32 @@ Operator tag_to_op(Tag t) {
         }
 }
 
+string type_to_string(Type t) {
+    switch (t) 
+    {
+        case Type::int_t:
+            return "INT";
+        case Type::char_t:
+            return "CHAR";
+        case Type::void_t:
+            return "VOID";
+        default:
+            return "ERROR";
+    }
+}
+
+string vartype_to_string(VarType t) {
+    switch (t) 
+    {
+        case VarType::var_t:
+            return "var";
+        case VarType::array_t:
+            return "array";
+        default:
+            return "ERROR";
+    }
+}
+
 string op_to_string(Operator p) {
     switch (p) 
     {
