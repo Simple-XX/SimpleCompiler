@@ -53,4 +53,7 @@ Operator tag_to_op(Tag t);
 
 string op_to_string(Operator p);
 
+string type_to_string(Type t);
+
+string vartype_to_string(VarType t);
 #endif /* _TYPE_H_ */
