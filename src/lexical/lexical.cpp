@@ -320,7 +320,7 @@ Token *Lexer::lexing() {
         else if (COND_NUMBER) {
             number();
         }
-        else if ((ch == '\'')) {
+        else if (ch == '\'') {
             character();
         }
         else if (ch == '"') {
