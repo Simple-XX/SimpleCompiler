@@ -13,15 +13,14 @@
 #include "lexical.h"
 #include "parser.h"
 #include "ast.h"
+#include "typechecker.h"
+#include "utils.h"
 
 class Init;
 class Error;
 class Lexer;
 class Scanner;
 class Parser;
-class Variable;
-class Function;
-class SymTab;
 
 extern Error *error;
 

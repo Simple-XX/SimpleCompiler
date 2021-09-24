@@ -30,7 +30,6 @@ int main(int argc, char **argv) {
         error = new Error(i);
         Scanner scanner(i);
         Lexer   lexer(scanner);
-        SymTab  symtab(void);
         Parser parser(lexer);
         ASTPtr prog = parser.parsing();
         cout << prog->to_string();
