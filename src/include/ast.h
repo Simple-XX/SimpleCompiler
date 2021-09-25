@@ -15,14 +15,16 @@
 using namespace std;
 
 class MetaAST;
+class TypeCheck;
 
-typedef std::unique_ptr<MetaAST> ASTPtr;
-typedef std::vector<ASTPtr> ASTPtrList;
+using ASTPtr = std::unique_ptr<MetaAST>;
+using ASTPtrList = std::vector<ASTPtr>;
 
 class MetaAST {
     public:
         virtual ~MetaAST() = default;
         virtual string to_string(void) = 0;
+        virtual ASTPtr Eval(TypeCheck &checker) = 0;
 };
 
 // Compile Unit 编译单元
@@ -46,6 +48,7 @@ class CompUnitAST : public MetaAST {
             }
             return "CompUnit: [" + output + "]\n";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Statement 语句
@@ -62,6 +65,7 @@ class StmtAST : public MetaAST {
         string to_string(void) override {
             return "Statement: {" + stmt->to_string() + "}\n";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // FunctionDefinition 函数定义
@@ -94,6 +98,7 @@ class FuncDefAST : public MetaAST {
             if (body) output = output + body->to_string();
             return output;
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // FunctionCall 函数调用
@@ -113,6 +118,7 @@ class FuncCallAST : public MetaAST {
         string to_string(void) override {
             return "FuncCallAST";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // VarDeclaration 变量声明
@@ -120,10 +126,10 @@ class VarDeclAST : public MetaAST {
     private:
         ASTPtrList vars;
         // many vars, for example: int a,b,c,d;
-        bool isConst;
+        bool Const;
         // const or not
     public:
-        VarDeclAST(bool i, ASTPtrList v) : vars(move(v)), isConst(i) {}
+        VarDeclAST(bool i, ASTPtrList v) : vars(move(v)), Const(i) {}
         // construction
         ~VarDeclAST() override {
             for (auto &var: vars) {
@@ -137,11 +143,14 @@ class VarDeclAST : public MetaAST {
             {
                 output = output + "\n" + unit->to_string();
             }
-            if (isConst) {
+            if (Const) {
                 return "VarDeclAST (CONST): {" + output + "}";
             }
             return "VarDeclAST: {" + output + "}";
         }
+        bool isConst() const { return Const; }
+        const ASTPtrList &getVarDefs() const { return vars; }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // VarDefinition 变量定义
@@ -167,6 +176,7 @@ class VarDefAST : public MetaAST {
             }
             return "VarDefAST: { " + var->to_string() + " }";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Ident 变量
@@ -192,6 +202,30 @@ class IdAST : public MetaAST {
             }
             return "IdAST(" + vartype_to_string(type) + "): " + name;
         }
+        ASTPtr Eval(TypeCheck &checker) override;
+};
+
+// Ident 变量 (processed)
+class ProcessedIdAST : public MetaAST {
+    private:
+        string name;
+        VarType type;
+        vector<int> dim;
+        bool isConst;
+
+    public:
+        ProcessedIdAST(const string &n, VarType t, bool i, vector<int> d = vector<int>{}) : name(n), type(t), dim(move(d)), isConst(i) {}
+        // construction
+        ~ProcessedIdAST() override {
+        }
+        // destruction
+        string to_string(void) override {
+            if (isConst) {
+                return "ProcessedIdAST (CONST) (" + vartype_to_string(type) + "): " + name;
+            }
+            return "ProcessedIdAST(" + vartype_to_string(type) + "): " + name;
+        }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // InitialValue 初始值
@@ -211,6 +245,12 @@ class InitValAST : public MetaAST {
         string to_string(void) override {
             return "InitValAST(" + vartype_to_string(type) + ")";
         }
+
+        VarType getType() const { return type; }
+
+        const ASTPtrList &getValues() const { return values; }
+
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Block 块作用域
@@ -235,6 +275,7 @@ class BlockAST : public MetaAST {
             }
             return "BlockAST: {" + output + "}";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // BinaryExpression 二元表达式 (A op B)
@@ -257,6 +298,7 @@ class BinaryAST : public MetaAST {
         string to_string(void) override {
             return  '(' + (left->to_string()) + ' ' + op_to_string(op) + ' ' + (right->to_string()) + ')';
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // UnaryExpression 一元表达式 (op A)
@@ -277,6 +319,7 @@ class UnaryAST : public MetaAST {
         string to_string(void) override {
             return '(' +  op_to_string(op) + ' ' + exp->to_string() + ')';
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Number 数字（int）
@@ -292,6 +335,8 @@ class NumAST : public MetaAST {
         string to_string(void) override {
             return std::to_string(val);
         }
+        const int &getVal() const { return val; }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // If 条件表达式
@@ -317,6 +362,7 @@ class IfAST : public MetaAST {
                 return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " + thenAST->to_string() + ") else (" + elseAST->to_string() + " ) }";
             else return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " + thenAST->to_string() + " ) }";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // While 循环
@@ -337,6 +383,7 @@ class WhileAST : public MetaAST {
         string to_string(void) override {
             return "WhileAST: { while (" + conditionExp->to_string() + " ) do ( " + body->to_string() + " ) }";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Control 控制语句 (break continue return)
@@ -368,6 +415,7 @@ class ControlAST : public MetaAST {
             }
             return "ERROR";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // Assignment 赋值语句 (break continue return)
@@ -388,6 +436,7 @@ class AssignAST : public MetaAST {
         string to_string(void) override {
             return " AssignAST: { " + left->to_string() + " = " + right->to_string() + " }";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // LeftValue 左值
@@ -408,6 +457,7 @@ class LValAST : public MetaAST {
         string to_string(void) override {
             return "LValAST:(" + vartype_to_string(type) + "):  { " + name + " }";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 // 空指令 
@@ -420,6 +470,7 @@ class EmptyAST : public MetaAST {
         string to_string(void) override {
             return "EmptyAST";
         }
+        ASTPtr Eval(TypeCheck &checker) override;
 };
 
 #endif /* _AST_H_ */
