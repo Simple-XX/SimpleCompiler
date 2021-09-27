@@ -378,7 +378,7 @@ class UnaryAST : public MetaAST {
 
         // expression
     public:
-        UnaryAST(Operator o, ASTPtr e) : op(o), exp(move(e)) {}
+        UnaryAST(ASTPtr e, Operator o = Operator::ERROR) : op(o), exp(move(e)) {}
         // construction
         ~UnaryAST() override {
             if (exp) exp.reset();

@@ -33,19 +33,14 @@ int main(int argc, char **argv) {
         Parser parser(lexer);
         ASTPtr prog = parser.parsing();
         cout << prog->to_string();
-        // while (lexer.is_done() == false) {
-        //     auto ch = lexer.lexing();
-        //     if (ch->tag < 0) {
-        //         if (ch->tag == EOF) {
-        //             cout << "File done: " << i << endl;
-        //         }
-        //     }
-        //     else {
-        //         // 输出到控制台
-        //         TOKEN_CAST(ch);
-        //         cout << ch->to_string() << endl;
-        //     }
-        // }
+        TypeCheck checker = TypeCheck();
+        ASTPtr root = prog -> Eval(checker);
+        if (!root) {
+            std::cerr << "Type check error\n";
+            exit(2);
+        }
+        std::map<std::string, Function> FuncTable = checker.FuncTable;
+        std::map<int, std::map<std::string, Var>> BlockVars = checker.BlockVars;
     }
 
     return 0;
