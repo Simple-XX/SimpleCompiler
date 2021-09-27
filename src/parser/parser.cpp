@@ -263,7 +263,7 @@ ASTPtr Parser::unary(void)
         if (!exp) {
             exit(103);
         }
-        return make_unique<UnaryAST>(Operator::add_op, move(exp));
+        return make_unique<UnaryAST>(move(exp), Operator::add_op);
     } else if (match_token(Tag::SUB)){
         // - EXP
         next();
@@ -271,7 +271,7 @@ ASTPtr Parser::unary(void)
         if (!exp) {
             exit(104);
         }
-        return make_unique<UnaryAST>(Operator::sub_op, move(exp));
+        return make_unique<UnaryAST>(move(exp), Operator::sub_op);
     } else if (match_token(Tag::NOT)){
         // ! EXP
         next();
@@ -279,7 +279,7 @@ ASTPtr Parser::unary(void)
         if (!exp) {
             exit(105);
         }
-        return make_unique<UnaryAST>(Operator::not_op, move(exp));
+        return make_unique<UnaryAST>(move(exp), Operator::not_op);
     } else if (match_token(Tag::ID)){
         Id* token_casted = (Id*)token;
         string id_name = token_casted->name;

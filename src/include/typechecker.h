@@ -91,7 +91,10 @@ class TypeCheck {
         unique_ptr<InitValAST> EvalInitVal(InitValAST &init);
 
         unique_ptr<NumAST> EvalNumber(NumAST &num);
-};
 
+        unique_ptr<ProcessedIdAST> EvalProcessedId(ProcessedIdAST &id);
+
+        unique_ptr<EmptyAST> EvalEmpty();
+};
 
 #endif /* _TYCK_H_ */
