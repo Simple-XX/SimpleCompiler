@@ -20,7 +20,7 @@ aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/error error_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/lexical lexical_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/parser parser_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/scanner scanner_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/sym sym_src)
+aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/typechecker typechecker_src)
 
 include_directories(${SimpleCompiler_SOURCE_CODE_DIR}/include)
 
@@ -30,4 +30,4 @@ add_executable(${CompilerName}
     ${lexical_src}
     ${parser_src}
     ${scanner_src}
-    ${sym_src})
+    ${typechecker_src})

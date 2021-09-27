@@ -21,4 +21,3 @@ set(CompilerName SimpleCompiler)
 
 set(SimpleCompiler_SOURCE_CODE_DIR ${SimpleCompiler_SOURCE_DIR}/src)
 add_subdirectory(${SimpleCompiler_SOURCE_CODE_DIR})
-
