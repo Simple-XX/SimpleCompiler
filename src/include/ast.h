@@ -16,6 +16,7 @@ using namespace std;
 
 class MetaAST;
 class TypeCheck;
+class IRGenerator;
 
 using ASTPtr = std::unique_ptr<MetaAST>;
 using ASTPtrList = std::vector<ASTPtr>;
@@ -25,6 +26,7 @@ class MetaAST {
         virtual ~MetaAST() = default;
         virtual string to_string(void) = 0;
         virtual ASTPtr Eval(TypeCheck &checker) = 0;
+        virtual string GenerateIR(IRGenerator &gen, std::string &code) = 0;
 };
 
 // Compile Unit 编译单元
@@ -51,6 +53,8 @@ class CompUnitAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const ASTPtrList &getNodes() const { return units; }
 };
 
@@ -70,6 +74,8 @@ class StmtAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const ASTPtr &getStmt() const { return stmt; }
 };
@@ -107,6 +113,8 @@ class FuncDefAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         Type getType() const { return type; }
 
         const std::string &getName() const { return name; }
@@ -135,6 +143,8 @@ class FuncCallAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const std::string &getName() const { return name; }
 
@@ -171,6 +181,8 @@ class VarDeclAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         bool isConst() const { return Const; }
 
         const ASTPtrList &getVarDefs() const { return vars; }
@@ -201,6 +213,8 @@ class VarDefAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const ASTPtr &getVar() const { return var; }
 
@@ -235,6 +249,8 @@ class IdAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const std::string getName() const { return name; }
 
         VarType getType() const { return type; }
@@ -268,6 +284,8 @@ class ProcessedIdAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const std::string &getName() const { return std::move(name); }
 
         const VarType &getType() const { return type; }
@@ -298,6 +316,8 @@ class InitValAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         bool setDim(std::vector<int> _dims) {
             dims = std::move(_dims);
@@ -336,6 +356,8 @@ class BlockAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const ASTPtrList &getStmts() const { return stmts; };
 };
 
@@ -361,6 +383,8 @@ class BinaryAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const Operator &getOp() const { return op; }
 
@@ -390,6 +414,8 @@ class UnaryAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const ASTPtr &getNode() const { return exp; }
 
         Operator getOp() const { return op; }
@@ -410,6 +436,8 @@ class NumAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const int &getVal() const { return val; }
 };
@@ -440,6 +468,8 @@ class IfAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const ASTPtr &getCond() const { return conditionExp; }
 
         const ASTPtr &getThenStmt() const { return thenAST; }
@@ -467,6 +497,8 @@ class WhileAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const ASTPtr &getCond() const { return conditionExp; }
 
@@ -505,6 +537,8 @@ class ControlAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         Control getControl() const { return type; }
 
         const ASTPtr &getReturnExp() const { return returnStmt; }
@@ -530,6 +564,8 @@ class AssignAST : public MetaAST {
         }
 
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 
         const ASTPtr &getLeft() const { return left; }
 
@@ -557,6 +593,8 @@ class LValAST : public MetaAST {
 
         ASTPtr Eval(TypeCheck &checker) override;
 
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
+
         const ASTPtrList &getPosition() const { return position; }
 
         const std::string &getName() const { return name; }
@@ -574,7 +612,10 @@ class EmptyAST : public MetaAST {
         string to_string(void) override {
             return "EmptyAST";
         }
+        
         ASTPtr Eval(TypeCheck &checker) override;
+
+        string GenerateIR(IRGenerator &gen, std::string &code) override;
 };
 
 #endif /* _AST_H_ */
