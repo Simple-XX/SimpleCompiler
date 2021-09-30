@@ -20,6 +20,7 @@
 #include "irlexer.h"
 #include "irparser.h"
 #include "lowirgen.h"
+#include "codegen.h"
 #include "utils.h"
 
 class Init;
@@ -32,6 +33,7 @@ class IRGenerator;
 class IRLexer;
 class IRParser;
 class LowIRGenerator;
+class Codegen;
 
 extern Error *error;
 
