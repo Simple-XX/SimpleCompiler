@@ -41,6 +41,11 @@ int main(int argc, char **argv) {
         }
         std::map<std::string, Function> FuncTable = checker.FuncTable;
         std::map<int, std::map<std::string, Var>> BlockVars = checker.BlockVars;
+
+        IRGenerator generator = IRGenerator(std::move(FuncTable), std::move(BlockVars));
+        string out;
+        root->GenerateIR(generator, out);
+        cout << out << endl;
     }
 
     return 0;

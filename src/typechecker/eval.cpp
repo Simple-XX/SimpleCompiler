@@ -6,6 +6,7 @@
 
 #include "ast.h"
 #include "typechecker.h"
+#include "irgen.h"
 #include <functional>
 #include <string>
 #include <vector>

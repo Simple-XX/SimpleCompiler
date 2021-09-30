@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "ast.h"
 #include "typechecker.h"
+#include "irgen.h"
 #include "utils.h"
 
 class Init;
@@ -21,6 +22,8 @@ class Error;
 class Lexer;
 class Scanner;
 class Parser;
+class TypeChecker;
+class IRGenerator;
 
 extern Error *error;
 

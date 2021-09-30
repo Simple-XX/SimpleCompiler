@@ -19,5 +19,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CompilerName SimpleCompiler)
 
+add_definitions(-w)
+
 set(SimpleCompiler_SOURCE_CODE_DIR ${SimpleCompiler_SOURCE_DIR}/src)
 add_subdirectory(${SimpleCompiler_SOURCE_CODE_DIR})
