@@ -4,7 +4,8 @@
 //
 // main.cpp for Simple-XX/SimpleCompiler.
 
-#include "iostream"
+#include <sstream>
+#include <iostream>
 #include "string"
 #include "vector"
 #include "common.h"
@@ -43,9 +44,17 @@ int main(int argc, char **argv) {
         std::map<int, std::map<std::string, Var>> BlockVars = checker.BlockVars;
 
         IRGenerator generator = IRGenerator(std::move(FuncTable), std::move(BlockVars));
-        string out;
-        root->GenerateIR(generator, out);
-        cout << out << endl;
+        string irout;
+        root->GenerateIR(generator, irout);
+        cout << irout << endl; // ir
+
+        std::istringstream stream_stmt(irout);
+        IRParser irparser = IRParser(stream_stmt);
+        IRPtr irroot = irparser.ParseProgram();
+        LowIRGenerator lowirgenerator = LowIRGenerator();
+        string lowirout;
+        irroot->Generate(lowirgenerator, lowirout);
+        cout << lowirout << endl; // low ir
     }
 
     return 0;

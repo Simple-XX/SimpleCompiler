@@ -15,6 +15,11 @@
 #include "ast.h"
 #include "typechecker.h"
 #include "irgen.h"
+#include "ir.h"
+#include "irast.h"
+#include "irlexer.h"
+#include "irparser.h"
+#include "lowirgen.h"
 #include "utils.h"
 
 class Init;
@@ -24,6 +29,9 @@ class Scanner;
 class Parser;
 class TypeChecker;
 class IRGenerator;
+class IRLexer;
+class IRParser;
+class LowIRGenerator;
 
 extern Error *error;
 
