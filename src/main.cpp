@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
         Lexer   lexer(scanner);
         Parser parser(lexer);
         ASTPtr prog = parser.parsing();
-        cout << prog->to_string();
+        cout << "[AST]:" << endl << prog->to_string() << endl;
         TypeCheck checker = TypeCheck();
         ASTPtr root = prog -> Eval(checker);
         if (!root) {
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
         IRGenerator generator = IRGenerator(std::move(FuncTable), std::move(BlockVars));
         string irout;
         root->GenerateIR(generator, irout);
-        cout << irout << endl; // ir
+        cout << "[IR]:" << endl << irout << endl; // ir
 
         std::istringstream stream_stmt(irout);
         IRParser irparser = IRParser(stream_stmt);
@@ -54,7 +54,13 @@ int main(int argc, char **argv) {
         LowIRGenerator lowirgenerator = LowIRGenerator();
         string lowirout;
         irroot->Generate(lowirgenerator, lowirout);
-        cout << lowirout << endl; // low ir
+        cout << "[LowIR]:" << endl << lowirout << endl; // low ir
+
+        std::istringstream stream_stmt2(lowirout);
+        CodeGen codegenerator = CodeGen(stream_stmt2);
+        string riscV;
+        codegenerator.Generate(riscV);
+        cout << "[RiscV]:" << endl << riscV << std::endl;
     }
 
     return 0;

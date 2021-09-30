@@ -22,6 +22,7 @@ aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/parser parser_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/scanner scanner_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/typechecker typechecker_src)
 aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/ir ir_src)
+aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/codegen codegen_src)
 
 include_directories(${SimpleCompiler_SOURCE_CODE_DIR}/include)
 
@@ -33,4 +34,5 @@ add_executable(${CompilerName}
     ${scanner_src}
     ${ir_src}
     ${typechecker_src}
+    ${codegen_src}
     )
