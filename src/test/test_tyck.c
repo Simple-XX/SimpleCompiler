@@ -5,7 +5,16 @@
 
 int global = 1;
 
+int fib(int a) {
+    if (a == 0)
+        return 1;
+    if (a == 1)
+        return 2;
+    return fib(a - 1) + fib(a - 2);
+}
+
 int main() {
     int a = global + 1;
+    a = a + fib(a);
     return 0;
 }
