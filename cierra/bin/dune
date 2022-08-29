@@ -1,6 +1,0 @@
-(executable
- (public_name cierra)
- (name main)
- (libraries cierra base cmdliner)
- (preprocess
-  (pps ppx_inline_test)))
