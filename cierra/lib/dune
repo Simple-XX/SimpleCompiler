@@ -1,0 +1,6 @@
+(library
+ (inline_tests)
+ (name cierra)
+ (libraries base cmdliner)
+ (preprocess
+  (pps ppx_inline_test)))
