@@ -2,9 +2,15 @@
 name = "cierra"
 version = "0.1.0"
 edition = "2018"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 pest = "^2.3.0"
 pest_derive = "^2.3.0"
+antlr-rust = "0.3.0-beta"
+
+[build-dependencies]
+ureq = "2.5"
+glob = "0.3"
