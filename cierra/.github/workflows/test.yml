@@ -1,0 +1,57 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+name: Test
+
+jobs:
+  fmt:
+    name: Fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout 🛎️
+      - uses: dtolnay/rust-toolchain@nightly
+        name: Setup Cargo Toolchain 🛎️
+        with:
+          components: rustfmt
+      - uses: mbrobbel/rustfmt-check@master
+        name: Check Code Format (auto fix) 🔧
+        with:
+          toolchain: nightly
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout 🛎️
+      - uses: dtolnay/rust-toolchain@stable
+        name: Setup Cargo Toolchain 🛎️
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v1
+      - run: cargo clippy --tests
+        name: Run Clippy Lints 🔨
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      rmq:
+        image: rabbitmq:3-alpine
+        ports:
+          - 5672:5672
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout 🛎️
+      - uses: dtolnay/rust-toolchain@stable
+        name: Setup Cargo Toolchain 🛎️
+      - uses: Swatinem/rust-cache@v1
+      - run: cargo test
+        name: Running Tests 🚀
