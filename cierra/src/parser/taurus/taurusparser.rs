@@ -3019,6 +3019,11 @@ pub trait ArrLogicParaVarContextAttrs<'input>: TaurusParserContext<'input>{
 	fn logicAtomicType(&self) -> Option<Rc<LogicAtomicTypeContextAll<'input>>> where Self:Sized{
 		self.child_of_type(0)
 	}
+	/// Retrieves first TerminalNode corresponding to token IDENT
+	/// Returns `None` if there is no child corresponding to token IDENT
+	fn IDENT(&self) -> Option<Rc<TerminalNode<'input,TaurusParserContextType>>> where Self:Sized{
+		self.get_token(IDENT, 0)
+	}
 	/// Retrieves first TerminalNode corresponding to token LBRACKET
 	/// Returns `None` if there is no child corresponding to token LBRACKET
 	fn LBRACKET(&self) -> Option<Rc<TerminalNode<'input,TaurusParserContextType>>> where Self:Sized{
@@ -3028,11 +3033,6 @@ pub trait ArrLogicParaVarContextAttrs<'input>: TaurusParserContext<'input>{
 	/// Returns `None` if there is no child corresponding to token RBRACKET
 	fn RBRACKET(&self) -> Option<Rc<TerminalNode<'input,TaurusParserContextType>>> where Self:Sized{
 		self.get_token(RBRACKET, 0)
-	}
-	/// Retrieves first TerminalNode corresponding to token IDENT
-	/// Returns `None` if there is no child corresponding to token IDENT
-	fn IDENT(&self) -> Option<Rc<TerminalNode<'input,TaurusParserContextType>>> where Self:Sized{
-		self.get_token(IDENT, 0)
 	}
 }
 
@@ -3268,13 +3268,13 @@ where
 					recog.logicAtomicType()?;
 
 					recog.base.set_state(185);
-					recog.base.match_token(LBRACKET,&mut recog.err_handler)?;
+					recog.base.match_token(IDENT,&mut recog.err_handler)?;
 
 					recog.base.set_state(186);
-					recog.base.match_token(RBRACKET,&mut recog.err_handler)?;
+					recog.base.match_token(LBRACKET,&mut recog.err_handler)?;
 
 					recog.base.set_state(187);
-					recog.base.match_token(IDENT,&mut recog.err_handler)?;
+					recog.base.match_token(RBRACKET,&mut recog.err_handler)?;
 
 					}
 				}
@@ -14879,8 +14879,8 @@ const _serializedATN:&'static str =
 	\x03\x02\x02\x02\u{b2}\u{b1}\x03\x02\x02\x02\u{b3}\x15\x03\x02\x02\x02\u{b4}\
 	\u{b5}\x05\x18\x0d\x02\u{b5}\u{b6}\x07\x44\x02\x02\u{b6}\u{c0}\x03\x02\x02\
 	\x02\u{b7}\u{b8}\x07\x04\x02\x02\u{b8}\u{b9}\x07\x44\x02\x02\u{b9}\u{c0}\
-	\x07\x44\x02\x02\u{ba}\u{bb}\x05\x18\x0d\x02\u{bb}\u{bc}\x07\x0b\x02\x02\
-	\u{bc}\u{bd}\x07\x0c\x02\x02\u{bd}\u{be}\x07\x44\x02\x02\u{be}\u{c0}\x03\
+	\x07\x44\x02\x02\u{ba}\u{bb}\x05\x18\x0d\x02\u{bb}\u{bc}\x07\x44\x02\x02\
+	\u{bc}\u{bd}\x07\x0b\x02\x02\u{bd}\u{be}\x07\x0c\x02\x02\u{be}\u{c0}\x03\
 	\x02\x02\x02\u{bf}\u{b4}\x03\x02\x02\x02\u{bf}\u{b7}\x03\x02\x02\x02\u{bf}\
 	\u{ba}\x03\x02\x02\x02\u{c0}\x17\x03\x02\x02\x02\u{c1}\u{c5}\x07\x36\x02\
 	\x02\u{c2}\u{c5}\x07\x37\x02\x02\u{c3}\u{c5}\x07\x35\x02\x02\u{c4}\u{c1}\

@@ -62,7 +62,7 @@ atomicType:
 logicParaVar:
 	logicAtomicType IDENT                       # AtomLogicParaVar
 	| STRUCT IDENT IDENT                        # StructLogicParaVar
-	| logicAtomicType LBRACKET RBRACKET IDENT   # ArrLogicParaVar
+	| logicAtomicType IDENT LBRACKET RBRACKET   # ArrLogicParaVar
 	;
 
 logicAtomicType:

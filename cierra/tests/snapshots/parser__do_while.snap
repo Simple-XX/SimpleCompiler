@@ -1,0 +1,125 @@
+---
+source: tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: "fun",
+                contract: Contract {
+                    requires: [
+                        TT,
+                    ],
+                    ensures: [
+                        TT,
+                    ],
+                },
+                ret_ty: Void,
+                vars: [],
+                decl_stmts: [
+                    Decl(
+                        Decl {
+                            ty: Atom(
+                                Int,
+                            ),
+                            name: "x",
+                            value: Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                    Stmt(
+                        Do {
+                            annot: LoopAnnot {
+                                invariants: [
+                                    Cmp(
+                                        Cmp(
+                                            Lt,
+                                            ArithTerm(
+                                                Ident(
+                                                    "x",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    1,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                variants: [],
+                            },
+                            cond: Binary(
+                                Logic(
+                                    Cmp(
+                                        Lt,
+                                    ),
+                                ),
+                                Ident(
+                                    "x",
+                                ),
+                                Const(
+                                    Int(
+                                        1,
+                                    ),
+                                ),
+                            ),
+                            body: Block(
+                                [
+                                    Stmt(
+                                        Assign(
+                                            Var(
+                                                "x",
+                                                Binary(
+                                                    Arith(
+                                                        Plus,
+                                                    ),
+                                                    Ident(
+                                                        "x",
+                                                    ),
+                                                    Const(
+                                                        Int(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        },
+                    ),
+                    Stmt(
+                        Empty,
+                    ),
+                    Stmt(
+                        Assert(
+                            Cmp(
+                                Cmp(
+                                    Eq,
+                                    ArithTerm(
+                                        Ident(
+                                            "x",
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            1,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}

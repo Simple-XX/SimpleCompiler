@@ -1,4 +1,4 @@
-use antlr_rust::{parser_rule_context::ParserRuleContext, token::Token, tree::ParseTree};
+use antlr_rust::{tree::ParseTree};
 
 use crate::{
     parser::taurus::taurusparser::{
@@ -238,7 +238,7 @@ fn parse_pred(ctx: &PredContextAll) -> Pred {
         ),
         PredContextAll::LengthPredContext(ctx) => Pred::Length {
             base: ctx.IDENT().unwrap().get_text(),
-            start: ctx.INT_CONSTANT().get_text().parse().unwrap(),
+            start: ctx.INT_CONSTANT().unwrap().get_text().parse().unwrap(),
             end: parse_arith_term(&ctx.arithTerm().unwrap()),
         },
         PredContextAll::QuantiPredContext(ctx) => Pred::Quantifier {

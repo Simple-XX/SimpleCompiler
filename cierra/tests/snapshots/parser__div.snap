@@ -1,0 +1,58 @@
+---
+source: tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: "main",
+                contract: Contract {
+                    requires: [],
+                    ensures: [
+                        Cmp(
+                            Cmp(
+                                Eq,
+                                ArithTerm(
+                                    Res,
+                                ),
+                                Const(
+                                    Int(
+                                        1,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Binary(
+                                    Arith(
+                                        Mul,
+                                    ),
+                                    Const(
+                                        Int(
+                                            5,
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            3,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}
