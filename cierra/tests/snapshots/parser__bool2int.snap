@@ -1,0 +1,82 @@
+---
+source: tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: "main",
+                contract: Contract {
+                    requires: [],
+                    ensures: [
+                        Cmp(
+                            Cmp(
+                                Eq,
+                                ArithTerm(
+                                    Res,
+                                ),
+                                Const(
+                                    Int(
+                                        2,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Binary(
+                                    Arith(
+                                        Plus,
+                                    ),
+                                    Binary(
+                                        Logic(
+                                            Cmp(
+                                                Eq,
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    ),
+                                    Binary(
+                                        Logic(
+                                            Cmp(
+                                                Neq,
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                0,
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}
