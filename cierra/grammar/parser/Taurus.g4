@@ -162,7 +162,7 @@ pred:
 	| NOT pred							    # NotPred
 	| pred XOR pred					        # XorPred
 	// 这里化简了 ACSL 中 location 和 tset 的概念 range 是个闭区间，其首尾的类型都只能是 integer
-	| VALID LPAR IDENT ADD LPAR INT_CONSTANT '..' arithTerm RPAR RPAR	# LengthPred
+	| VALID LPAR IDENT ADD LPAR INT_CONSTANT APOSTROPHE arithTerm RPAR RPAR	# LengthPred
 	| quantifier binder (COMMA binder)* SEMICOLON pred			        # QuantiPred;
 
 arithOp:

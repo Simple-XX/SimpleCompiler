@@ -238,7 +238,7 @@ fn parse_pred(ctx: &PredContextAll) -> Pred {
         ),
         PredContextAll::LengthPredContext(ctx) => Pred::Length {
             base: ctx.IDENT().unwrap().get_text(),
-            start: ctx.start().get_text().parse().unwrap(),
+            start: ctx.INT_CONSTANT().get_text().parse().unwrap(),
             end: parse_arith_term(&ctx.arithTerm().unwrap()),
         },
         PredContextAll::QuantiPredContext(ctx) => Pred::Quantifier {
