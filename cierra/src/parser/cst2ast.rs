@@ -1,4 +1,4 @@
-use antlr_rust::{tree::ParseTree};
+use antlr_rust::tree::ParseTree;
 
 use crate::{
     parser::taurus::taurusparser::{
