@@ -1,5 +1,3 @@
-use std::ops::{Div, Mul, Neg, Not, Rem};
-
 use antlr_rust::{common_token_stream::CommonTokenStream, InputStream};
 
 use crate::parser::{
@@ -308,7 +306,7 @@ pub mod logic {
     #[derive(Debug, Clone)]
     pub struct Binder {
         pub ty: AtomTy,
-        pub(crate) name: String,
+        pub name: String,
     }
 
     #[derive(Debug, Copy, Clone)]

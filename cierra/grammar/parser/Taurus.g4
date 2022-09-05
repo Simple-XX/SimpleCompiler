@@ -1,5 +1,9 @@
 grammar Taurus;
 
+@header {
+#![allow(unused_parens)]
+}
+
 @fields {
     in_annot: bool,
     in_line_annot: bool,

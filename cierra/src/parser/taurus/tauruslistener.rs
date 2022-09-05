@@ -1,5 +1,8 @@
 #![allow(nonstandard_style)]
 // Generated from Taurus.g4 by ANTLR 4.8
+
+#![allow(unused_parens)]
+
 use antlr_rust::tree::ParseTreeListener;
 use super::taurusparser::*;
 
