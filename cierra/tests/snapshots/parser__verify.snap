@@ -1,0 +1,204 @@
+---
+source: tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: "verify",
+                contract: Contract {
+                    requires: [
+                        Cmp(
+                            Cmp(
+                                Ge,
+                                ArithTerm(
+                                    Ident(
+                                        "n",
+                                    ),
+                                ),
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                    ensures: [
+                        TT,
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [
+                    (
+                        Atom(
+                            Int,
+                        ),
+                        "n",
+                    ),
+                ],
+                decl_stmts: [
+                    Decl(
+                        Decl {
+                            ty: Atom(
+                                Int,
+                            ),
+                            name: "x",
+                            value: Some(
+                                Ident(
+                                    "n",
+                                ),
+                            ),
+                        },
+                    ),
+                    Decl(
+                        Decl {
+                            ty: Atom(
+                                Int,
+                            ),
+                            name: "y",
+                            value: Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                    Stmt(
+                        While {
+                            annot: LoopAnnot {
+                                invariants: [
+                                    Cmp(
+                                        Cmp(
+                                            Ge,
+                                            ArithTerm(
+                                                Ident(
+                                                    "x",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    0,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Cmp(
+                                        Cmp(
+                                            Eq,
+                                            ArithTerm(
+                                                Binary(
+                                                    Plus,
+                                                    Ident(
+                                                        "x",
+                                                    ),
+                                                    Ident(
+                                                        "y",
+                                                    ),
+                                                ),
+                                            ),
+                                            Ident(
+                                                "n",
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                variants: [],
+                            },
+                            cond: Binary(
+                                Logic(
+                                    Cmp(
+                                        Gt,
+                                    ),
+                                ),
+                                Ident(
+                                    "x",
+                                ),
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                            body: Block(
+                                [
+                                    Stmt(
+                                        Assign(
+                                            Var(
+                                                "x",
+                                                Binary(
+                                                    Arith(
+                                                        Minus,
+                                                    ),
+                                                    Ident(
+                                                        "x",
+                                                    ),
+                                                    Const(
+                                                        Int(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Stmt(
+                                        Assign(
+                                            Var(
+                                                "y",
+                                                Binary(
+                                                    Arith(
+                                                        Plus,
+                                                    ),
+                                                    Ident(
+                                                        "y",
+                                                    ),
+                                                    Const(
+                                                        Int(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        },
+                    ),
+                    Stmt(
+                        Assert(
+                            Cmp(
+                                Cmp(
+                                    Eq,
+                                    ArithTerm(
+                                        Ident(
+                                            "y",
+                                        ),
+                                    ),
+                                    Ident(
+                                        "n",
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    Stmt(
+                        Ret(
+                            Some(
+                                Ident(
+                                    "y",
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}
