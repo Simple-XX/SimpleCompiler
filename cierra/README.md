@@ -39,11 +39,13 @@ Optionally,
 
 ### Regenerate grammar files
 
+If you've configured the project with `Nix`,
+
 ```bash
 $ generate
 ```
 
-or
+otherwise,
 
 ```bash
 $ ./generate.sh
@@ -53,11 +55,13 @@ $ ./generate.sh
 
 ### Format code
 
+If you've configured the project with `Nix`,
+
 ```bash
 $ format
 ```
 
-or
+otherwise,
 
 ```bash
 $ cargo +nightly fmt
@@ -74,3 +78,7 @@ except for files in the following folders:
 Files under the `grammar` folder are adopted from [CMinor-Verifier](https://github.com/thufv/CMinor-Verifier) project
 and licensed under [GPLv3](./grammar/COPYING).
 All modifications are stated in comments of the files.
+
+## References
+
+- [CMinor-Verifier](https://github.com/thufv/CMinor-Verifier) - Course lab project of [Software Analysis and Verification (zh-cn)](https://feihe.github.io/ProgramVerification/s22), Tsinghua University.
