@@ -1,0 +1,19 @@
+[package]
+name = "sexp_macro"
+version = "0.0.0"
+authors = ["LightQuantum <self@lightquantum.me>"]
+description = "A `cargo generate` template for quick-starting a procedural macro crate"
+keywords = ["template", "proc_macro", "procmacro"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1"
+syn = "1.0"
+
+[dev-dependencies]
+insta = "1.21"
+sexp = { path = "../sexp" }

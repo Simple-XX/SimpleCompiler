@@ -1,4 +1,4 @@
-// Generated from /home/misaka/code/cierra/grammar/parser/Taurus.g4 by ANTLR 4.9.2
+// Generated from /Users/lightquantum/Projects/cierra/grammar/parser/Taurus.g4 by ANTLR 4.9.2
 
 #![allow(unused_parens)]
 

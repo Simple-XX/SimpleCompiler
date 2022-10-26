@@ -1,26 +1,2 @@
-[package]
-name = "cierra"
-version = "0.1.0"
-edition = "2018"
-
-[[bin]]
-name = "cierra-cli"
-path = "src/main.rs"
-
-[lib]
-name = "cierra"
-path = "src/lib.rs"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-antlr-rust = "0.3.0-beta"
-itertools = "0.10"
-
-[dev-dependencies]
-insta = "1.19"
-glob = "0.3"
-
-[build-dependencies]
-ureq = "2.5"
-glob = "0.3"
+[workspace]
+members = ["cierra", "macro", "sexp"]

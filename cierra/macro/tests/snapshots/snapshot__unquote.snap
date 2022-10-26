@@ -1,0 +1,11 @@
+---
+source: macro/tests/snapshot.rs
+expression: buf
+---
+(=>
+  (not
+    (= x 0)
+  )
+  (> y 1)
+)
+

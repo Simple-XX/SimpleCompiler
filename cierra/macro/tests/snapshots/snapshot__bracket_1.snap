@@ -1,0 +1,14 @@
+---
+source: macro/tests/snapshot.rs
+expression: buf
+---
+(forall [x y z]
+  (=>
+    (and
+      (<= x y)
+      (<= y z)
+    )
+    (<= x z)
+  )
+)
+

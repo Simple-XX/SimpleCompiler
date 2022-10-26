@@ -1,0 +1,189 @@
+---
+source: cierra/tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: Symbol(
+                    "collide",
+                ),
+                contract: Contract {
+                    requires: [],
+                    ensures: [
+                        TT,
+                    ],
+                },
+                ret_ty: Void,
+                vars: [],
+                decl_stmts: [
+                    Decl(
+                        Decl {
+                            ty: Atom(
+                                Int,
+                            ),
+                            name: Symbol(
+                                "x",
+                            ),
+                            value: Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                    Decl(
+                        Decl {
+                            ty: Atom(
+                                Int,
+                            ),
+                            name: Symbol(
+                                "y",
+                            ),
+                            value: Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                    Stmt(
+                        While(
+                            LoopAnnot {
+                                invariants: [
+                                    Cmp(
+                                        Cmp(
+                                            Le,
+                                            ArithTerm(
+                                                Var(
+                                                    Symbol(
+                                                        "x",
+                                                    ),
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    5,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                variants: [],
+                            },
+                            Binary(
+                                Logic(
+                                    Cmp(
+                                        Lt,
+                                    ),
+                                ),
+                                Var(
+                                    Symbol(
+                                        "x",
+                                    ),
+                                ),
+                                Const(
+                                    Int(
+                                        5,
+                                    ),
+                                ),
+                            ),
+                            Block(
+                                [
+                                    Decl(
+                                        Decl {
+                                            ty: Atom(
+                                                Int,
+                                            ),
+                                            name: Symbol(
+                                                "y",
+                                            ),
+                                            value: Some(
+                                                Var(
+                                                    Symbol(
+                                                        "x",
+                                                    ),
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    Stmt(
+                                        Assign(
+                                            Var(
+                                                Symbol(
+                                                    "x",
+                                                ),
+                                                Binary(
+                                                    Arith(
+                                                        Plus,
+                                                    ),
+                                                    Var(
+                                                        Symbol(
+                                                            "y",
+                                                        ),
+                                                    ),
+                                                    Const(
+                                                        Int(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ),
+                    ),
+                    Stmt(
+                        Assert(
+                            Cmp(
+                                Cmp(
+                                    Eq,
+                                    ArithTerm(
+                                        Var(
+                                            Symbol(
+                                                "y",
+                                            ),
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            0,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    Stmt(
+                        Assert(
+                            Cmp(
+                                Cmp(
+                                    Eq,
+                                    ArithTerm(
+                                        Var(
+                                            Symbol(
+                                                "x",
+                                            ),
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            5,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}

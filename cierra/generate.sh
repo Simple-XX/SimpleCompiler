@@ -10,7 +10,7 @@ function to_rust_path() {
   local base_name_without_extension=${base_name%.*}
   local lower_base_name_without_extension=${base_name_without_extension,,}
 
-  local rust_path="src/${relative_parent_path}/${lower_base_name_without_extension}"
+  local rust_path="cierra/src/${relative_parent_path}/${lower_base_name_without_extension}"
   echo "$rust_path"
 }
 

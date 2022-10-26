@@ -1,0 +1,176 @@
+---
+source: cierra/tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: Symbol(
+                    "fun",
+                ),
+                contract: Contract {
+                    requires: [
+                        Con(
+                            Length {
+                                base: Symbol(
+                                    "a",
+                                ),
+                                start: 0,
+                                end: Var(
+                                    Symbol(
+                                        "len",
+                                    ),
+                                ),
+                            },
+                            Cmp(
+                                Cmp(
+                                    Ge,
+                                    ArithTerm(
+                                        Var(
+                                            Symbol(
+                                                "len",
+                                            ),
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            2,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                    ensures: [
+                        Cmp(
+                            Cmp(
+                                Eq,
+                                ArithTerm(
+                                    Res,
+                                ),
+                                Binary(
+                                    Plus,
+                                    Binary(
+                                        Plus,
+                                        Read(
+                                            Var(
+                                                Symbol(
+                                                    "a",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    0,
+                                                ),
+                                            ),
+                                        ),
+                                        Read(
+                                            Var(
+                                                Symbol(
+                                                    "a",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    1,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Read(
+                                        Var(
+                                            Symbol(
+                                                "a",
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                2,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [
+                    (
+                        Array(
+                            Int,
+                        ),
+                        Symbol(
+                            "a",
+                        ),
+                    ),
+                    (
+                        Atom(
+                            Int,
+                        ),
+                        Symbol(
+                            "len",
+                        ),
+                    ),
+                ],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Binary(
+                                    Arith(
+                                        Plus,
+                                    ),
+                                    Binary(
+                                        Arith(
+                                            Plus,
+                                        ),
+                                        Read(
+                                            Var(
+                                                Symbol(
+                                                    "a",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    0,
+                                                ),
+                                            ),
+                                        ),
+                                        Read(
+                                            Var(
+                                                Symbol(
+                                                    "a",
+                                                ),
+                                            ),
+                                            Const(
+                                                Int(
+                                                    1,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Read(
+                                        Var(
+                                            Symbol(
+                                                "a",
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                2,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}

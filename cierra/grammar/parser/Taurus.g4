@@ -1,7 +1,7 @@
 grammar Taurus;
 
 @header {
-#![allow(unused_parens)]
+#![allow(warnings, clippy::all)]
 }
 
 @fields {
@@ -79,7 +79,7 @@ stmt:
 	| IF LPAR expr RPAR stmt (ELSE stmt)?							            # IfStmt
 	| loopAnnot WHILE LPAR expr RPAR stmt							            # WhileStmt
 	| loopAnnot DO stmt WHILE LPAR expr RPAR						            # DoStmt
-	| loopAnnot FOR LPAR forInit? SEMICOLON expr? SEMICOLON forIter? RPAR stmt	# ForStmt
+	| loopAnnot FOR LPAR forInit? SEMICOLON expr? SEMICOLON stmt? RPAR stmt	    # ForStmt
 	| BREAK SEMICOLON													        # BreakStmt
 	| CONTINUE SEMICOLON												        # ContStmt
 	| RETURN expr? SEMICOLON										        	# ReturnStmt
@@ -90,11 +90,6 @@ stmt:
 forInit:
     localVar (ASSIGN expr)? # ForInitLocalVar
     | assign                # ForInitAssign
-    ;
-
-forIter:
-    assign  # ForIterAssign
-    | expr  # ForIterExpr
     ;
 
 assign:
