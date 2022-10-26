@@ -6,6 +6,7 @@ use std::{
 };
 
 use itertools::Itertools;
+use sexp::SexpDisplay;
 use tracing::trace;
 
 use crate::{
@@ -202,7 +203,7 @@ pub fn weakest_post(ctx: &mut Context, acc: Pred, gc: GuardedCommand) -> Pred {
             acc
         }
         Assert(p) => {
-            trace!("&& {:?}", p);
+            trace!("&& {}", p.plain_display());
             Pred::Con(boxed(p), boxed(acc))
         }
         Assume(Pred::Bot) => {
@@ -210,19 +211,25 @@ pub fn weakest_post(ctx: &mut Context, acc: Pred, gc: GuardedCommand) -> Pred {
             Pred::TT
         }
         Assume(p) => {
-            trace!("=> {:?}", p);
+            trace!("=> {}", p.plain_display());
             Pred::Imply(boxed(p), boxed(acc))
         }
         Havoc(x) => {
             let tmp = ctx.next_fv();
             let q = acc.subst(Var(tmp), x);
-            trace!("replace {:?} with {:?} in {:?} ==> {:?}", x, tmp, acc, q);
+            trace!(
+                "replace {} with {} in {} ==> {}",
+                x,
+                tmp,
+                acc.plain_display(),
+                q.pretty_display()
+            );
             q
         }
         Choice(gc1, gc2) => {
             let p1 = weakest_post_block(ctx, acc.clone(), gc1);
             let p2 = weakest_post_block(ctx, acc, gc2);
-            trace!("choice {:?} or {:?}", p1, p2);
+            trace!("choice {} or {}", p1.pretty_display(), p2.pretty_display());
             Pred::Con(boxed(p1), boxed(p2))
         }
     }
