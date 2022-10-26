@@ -1,0 +1,170 @@
+---
+source: cierra/tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Pred(
+            PredDef {
+                name: Symbol(
+                    "sorted",
+                ),
+                vars: [
+                    (
+                        Array(
+                            Int,
+                        ),
+                        Symbol(
+                            "a",
+                        ),
+                    ),
+                ],
+                body: Quant(
+                    Forall,
+                    [
+                        Binder(
+                            Int,
+                            Symbol(
+                                "i",
+                            ),
+                        ),
+                    ],
+                    Imply(
+                        Cmp(
+                            Cmp(
+                                Lt,
+                                Cmp(
+                                    Le,
+                                    ArithTerm(
+                                        Const(
+                                            Int(
+                                                0,
+                                            ),
+                                        ),
+                                    ),
+                                    Var(
+                                        Symbol(
+                                            "i",
+                                        ),
+                                    ),
+                                ),
+                                Binary(
+                                    Minus,
+                                    Var(
+                                        Symbol(
+                                            "a",
+                                        ),
+                                    ),
+                                    Const(
+                                        Int(
+                                            1,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        Cmp(
+                            Cmp(
+                                Le,
+                                ArithTerm(
+                                    Read(
+                                        Var(
+                                            Symbol(
+                                                "a",
+                                            ),
+                                        ),
+                                        Var(
+                                            Symbol(
+                                                "i",
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                Read(
+                                    Var(
+                                        Symbol(
+                                            "a",
+                                        ),
+                                    ),
+                                    Binary(
+                                        Plus,
+                                        Var(
+                                            Symbol(
+                                                "i",
+                                            ),
+                                        ),
+                                        Const(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            },
+        ),
+        Func(
+            FuncDef {
+                name: Symbol(
+                    "search",
+                ),
+                contract: Contract {
+                    requires: [
+                        Call(
+                            Symbol(
+                                "sorted",
+                            ),
+                            [
+                                Arith(
+                                    Var(
+                                        Symbol(
+                                            "a",
+                                        ),
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ],
+                    ensures: [],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [
+                    (
+                        Array(
+                            Int,
+                        ),
+                        Symbol(
+                            "a",
+                        ),
+                    ),
+                    (
+                        Atom(
+                            Int,
+                        ),
+                        Symbol(
+                            "x",
+                        ),
+                    ),
+                ],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}

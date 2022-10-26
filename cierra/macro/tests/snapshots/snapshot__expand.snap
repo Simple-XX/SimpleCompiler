@@ -1,0 +1,9 @@
+---
+source: macro/tests/snapshot.rs
+expression: buf
+---
+(test
+  (assert 1 2)
+  (assert 1 2)
+)
+

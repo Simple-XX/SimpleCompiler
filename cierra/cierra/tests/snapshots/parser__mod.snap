@@ -1,0 +1,63 @@
+---
+source: cierra/tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: Symbol(
+                    "main",
+                ),
+                contract: Contract {
+                    requires: [],
+                    ensures: [
+                        Cmp(
+                            Cmp(
+                                Eq,
+                                ArithTerm(
+                                    Res,
+                                ),
+                                Const(
+                                    Int(
+                                        2,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Binary(
+                                    Arith(
+                                        Mul,
+                                    ),
+                                    Const(
+                                        Int(
+                                            5,
+                                        ),
+                                    ),
+                                    Unary(
+                                        Neg,
+                                        Const(
+                                            Int(
+                                                3,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}

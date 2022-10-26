@@ -1,0 +1,77 @@
+---
+source: cierra/tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [
+        Func(
+            FuncDef {
+                name: Symbol(
+                    "cmp",
+                ),
+                contract: Contract {
+                    requires: [
+                        TT,
+                    ],
+                    ensures: [
+                        Cmp(
+                            Cmp(
+                                Le,
+                                Cmp(
+                                    Le,
+                                    ArithTerm(
+                                        Res,
+                                    ),
+                                    Var(
+                                        Symbol(
+                                            "a",
+                                        ),
+                                    ),
+                                ),
+                                Var(
+                                    Symbol(
+                                        "b",
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret_ty: Atom(
+                    Int,
+                ),
+                vars: [
+                    (
+                        Atom(
+                            Int,
+                        ),
+                        Symbol(
+                            "a",
+                        ),
+                    ),
+                    (
+                        Atom(
+                            Int,
+                        ),
+                        Symbol(
+                            "b",
+                        ),
+                    ),
+                ],
+                decl_stmts: [
+                    Stmt(
+                        Ret(
+                            Some(
+                                Const(
+                                    Int(
+                                        0,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+    ],
+}
