@@ -27,7 +27,3 @@ tracing-subscriber = "0.3"
 [dev-dependencies]
 glob = "0.3"
 insta = "1.19"
-
-[build-dependencies]
-glob = "0.3"
-ureq = "2.5"
