@@ -1,3 +1,13 @@
+/* Modified at 2022/09/06
+    1. The name of the language is renamed to `Taurus` to avoid confusion.
+    2. Headers and actions are modified to generate Rust code.
+    3. All inline terminals are extracted and moved to the end of the file.
+    4. Labels are added and non-terminals are renamed for easier ast generation.
+*/
+/* Modified at 2022/10/26
+    1. The iteration expression part of for loops is changed to accept a statement due to
+        lack of side effect of expressions in this language.
+*/
 grammar Taurus;
 
 @header {

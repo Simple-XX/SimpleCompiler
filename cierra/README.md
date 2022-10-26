@@ -62,3 +62,15 @@ or
 ```bash
 $ cargo +nightly fmt
 ```
+
+## License
+
+If not otherwise specified, all files in this repository are licensed under the [GPLv3](./LICENSE) license,
+except for files in the following folders:
+
+- `sexp` - [Apache-2.0](./sexp/LICENSE-APACHE) or [MIT](./sexp/LICENSE-MIT)
+- `macro` - [Apache-2.0](./macro/LICENSE-APACHE) or [MIT](./macro/LICENSE-MIT)
+
+Files under the `grammar` folder are adopted from [CMinor-Verifier](https://github.com/thufv/CMinor-Verifier) project
+and licensed under [GPLv3](./grammar/COPYING).
+All modifications are stated in comments of the files.
