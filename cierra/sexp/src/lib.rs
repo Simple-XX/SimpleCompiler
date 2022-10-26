@@ -18,7 +18,7 @@ pub trait SexpDisplay {
         self.display(SerializerStyle { line_break: "\n", indentation: "  " })
     }
     fn plain_display(&self) -> String {
-        self.display(SerializerStyle { line_break: "", indentation: "" })
+        self.display(SerializerStyle { line_break: " ", indentation: "" })
     }
 }
 
