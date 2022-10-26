@@ -1,10 +1,14 @@
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
+
+defaults:
+  run:
+    working-directory: ./cierra
 
 name: Test
 
@@ -19,11 +23,8 @@ jobs:
         name: Setup Cargo Toolchain 🛎️
         with:
           components: rustfmt
-      - uses: mbrobbel/rustfmt-check@master
-        name: Check Code Format (auto fix) 🔧
-        with:
-          toolchain: nightly
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: cargo fmt --all -- --check
+        name: Check Code Format 🔧
 
   lint:
     name: Lint
