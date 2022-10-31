@@ -1,0 +1,8 @@
+---
+source: macro/tests/snapshot.rs
+expression: buf
+---
+(= y
+  (+ x 1)
+)
+

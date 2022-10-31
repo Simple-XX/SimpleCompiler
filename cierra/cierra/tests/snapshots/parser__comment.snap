@@ -1,0 +1,7 @@
+---
+source: tests/parser.rs
+expression: ast
+---
+Taurus {
+    defs: [],
+}

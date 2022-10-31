@@ -1,0 +1,52 @@
+---
+source: macro/tests/snapshot.rs
+expression: buf
+---
+(assert
+  (not
+    (=>
+      (choice
+        (+
+          (choice
+            (8 9 10)
+          )
+          (assume
+            (-
+              (choice
+                (8
+                  (choice
+                    (8 9 10)
+                  )
+                  (choice
+                    (+
+                      (assume
+                        (-
+                          (choice
+                            (8
+                              (choice
+                                (+
+                                  (assume
+                                    (-
+                                      (choice
+                                        (8 9 10)
+                                      )
+                                    )
+                                  )
+                                )
+                              ) 10
+                            )
+                          )
+                        )
+                      )
+                    )
+                  ) 10
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+

@@ -1,0 +1,6 @@
+---
+source: tests/snapshot.rs
+expression: buf
+---
+(assert 1 2)
+
