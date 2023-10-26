@@ -1,8 +1,18 @@
 
-// This file is a part of Simple-XX/SimpleCompiler
-// (https://github.com/Simple-XX/SimpleCompiler).
-//
-// lexical.h for Simple-XX/SimpleCompiler.
+/**
+ * @file lexical.h
+ * @brief lexical
+ * @author Zone.N (Zone.Niuzh@hotmail.com)
+ * @version 1.0
+ * @date 2023-10-26
+ * @copyright MIT LICENSE
+ * https://github.com/Simple-XX/SimpleCompiler
+ * @par change log:
+ * <table>
+ * <tr><th>Date<th>Author<th>Description
+ * <tr><td>2023-10-26<td>Zone.N<td>迁移到 doxygen
+ * </table>
+ */
 
 #ifndef _LEXICAL_H_
 #define _LEXICAL_H_
