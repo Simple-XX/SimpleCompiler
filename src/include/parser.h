@@ -38,50 +38,50 @@ private:
   // 超前查看的 token
   Token *token;
   // 获取下一个 token
-  void next(void);
+  void next();
   // 匹配指定 Token
   bool match_token(Tag tag);
 
   // 程序
-  ASTPtr program(void);
+  ASTPtr program();
   // 语句
-  ASTPtr statement(void);
+  ASTPtr statement();
 
   // 一元表达式
-  ASTPtr unary(void);
+  ASTPtr unary();
   // 二元表达式
   ASTPtr binary(const std::function<ASTPtr()> &parser,
                 std::initializer_list<Operator> ops);
-  ASTPtr binary_add(void);
-  ASTPtr binary_mul(void);
-  ASTPtr binary_relation(void);
-  ASTPtr binary_eq(void);
-  ASTPtr binary_and(void);
-  ASTPtr binary_or(void);
+  ASTPtr binary_add();
+  ASTPtr binary_mul();
+  ASTPtr binary_relation();
+  ASTPtr binary_eq();
+  ASTPtr binary_and();
+  ASTPtr binary_or();
 
   // If then else
-  ASTPtr if_else(void);
+  ASTPtr if_else();
   // while loop
-  ASTPtr while_loop(void);
+  ASTPtr while_loop();
   // block
-  ASTPtr block(void);
+  ASTPtr block();
 
   // var declare
-  ASTPtr var_decl(void);
+  ASTPtr var_decl();
   // var definition
   ASTPtr var_def(bool);
   // initial value
-  ASTPtr init_val(void);
+  ASTPtr init_val();
 
   // function def
-  ASTPtr function_def(void);
+  ASTPtr function_def();
 
 public:
   Parser(Lexer &lex);
-  ~Parser(void);
+  ~Parser();
   // 进行解析
-  ASTPtr parsing(void);
-  bool is_done(void) const;
+  ASTPtr parsing();
+  bool is_done() const;
 };
 
 #endif /* SIMPLECOMPILER_PARSER_H */

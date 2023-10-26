@@ -45,13 +45,13 @@ private:
 public:
   // 读一个文件
   Scanner(const std::string &filename);
-  ~Scanner(void);
+  ~Scanner();
   // 扫描并返回字符
-  char scan(void);
+  char scan();
   // 返回前一个字符
-  char get_prev_char(void);
+  char get_prev_char();
   // 文件是否结束
-  bool is_done(void);
+  bool is_done();
 };
 
 #endif /* SIMPLECOMPILER_SCANNER_H */

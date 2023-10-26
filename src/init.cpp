@@ -43,8 +43,8 @@ Init::Init() {
 
 Init::~Init() { return; }
 
-int Init::init(int &argc, char **&argv) {
-  while ((c = getopt_long(argc, argv, "hvo:", long_options, &index)) != EOF) {
+int Init::init(int &_argc, char **&_argv) {
+  while ((c = getopt_long(_argc, _argv, "hvo:", long_options, &index)) != EOF) {
     switch (c) {
     // 显示帮助信息
     case 'h':
@@ -62,11 +62,11 @@ int Init::init(int &argc, char **&argv) {
                 << "简单的 C 语言子集编译器" << std::endl;
       break;
     case 'o':
-      // 寻找源文件，寻找区间 argv[1:-2]
-      for (int i = 1; i < argc - 2; i++) {
+      // 寻找源文件，寻找区间 _argv[1:-2]
+      for (int i = 1; i < _argc - 2; i++) {
         // 添加源文件
-        if (strstr(argv[i], ".c")) {
-          src_files.push_back(abs_path + argv[i]);
+        if (strstr(_argv[i], ".c")) {
+          src_files.push_back(abs_path + _argv[i]);
         }
       }
       // 设置输出文件

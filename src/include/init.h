@@ -38,8 +38,8 @@ private:
   int c;
 
 public:
-  Init(void);
-  ~Init(void);
+  Init();
+  ~Init();
   int init(int &argc, char **&argv);
 };
 

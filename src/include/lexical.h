@@ -83,28 +83,28 @@ private:
   // 扫描
   bool scan(char need = 0);
   // 返回错误号
-  int err(void);
+  int err();
   // 空白字符
-  void blank(void);
+  void blank();
   // 标识符，包括关键字
-  void identifier(void);
+  void identifier();
   // 数字
-  void number(void);
+  void number();
   // 字符
-  void character(void);
+  void character();
   // 字符串
-  void str(void);
+  void str();
   // 分界符
-  void separator(void);
+  void separator();
   // 操作符
-  void operation(void);
+  void operation();
 
 public:
   Lexer(Scanner &sc);
-  ~Lexer(void);
+  ~Lexer();
 
-  Token *lexing(void);
-  bool is_done(void) const;
+  Token *lexing();
+  bool is_done() const;
 };
 
 #endif /* SIMPLECOMPILER_LEXICAL_H */

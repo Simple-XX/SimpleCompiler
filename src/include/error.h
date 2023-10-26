@@ -23,7 +23,7 @@
 class Pos {
 public:
   Pos(unsigned int l, unsigned int c);
-  ~Pos(void);
+  ~Pos();
   // 保存当前行号
   unsigned int line;
   // 保存当前列号
@@ -46,9 +46,9 @@ public:
   void set_line(unsigned int l);
   void set_col(unsigned int c);
   void set_err_no(int e);
-  int get_err_no(void) const;
-  Pos *get_pos(void) const;
-  virtual void display_err(void) const;
+  int get_err_no() const;
+  Pos *get_pos() const;
+  virtual void display_err() const;
 };
 
 #endif /* SIMPLECOMPILER_ERROR_H */

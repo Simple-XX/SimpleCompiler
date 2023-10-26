@@ -29,11 +29,11 @@ std::string dest_file = "";
 
 Error *error = NULL;
 
-int main(int argc, char **argv) {
+int main(int _argc, char **_argv) {
   // 初始化
   // 包括与命令行的交互、获取要操作的文件等
   Init initer;
-  initer.init(argc, argv);
+  initer.init(_argc, _argv);
   // 逐个打开文件
   for (const auto &i : src_files) {
     std::cout << "Open file: " << i << std::endl;

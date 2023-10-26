@@ -33,7 +33,7 @@ using ASTPtrList = std::vector<ASTPtr>;
 class MetaAST {
 public:
   virtual ~MetaAST() = default;
-  virtual std::string to_string(void) = 0;
+  virtual std::string to_string() = 0;
   virtual ASTPtr Eval(TypeCheck &checker) = 0;
   virtual std::string GenerateIR(IRGenerator &gen, std::string &code) = 0;
 };
@@ -53,7 +53,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     std::string output;
     for (auto &unit : units) {
       output = output + "\n" + unit->to_string();
@@ -81,7 +81,7 @@ public:
       stmt.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return "Statement: {" + stmt->to_string() + "}\n";
   }
 
@@ -116,7 +116,7 @@ public:
       body.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     std::string output =
         "FunctionDef(" + type_to_string(type) + "): " + name + ' ';
     for (auto &param : params) {
@@ -158,7 +158,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override { return "FuncCallAST"; }
+  std::string to_string() override { return "FuncCallAST"; }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
@@ -186,7 +186,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     std::string output;
     for (auto &unit : vars) {
       output = output + "\n" + unit->to_string();
@@ -226,7 +226,7 @@ public:
       initVal.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     if (Const) {
       return "VarDefAST (CONST): {" + var->to_string() + "}";
     }
@@ -262,7 +262,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     if (Const) {
       return "IdAST (CONST) (" + vartype_to_string(type) + "): " + name;
     }
@@ -297,7 +297,7 @@ public:
   // construction
   ~ProcessedIdAST() override {}
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     if (Const) {
       return "ProcessedIdAST (CONST) (" + vartype_to_string(type) +
              "): " + name;
@@ -337,7 +337,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return "InitValAST(" + vartype_to_string(type) + ")";
   }
 
@@ -372,7 +372,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     std::string output;
     for (auto &unit : stmts) {
       output = output + "\n" + unit->to_string();
@@ -407,7 +407,7 @@ public:
       right.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return '(' + (left->to_string()) + ' ' + op_to_string(op) + ' ' +
            (right->to_string()) + ')';
   }
@@ -439,7 +439,7 @@ public:
       exp.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return '(' + op_to_string(op) + ' ' + exp->to_string() + ')';
   }
 
@@ -462,7 +462,7 @@ public:
   // construction
   ~NumAST() override {}
   // destruction
-  std::string to_string(void) override { return std::to_string(val); }
+  std::string to_string() override { return std::to_string(val); }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
@@ -494,7 +494,7 @@ public:
       elseAST.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     if (elseAST)
       return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " +
              thenAST->to_string() + ") else (" + elseAST->to_string() + " ) }";
@@ -532,7 +532,7 @@ public:
       body.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return "WhileAST: { while (" + conditionExp->to_string() + " ) do ( " +
            body->to_string() + " ) }";
   }
@@ -562,7 +562,7 @@ public:
       returnStmt.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     if (type == Control::break_c) {
       return "ControlAST: BREAK";
     }
@@ -604,7 +604,7 @@ public:
       right.reset();
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return " AssignAST: { " + left->to_string() + " = " + right->to_string() +
            " }";
   }
@@ -636,7 +636,7 @@ public:
     }
   }
   // destruction
-  std::string to_string(void) override {
+  std::string to_string() override {
     return "LValAST:(" + vartype_to_string(type) + "):  { " + name + " }";
   }
 
@@ -658,7 +658,7 @@ public:
   // construction
   ~EmptyAST() override {}
   // destruction
-  std::string to_string(void) override { return "EmptyAST"; }
+  std::string to_string() override { return "EmptyAST"; }
 
   ASTPtr Eval(TypeCheck &checker) override;
 

@@ -78,7 +78,7 @@ class Token {
 public:
   Tag tag;
   Token(Tag t);
-  virtual std::string to_string(void);
+  virtual std::string to_string();
   virtual ~Token();
 };
 
@@ -87,7 +87,7 @@ class Id : public Token {
 public:
   std::string name;
   Id(std::string n);
-  virtual std::string to_string(void);
+  virtual std::string to_string();
 };
 
 // 数字
@@ -95,7 +95,7 @@ class Num : public Token {
 public:
   int val;
   Num(int v);
-  virtual std::string to_string(void);
+  virtual std::string to_string();
 };
 
 // 字符
@@ -103,7 +103,7 @@ class Char : public Token {
 public:
   char ch;
   Char(char c);
-  virtual std::string to_string(void);
+  virtual std::string to_string();
 };
 
 // 字符串
@@ -111,7 +111,7 @@ class Str : public Token {
 public:
   std::string str;
   Str(std::string s);
-  virtual std::string to_string(void);
+  virtual std::string to_string();
 };
 
 // 关键字

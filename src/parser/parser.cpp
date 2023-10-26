@@ -21,7 +21,7 @@ Parser::Parser(Lexer &lex) : lexer(lex) { return; }
 Parser::~Parser() { return; }
 
 // 获取下一个 token
-void Parser::next(void) {
+void Parser::next() {
   token = lexer.lexing();
   return;
 }
@@ -36,7 +36,7 @@ bool Parser::match_token(Tag tag) {
 }
 
 // 进行解析，返回解析结果(AST)
-ASTPtr Parser::parsing(void) {
+ASTPtr Parser::parsing() {
   this->next(); // 读入第一个token
 
   ASTPtr prog = program();
@@ -44,7 +44,7 @@ ASTPtr Parser::parsing(void) {
 }
 
 // 程序由代码片段组成，代码片段由声明与定义组成
-ASTPtr Parser::program(void) {
+ASTPtr Parser::program() {
   ASTPtrList nodes;
   while (is_done() == false) {
     if (match_token(Tag::KW_CONST)) {
@@ -215,37 +215,37 @@ ASTPtr Parser::binary(const std::function<ASTPtr()> &parser,
   return lhs;
 }
 
-ASTPtr Parser::binary_relation(void) {
+ASTPtr Parser::binary_relation() {
   return binary(
       [this] { return binary_add(); },
       {Operator::gt_op, Operator::ge_op, Operator::le_op, Operator::le_op});
 }
 
-ASTPtr Parser::binary_eq(void) {
+ASTPtr Parser::binary_eq() {
   return binary([this] { return binary_relation(); },
                 {Operator::equ_op, Operator::nequ_op});
 }
 
-ASTPtr Parser::binary_add(void) {
+ASTPtr Parser::binary_add() {
   return binary([this] { return binary_mul(); },
                 {Operator::add_op, Operator::sub_op});
 }
 
-ASTPtr Parser::binary_mul(void) {
+ASTPtr Parser::binary_mul() {
   return binary([this] { return unary(); },
                 {Operator::mul_op, Operator::div_op, Operator::mod_op});
 }
 
-ASTPtr Parser::binary_and(void) {
+ASTPtr Parser::binary_and() {
   return binary([this] { return binary_eq(); }, {Operator::and_op});
 }
 
-ASTPtr Parser::binary_or(void) {
+ASTPtr Parser::binary_or() {
   return binary([this] { return binary_and(); }, {Operator::or_op});
 }
 
 // 一元表达式
-ASTPtr Parser::unary(void) {
+ASTPtr Parser::unary() {
   if (match_token(Tag::LPAREN)) {
     // (  EXP  )
     next(); // 消耗左括号
@@ -337,7 +337,7 @@ ASTPtr Parser::unary(void) {
   exit(55);
 }
 
-ASTPtr Parser::statement(void) {
+ASTPtr Parser::statement() {
   if (match_token(Tag::SEMICON)) {
     next(); // ;
     return std::make_unique<StmtAST>(std::make_unique<EmptyAST>());
@@ -435,7 +435,7 @@ ASTPtr Parser::statement(void) {
   exit(56);
 }
 
-ASTPtr Parser::if_else(void) {
+ASTPtr Parser::if_else() {
   next(); // if () then else
   if (!match_token(Tag::LPAREN)) {
     exit(116);
@@ -469,7 +469,7 @@ ASTPtr Parser::if_else(void) {
   exit(57);
 }
 
-ASTPtr Parser::while_loop(void) {
+ASTPtr Parser::while_loop() {
   next(); // while () stmt
   if (!match_token(Tag::LPAREN)) {
     exit(116);
@@ -490,7 +490,7 @@ ASTPtr Parser::while_loop(void) {
   return std::make_unique<WhileAST>(std::move(condition), std::move(stmt));
 }
 
-ASTPtr Parser::init_val(void) {
+ASTPtr Parser::init_val() {
   if (match_token(Tag::LBRACE)) {
     next();
     if (match_token(Tag::RBRACE)) {
@@ -606,7 +606,7 @@ ASTPtr Parser::var_def(bool isConst) {
   }
 }
 
-ASTPtr Parser::block(void) {
+ASTPtr Parser::block() {
   next(); // {
   if (match_token(Tag::RBRACE)) {
     next(); // }
@@ -633,7 +633,7 @@ ASTPtr Parser::block(void) {
   }
 }
 
-ASTPtr Parser::function_def(void) {
+ASTPtr Parser::function_def() {
   // function type
   Type type;
   if (match_token(Tag::KW_INT))
@@ -710,4 +710,4 @@ ASTPtr Parser::function_def(void) {
                                       std::move(body));
 }
 
-bool Parser::is_done(void) const { return lexer.is_done(); }
+bool Parser::is_done() const { return lexer.is_done(); }
