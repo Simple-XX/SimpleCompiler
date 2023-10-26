@@ -27,7 +27,7 @@ class CodeGen {
   std::istream &cinstream;
 
 public:
-  void Generate(std::string &code);
+  void Generate(std::string &_code);
   CodeGen(std::istream &_cinstream) : cinstream(_cinstream) {}
 };
 
