@@ -1,0 +1,28 @@
+
+# This file is a part of Simple-XX/SimpleCompiler
+# (https://github.com/Simple-XX/SimpleCompiler).
+#
+# .clang-tidy for Simple-XX/SimpleCompiler.
+
+---
+Checks: '-*,\
+  bugprone-*,\
+  clang-analyzer-*,\
+  cppcoreguidelines-*,\
+  hicpp-*,\
+  llvm-*,\
+  misc-*
+  modernize-*,\
+  performance-*,\
+  portability-*,\
+  readability-*,\
+  -cppcoreguidelines-pro-type-reinterpret-cast,\
+  -bugprone-easily-swappable-parameters,\
+  -llvm-header-guard,\
+  -misc-non-private-member-variables-in-classes,\
+  -cppcoreguidelines-non-private-member-variables-in-classes,\
+  -readability-identifier-length,\
+  -cppcoreguidelines-avoid-non-const-global-variables'
+HeaderFilterRegex: '^${sourceDir}/src'
+AnalyzeTemporaryDtors: true
+...

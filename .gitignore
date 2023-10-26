@@ -1,3 +1,9 @@
+
+# This file is a part of Simple-XX/SimpleCompiler
+# (https://github.com/Simple-XX/SimpleCompiler).
+#
+# .gitignore for Simple-XX/SimpleCompiler.
+
 # Prerequisites
 *.d
 
@@ -35,3 +41,15 @@
 .vscode
 
 build
+
+*.o
+.DS_Store
+build
+cmake-build*
+.gdbinit
+tools/opensbi/build
+.vscode
+.idea
+3rd
+Doxyfile
+src/include/config.h

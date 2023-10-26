@@ -1,32 +1,21 @@
 
-# This file is a part of Simple-XX/SimpleCompiler (https://github.com/Simple-XX/SimpleCompiler).
-# 
+# This file is a part of Simple-XX/SimpleCompiler
+# (https://github.com/Simple-XX/SimpleCompiler).
+#
 # CMakeLists.txt for Simple-XX/SimpleCompiler.
 
-# Set CXX flags for debug
-if (CMAKE_BUILD_TYPE STREQUAL DEBUG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -ggdb -Wall -Wextra")
-endif ()
+aux_source_directory(./ main_src)
+aux_source_directory(error error_src)
+aux_source_directory(lexical lexical_src)
+aux_source_directory(parser parser_src)
+aux_source_directory(scanner scanner_src)
+aux_source_directory(typechecker typechecker_src)
+aux_source_directory(ir ir_src)
+aux_source_directory(codegen codegen_src)
 
-if (CMAKE_BUILD_TYPE STREQUAL RELEASE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
-endif ()
+include_directories(include)
 
-# Set common flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
-
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR} main_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/error error_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/lexical lexical_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/parser parser_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/scanner scanner_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/typechecker typechecker_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/ir ir_src)
-aux_source_directory(${SimpleCompiler_SOURCE_CODE_DIR}/codegen codegen_src)
-
-include_directories(${SimpleCompiler_SOURCE_CODE_DIR}/include)
-
-add_executable(${CompilerName}
+add_executable(SimpleCompiler
     ${main_src}
     ${error_src}
     ${lexical_src}
