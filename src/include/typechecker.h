@@ -62,54 +62,54 @@ public:
 
   ~TypeCheck() = default;
 
-  bool FillInValue(int *memory, InitValAST *init, std::vector<int> &dim,
-                   size_t i);
+  bool FillInValue(int *_memory, InitValAST *_init, std::vector<int> &_dim,
+                   size_t _i);
 
-  std::unique_ptr<VarDeclAST> EvalVarDecl(VarDeclAST &varDecl);
+  std::unique_ptr<VarDeclAST> EvalVarDecl(VarDeclAST &_varDecl);
 
-  std::unique_ptr<ProcessedIdAST> EvalId(IdAST &id);
+  std::unique_ptr<ProcessedIdAST> EvalId(IdAST &_id);
 
-  std::unique_ptr<VarDefAST> EvalVarDef(VarDefAST &varDef);
+  std::unique_ptr<VarDefAST> EvalVarDef(VarDefAST &_varDef);
 
-  std::unique_ptr<FuncCallAST> EvalFuncCall(FuncCallAST &func);
+  std::unique_ptr<FuncCallAST> EvalFuncCall(FuncCallAST &_func);
 
-  std::unique_ptr<BlockAST> EvalBlock(BlockAST &block);
+  std::unique_ptr<BlockAST> EvalBlock(BlockAST &_block);
 
-  std::unique_ptr<IfAST> EvalIfElse(IfAST &stmt);
+  std::unique_ptr<IfAST> EvalIfElse(IfAST &_stmt);
 
-  std::unique_ptr<WhileAST> EvalWhile(WhileAST &stmt);
+  std::unique_ptr<WhileAST> EvalWhile(WhileAST &_stmt);
 
-  std::unique_ptr<ControlAST> EvalControl(ControlAST &stmt);
+  std::unique_ptr<ControlAST> EvalControl(ControlAST &_stmt);
 
-  std::unique_ptr<AssignAST> EvalAssign(AssignAST &assign);
+  std::unique_ptr<AssignAST> EvalAssign(AssignAST &_assign);
 
-  ASTPtr EvalLVal(LValAST &lval);
+  ASTPtr EvalLVal(LValAST &_lval);
 
-  ASTPtr EvalAddExp(BinaryAST &exp);
+  ASTPtr EvalAddExp(BinaryAST &_exp);
 
-  ASTPtr EvalMulExp(BinaryAST &exp);
+  ASTPtr EvalMulExp(BinaryAST &_exp);
 
-  ASTPtr EvalUnaryExp(UnaryAST &exp);
+  ASTPtr EvalUnaryExp(UnaryAST &_exp);
 
-  std::unique_ptr<FuncDefAST> EvalFuncDef(FuncDefAST &funcDef);
+  std::unique_ptr<FuncDefAST> EvalFuncDef(FuncDefAST &_funcDef);
 
-  ASTPtr EvalRelExp(BinaryAST &exp);
+  ASTPtr EvalRelExp(BinaryAST &_exp);
 
-  ASTPtr EvalLAndExp(BinaryAST &exp);
+  ASTPtr EvalLAndExp(BinaryAST &_exp);
 
-  ASTPtr EvalLOrExp(BinaryAST &exp);
+  ASTPtr EvalLOrExp(BinaryAST &_exp);
 
-  std::unique_ptr<CompUnitAST> EvalCompUnit(CompUnitAST &unit);
+  std::unique_ptr<CompUnitAST> EvalCompUnit(CompUnitAST &_unit);
 
-  ASTPtr EvalEqExp(BinaryAST &exp);
+  ASTPtr EvalEqExp(BinaryAST &_exp);
 
-  std::unique_ptr<StmtAST> EvalStmt(StmtAST &stmt);
+  std::unique_ptr<StmtAST> EvalStmt(StmtAST &_stmt);
 
-  std::unique_ptr<InitValAST> EvalInitVal(InitValAST &init);
+  std::unique_ptr<InitValAST> EvalInitVal(InitValAST &_init);
 
-  std::unique_ptr<NumAST> EvalNumber(NumAST &num);
+  std::unique_ptr<NumAST> EvalNumber(NumAST &_num);
 
-  std::unique_ptr<ProcessedIdAST> EvalProcessedId(ProcessedIdAST &id);
+  std::unique_ptr<ProcessedIdAST> EvalProcessedId(ProcessedIdAST &_id);
 
   std::unique_ptr<EmptyAST> EvalEmpty();
 };

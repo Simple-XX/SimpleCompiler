@@ -44,7 +44,7 @@ private:
 
 public:
   // 读一个文件
-  Scanner(const std::string &filename);
+  Scanner(const std::string &_filename);
   ~Scanner();
   // 扫描并返回字符
   char scan();

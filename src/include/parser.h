@@ -40,7 +40,7 @@ private:
   // 获取下一个 token
   void next();
   // 匹配指定 Token
-  bool match_token(Tag tag);
+  bool match_token(Tag _tag);
 
   // 程序
   ASTPtr program();
@@ -50,8 +50,8 @@ private:
   // 一元表达式
   ASTPtr unary();
   // 二元表达式
-  ASTPtr binary(const std::function<ASTPtr()> &parser,
-                std::initializer_list<Operator> ops);
+  ASTPtr binary(const std::function<ASTPtr()> &_parser,
+                std::initializer_list<Operator> _ops);
   ASTPtr binary_add();
   ASTPtr binary_mul();
   ASTPtr binary_relation();
@@ -69,7 +69,7 @@ private:
   // var declare
   ASTPtr var_decl();
   // var definition
-  ASTPtr var_def(bool);
+  ASTPtr var_def(bool _isConst);
   // initial value
   ASTPtr init_val();
 
@@ -77,7 +77,7 @@ private:
   ASTPtr function_def();
 
 public:
-  Parser(Lexer &lex);
+  Parser(Lexer &_lex);
   ~Parser();
   // 进行解析
   ASTPtr parsing();

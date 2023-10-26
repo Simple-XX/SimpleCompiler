@@ -18,8 +18,8 @@
 
 // convert tag to operator
 
-Operator tag_to_op(Tag t) {
-  switch (t) {
+Operator tag_to_op(Tag _t) {
+  switch (_t) {
   case Tag::ADD:
     return add_op;
   case Tag::SUB:
@@ -59,8 +59,8 @@ Operator tag_to_op(Tag t) {
   }
 }
 
-std::string type_to_string(Type t) {
-  switch (t) {
+std::string type_to_string(Type _t) {
+  switch (_t) {
   case Type::int_t:
     return "INT";
   case Type::char_t:
@@ -72,8 +72,8 @@ std::string type_to_string(Type t) {
   }
 }
 
-std::string vartype_to_string(VarType t) {
-  switch (t) {
+std::string vartype_to_string(VarType _t) {
+  switch (_t) {
   case VarType::var_t:
     return "var";
   case VarType::array_t:
@@ -83,8 +83,8 @@ std::string vartype_to_string(VarType t) {
   }
 }
 
-std::string op_to_string(Operator p) {
-  switch (p) {
+std::string op_to_string(Operator _p) {
+  switch (_p) {
   case Operator::add_op:
     return "add";
   case Operator::sub_op:

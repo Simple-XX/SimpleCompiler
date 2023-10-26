@@ -31,8 +31,8 @@ Keywords::Keywords() {
   keywords["return"] = KW_RETURN;
 }
 
-Tag Keywords::get_tag(std::string name) {
-  return keywords.find(name) != keywords.end() ? keywords[name] : ID;
+Tag Keywords::get_tag(std::string _name) {
+  return keywords.find(_name) != keywords.end() ? keywords[_name] : ID;
 }
 
 const char *tokenName[] = {
@@ -44,28 +44,28 @@ const char *tokenName[] = {
     "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
 };
 
-Token::Token(Tag t) : tag(t) { return; }
+Token::Token(Tag _t) : tag(_t) { return; }
 
 std::string Token::to_string() { return tokenName[tag]; }
 
 Token::~Token() { return; }
 
-Id::Id(std::string n) : Token(ID), name(n) { return; }
+Id::Id(std::string _n) : Token(ID), name(_n) { return; }
 
 std::string Id::to_string() { return Token::to_string() + "(" + name + ")"; }
 
-Num::Num(int v) : Token(NUM), val(v) { return; }
+Num::Num(int _v) : Token(NUM), val(_v) { return; }
 
 std::string Num::to_string() {
   return Token::to_string() + "(" + std::to_string(val) + ")";
 }
 
-Char::Char(char c) : Token(CHAR), ch(c) { return; }
+Char::Char(char _c) : Token(CHAR), ch(_c) { return; }
 
 std::string Char::to_string() {
   return Token::to_string() + "(" + std::to_string(ch) + ")";
 }
 
-Str::Str(std::string s) : Token(STR), str(s) { return; }
+Str::Str(std::string _s) : Token(STR), str(_s) { return; }
 
 std::string Str::to_string() { return Token::to_string() + "(" + str + ")"; }

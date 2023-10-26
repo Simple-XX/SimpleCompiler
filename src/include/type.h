@@ -46,12 +46,12 @@ enum Operator {
 
 enum Control { continue_c, break_c, return_c };
 
-Operator tag_to_op(Tag t);
+Operator tag_to_op(Tag _t);
 
-std::string op_to_string(Operator p);
+std::string op_to_string(Operator _p);
 
-std::string type_to_string(Type t);
+std::string type_to_string(Type _t);
 
-std::string vartype_to_string(VarType t);
+std::string vartype_to_string(VarType _t);
 
 #endif /* SIMPLECOMPILER_TYPE_H */

@@ -77,7 +77,7 @@ enum Tag {
 class Token {
 public:
   Tag tag;
-  Token(Tag t);
+  Token(Tag _t);
   virtual std::string to_string();
   virtual ~Token();
 };
@@ -86,7 +86,7 @@ public:
 class Id : public Token {
 public:
   std::string name;
-  Id(std::string n);
+  Id(std::string _n);
   virtual std::string to_string();
 };
 
@@ -94,7 +94,7 @@ public:
 class Num : public Token {
 public:
   int val;
-  Num(int v);
+  Num(int _v);
   virtual std::string to_string();
 };
 
@@ -102,7 +102,7 @@ public:
 class Char : public Token {
 public:
   char ch;
-  Char(char c);
+  Char(char _c);
   virtual std::string to_string();
 };
 
@@ -110,7 +110,7 @@ public:
 class Str : public Token {
 public:
   std::string str;
-  Str(std::string s);
+  Str(std::string _s);
   virtual std::string to_string();
 };
 
@@ -121,7 +121,7 @@ private:
 
 public:
   Keywords();
-  Tag get_tag(std::string name);
+  Tag get_tag(std::string _name);
 };
 
 #endif /* SIMPLECOMPILER_TOKEN_H */

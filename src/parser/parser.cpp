@@ -16,7 +16,7 @@
 
 #include "parser.h"
 
-Parser::Parser(Lexer &lex) : lexer(lex) { return; }
+Parser::Parser(Lexer &_lex) : lexer(_lex) { return; }
 
 Parser::~Parser() { return; }
 
@@ -27,8 +27,8 @@ void Parser::next() {
 }
 
 // 匹配指定 Token
-bool Parser::match_token(Tag tag) {
-  if (token->tag == tag) {
+bool Parser::match_token(Tag _tag) {
+  if (token->tag == _tag) {
     return true;
   } else {
     return false;
@@ -194,18 +194,18 @@ ASTPtr Parser::program() {
 }
 
 // 二元表达式
-ASTPtr Parser::binary(const std::function<ASTPtr()> &parser,
-                      std::initializer_list<Operator> ops) {
-  auto lhs = parser();
+ASTPtr Parser::binary(const std::function<ASTPtr()> &_parser,
+                      std::initializer_list<Operator> _ops) {
+  auto lhs = _parser();
   if (!lhs) {
     std::cout << "error 100" << std::endl;
     exit(100);
   }
-  while (std::find(ops.begin(), ops.end(), tag_to_op(token->tag)) !=
-         ops.end()) {
+  while (std::find(_ops.begin(), _ops.end(), tag_to_op(token->tag)) !=
+         _ops.end()) {
     Operator op = tag_to_op(token->tag);
     next();
-    auto rhs = parser();
+    auto rhs = _parser();
     if (!rhs) {
       std::cout << "error 101" << std::endl;
       exit(101);
@@ -564,7 +564,7 @@ ASTPtr Parser::var_decl() {
   return std::make_unique<VarDeclAST>(isConst, std::move(vars));
 }
 
-ASTPtr Parser::var_def(bool isConst) {
+ASTPtr Parser::var_def(bool _isConst) {
   if (!match_token(Tag::ID)) {
     exit(452);
   }
@@ -586,9 +586,9 @@ ASTPtr Parser::var_def(bool isConst) {
   }
   ASTPtr var;
   if (dims.empty())
-    var = std::make_unique<IdAST>(id_name, VarType::var_t, isConst);
+    var = std::make_unique<IdAST>(id_name, VarType::var_t, _isConst);
   else
-    var = std::make_unique<IdAST>(id_name, VarType::array_t, isConst,
+    var = std::make_unique<IdAST>(id_name, VarType::array_t, _isConst,
                                   std::move(dims));
   if (match_token(Tag::ASSIGN)) {
     next(); // =
@@ -596,13 +596,13 @@ ASTPtr Parser::var_def(bool isConst) {
     if (!init) {
       exit(456);
     }
-    return std::make_unique<VarDefAST>(isConst, std::move(var),
+    return std::make_unique<VarDefAST>(_isConst, std::move(var),
                                        std::move(init));
   } else {
-    if (isConst) {
+    if (_isConst) {
       exit(457);
     }
-    return std::make_unique<VarDefAST>(isConst, std::move(var));
+    return std::make_unique<VarDefAST>(_isConst, std::move(var));
   }
 }
 
