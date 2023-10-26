@@ -23,8 +23,6 @@
 
 #include "type.h"
 
-using namespace std;
-
 class MetaAST;
 class TypeCheck;
 class IRGenerator;
@@ -35,9 +33,9 @@ using ASTPtrList = std::vector<ASTPtr>;
 class MetaAST {
 public:
   virtual ~MetaAST() = default;
-  virtual string to_string(void) = 0;
+  virtual std::string to_string(void) = 0;
   virtual ASTPtr Eval(TypeCheck &checker) = 0;
-  virtual string GenerateIR(IRGenerator &gen, std::string &code) = 0;
+  virtual std::string GenerateIR(IRGenerator &gen, std::string &code) = 0;
 };
 
 // Compile Unit 编译单元
@@ -55,8 +53,8 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
-    string output;
+  std::string to_string(void) override {
+    std::string output;
     for (auto &unit : units) {
       output = output + "\n" + unit->to_string();
     }
@@ -65,7 +63,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtrList &getNodes() const { return units; }
 };
@@ -83,13 +81,13 @@ public:
       stmt.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return "Statement: {" + stmt->to_string() + "}\n";
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getStmt() const { return stmt; }
 };
@@ -99,14 +97,14 @@ class FuncDefAST : public MetaAST {
 private:
   Type type;
   // function return type 函数返回类型
-  string name;
+  std::string name;
   // function name 函数名
   ASTPtrList params;
   // function params 函数参数列表
   ASTPtr body;
   // function body 函数体
 public:
-  FuncDefAST(Type t, const string &n, ASTPtrList p, ASTPtr b)
+  FuncDefAST(Type t, const std::string &n, ASTPtrList p, ASTPtr b)
       : type(t), name(n), params(move(p)), body(move(b)) {}
   // construction
   ~FuncDefAST() override {
@@ -118,8 +116,9 @@ public:
       body.reset();
   }
   // destruction
-  string to_string(void) override {
-    string output = "FunctionDef(" + type_to_string(type) + "): " + name + ' ';
+  std::string to_string(void) override {
+    std::string output =
+        "FunctionDef(" + type_to_string(type) + "): " + name + ' ';
     for (auto &param : params) {
       if (param)
         output = output + param->to_string();
@@ -131,7 +130,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   Type getType() const { return type; }
 
@@ -145,11 +144,11 @@ public:
 // FunctionCall 函数调用
 class FuncCallAST : public MetaAST {
 private:
-  string name;
+  std::string name;
   ASTPtrList args;
 
 public:
-  FuncCallAST(const string &n, ASTPtrList a = ASTPtrList{})
+  FuncCallAST(const std::string &n, ASTPtrList a = ASTPtrList{})
       : name(n), args(move(a)) {}
   // construction
   ~FuncCallAST() override {
@@ -159,11 +158,11 @@ public:
     }
   }
   // destruction
-  string to_string(void) override { return "FuncCallAST"; }
+  std::string to_string(void) override { return "FuncCallAST"; }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const std::string &getName() const { return name; }
 
@@ -187,8 +186,8 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
-    string output;
+  std::string to_string(void) override {
+    std::string output;
     for (auto &unit : vars) {
       output = output + "\n" + unit->to_string();
     }
@@ -200,7 +199,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   bool isConst() const { return Const; }
 
@@ -227,7 +226,7 @@ public:
       initVal.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     if (Const) {
       return "VarDefAST (CONST): {" + var->to_string() + "}";
     }
@@ -236,7 +235,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getVar() const { return var; }
 
@@ -248,13 +247,13 @@ public:
 // Ident 变量
 class IdAST : public MetaAST {
 private:
-  string name;
+  std::string name;
   VarType type;
   ASTPtrList dim;
   bool Const;
 
 public:
-  IdAST(const string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{})
+  IdAST(const std::string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{})
       : name(n), type(t), dim(move(d)), Const(i) {}
   // construction
   ~IdAST() override {
@@ -263,7 +262,7 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     if (Const) {
       return "IdAST (CONST) (" + vartype_to_string(type) + "): " + name;
     }
@@ -272,7 +271,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const std::string getName() const { return name; }
 
@@ -286,19 +285,19 @@ public:
 // Ident 变量 (processed)
 class ProcessedIdAST : public MetaAST {
 private:
-  string name;
+  std::string name;
   VarType type;
-  vector<int> dim;
+  std::vector<int> dim;
   bool Const;
 
 public:
-  ProcessedIdAST(const string &n, VarType t, bool i,
-                 vector<int> d = vector<int>{})
+  ProcessedIdAST(const std::string &n, VarType t, bool i,
+                 std::vector<int> d = std::vector<int>{})
       : name(n), type(t), dim(move(d)), Const(i) {}
   // construction
   ~ProcessedIdAST() override {}
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     if (Const) {
       return "ProcessedIdAST (CONST) (" + vartype_to_string(type) +
              "): " + name;
@@ -308,7 +307,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const std::string &getName() const { return std::move(name); }
 
@@ -338,13 +337,13 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return "InitValAST(" + vartype_to_string(type) + ")";
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   bool setDim(std::vector<int> _dims) {
     dims = std::move(_dims);
@@ -373,8 +372,8 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
-    string output;
+  std::string to_string(void) override {
+    std::string output;
     for (auto &unit : stmts) {
       output = output + "\n" + unit->to_string();
     }
@@ -383,7 +382,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtrList &getStmts() const { return stmts; };
 };
@@ -408,14 +407,14 @@ public:
       right.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return '(' + (left->to_string()) + ' ' + op_to_string(op) + ' ' +
            (right->to_string()) + ')';
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const Operator &getOp() const { return op; }
 
@@ -440,13 +439,13 @@ public:
       exp.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return '(' + op_to_string(op) + ' ' + exp->to_string() + ')';
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getNode() const { return exp; }
 
@@ -463,11 +462,11 @@ public:
   // construction
   ~NumAST() override {}
   // destruction
-  string to_string(void) override { return std::to_string(val); }
+  std::string to_string(void) override { return std::to_string(val); }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const int &getVal() const { return val; }
 };
@@ -494,7 +493,7 @@ public:
       elseAST.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     if (elseAST)
       return "IfAST: { if (" + conditionExp->to_string() + " ) then ( " +
              thenAST->to_string() + ") else (" + elseAST->to_string() + " ) }";
@@ -505,7 +504,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getCond() const { return conditionExp; }
 
@@ -531,14 +530,14 @@ public:
       body.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return "WhileAST: { while (" + conditionExp->to_string() + " ) do ( " +
            body->to_string() + " ) }";
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getCond() const { return conditionExp; }
 
@@ -560,7 +559,7 @@ public:
       returnStmt.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     if (type == Control::break_c) {
       return "ControlAST: BREAK";
     }
@@ -578,7 +577,7 @@ public:
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   Control getControl() const { return type; }
 
@@ -602,14 +601,14 @@ public:
       right.reset();
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return " AssignAST: { " + left->to_string() + " = " + right->to_string() +
            " }";
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtr &getLeft() const { return left; }
 
@@ -619,12 +618,12 @@ public:
 // LeftValue 左值
 class LValAST : public MetaAST {
 private:
-  string name;
+  std::string name;
   VarType type;
   ASTPtrList position;
 
 public:
-  LValAST(const string &n, VarType t, ASTPtrList p = ASTPtrList{})
+  LValAST(const std::string &n, VarType t, ASTPtrList p = ASTPtrList{})
       : name(n), type(t), position(move(p)) {}
   // construction
   ~LValAST() override {
@@ -634,13 +633,13 @@ public:
     }
   }
   // destruction
-  string to_string(void) override {
+  std::string to_string(void) override {
     return "LValAST:(" + vartype_to_string(type) + "):  { " + name + " }";
   }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 
   const ASTPtrList &getPosition() const { return position; }
 
@@ -656,11 +655,11 @@ public:
   // construction
   ~EmptyAST() override {}
   // destruction
-  string to_string(void) override { return "EmptyAST"; }
+  std::string to_string(void) override { return "EmptyAST"; }
 
   ASTPtr Eval(TypeCheck &checker) override;
 
-  string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 };
 
 #endif /* _AST_H_ */

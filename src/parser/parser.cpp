@@ -53,14 +53,14 @@ ASTPtr Parser::program(void) {
         error->display_err();
         exit(1);
       }
-      nodes.push_back(move(variable_decl));
+      nodes.push_back(std::move(variable_decl));
     } else if (match_token(Tag::KW_VOID)) {
       ASTPtr func = function_def();
       if (!func) {
         error->display_err();
         exit(2);
       }
-      nodes.push_back(move(func));
+      nodes.push_back(std::move(func));
     } else if (match_token(Tag::KW_INT)) { // var or func
       next();                              // int
       if (!match_token(Tag::ID)) {
@@ -68,7 +68,7 @@ ASTPtr Parser::program(void) {
         exit(3);
       }
       Id *token_casted = (Id *)token;
-      string name = token_casted->name;
+      std::string name = token_casted->name;
       next(); // id
 
       // function def
@@ -89,12 +89,12 @@ ASTPtr Parser::program(void) {
             }
             // arg name
             Id *token_casted = (Id *)token;
-            string arg_name = token_casted->name;
+            std::string arg_name = token_casted->name;
             next();                         // id
             if (match_token(Tag::LBRACKET)) // [
             {
               ASTPtrList dim;
-              dim.push_back(make_unique<NumAST>(0));
+              dim.push_back(std::make_unique<NumAST>(0));
               next(); // [
               if (!match_token(Tag::RBRACKET)) {
                 exit(997);
@@ -107,18 +107,18 @@ ASTPtr Parser::program(void) {
                   error->display_err();
                   exit(995);
                 }
-                dim.push_back(move(_dim));
+                dim.push_back(std::move(_dim));
                 if (!match_token(Tag::RBRACKET)) {
                   error->display_err();
                   exit(994);
                 }
                 next(); // ]
               }
-              args.push_back(make_unique<IdAST>(arg_name, VarType::array_t,
-                                                false, move(dim)));
+              args.push_back(std::make_unique<IdAST>(arg_name, VarType::array_t,
+                                                     false, std::move(dim)));
             } else {
               args.push_back(
-                  make_unique<IdAST>(arg_name, VarType::var_t, false));
+                  std::make_unique<IdAST>(arg_name, VarType::var_t, false));
             }
             if (!match_token(Tag::COMMA))
               break;
@@ -131,9 +131,9 @@ ASTPtr Parser::program(void) {
         }
         next(); // )
         ASTPtr body = block();
-        ASTPtr func =
-            make_unique<FuncDefAST>(Type::int_t, name, move(args), move(body));
-        nodes.push_back(move(func));
+        ASTPtr func = std::make_unique<FuncDefAST>(
+            Type::int_t, name, std::move(args), std::move(body));
+        nodes.push_back(std::move(func));
       } else { // var def
         ASTPtrList varDefs;
         // first , because id is consumed
@@ -144,7 +144,7 @@ ASTPtr Parser::program(void) {
           if (!exp) {
             exit(453);
           }
-          dims.push_back(move(exp));
+          dims.push_back(std::move(exp));
           if (!match_token(Tag::RBRACKET)) {
             exit(454);
           }
@@ -153,20 +153,22 @@ ASTPtr Parser::program(void) {
         ASTPtr var;
         ASTPtr varDef;
         if (dims.empty())
-          var = make_unique<IdAST>(name, VarType::var_t, false);
+          var = std::make_unique<IdAST>(name, VarType::var_t, false);
         else
-          var = make_unique<IdAST>(name, VarType::array_t, false, move(dims));
+          var = std::make_unique<IdAST>(name, VarType::array_t, false,
+                                        std::move(dims));
         if (match_token(Tag::ASSIGN)) {
           next(); // =
           ASTPtr init = init_val();
           if (!init) {
             exit(456);
           }
-          varDef = make_unique<VarDefAST>(false, move(var), move(init));
+          varDef = std::make_unique<VarDefAST>(false, std::move(var),
+                                               std::move(init));
         } else {
-          varDef = make_unique<VarDefAST>(false, move(var));
+          varDef = std::make_unique<VarDefAST>(false, std::move(var));
         }
-        varDefs.push_back(move(varDef));
+        varDefs.push_back(std::move(varDef));
 
         while (match_token(Tag::COMMA)) {
           next(); // ,
@@ -174,13 +176,13 @@ ASTPtr Parser::program(void) {
           if (!varDef) {
             exit(133);
           }
-          varDefs.push_back(move(varDef));
+          varDefs.push_back(std::move(varDef));
         }
         if (!match_token(Tag::SEMICON)) {
           exit(134);
         }
-        ASTPtr decl = make_unique<VarDeclAST>(false, move(varDefs));
-        nodes.push_back(move(decl));
+        ASTPtr decl = std::make_unique<VarDeclAST>(false, std::move(varDefs));
+        nodes.push_back(std::move(decl));
         next(); // ;
       }
     } else {
@@ -188,26 +190,27 @@ ASTPtr Parser::program(void) {
       exit(233);
     }
   }
-  return make_unique<CompUnitAST>(move(nodes));
+  return std::make_unique<CompUnitAST>(std::move(nodes));
 }
 
 // 二元表达式
-ASTPtr Parser::binary(const function<ASTPtr()> &parser,
-                      initializer_list<Operator> ops) {
+ASTPtr Parser::binary(const std::function<ASTPtr()> &parser,
+                      std::initializer_list<Operator> ops) {
   auto lhs = parser();
   if (!lhs) {
-    cout << "error 100" << endl;
+    std::cout << "error 100" << std::endl;
     exit(100);
   }
-  while (find(ops.begin(), ops.end(), tag_to_op(token->tag)) != ops.end()) {
+  while (std::find(ops.begin(), ops.end(), tag_to_op(token->tag)) !=
+         ops.end()) {
     Operator op = tag_to_op(token->tag);
     next();
     auto rhs = parser();
     if (!rhs) {
-      cout << "error 101" << endl;
+      std::cout << "error 101" << std::endl;
       exit(101);
     }
-    lhs = make_unique<BinaryAST>(op, move(lhs), move(rhs));
+    lhs = std::make_unique<BinaryAST>(op, std::move(lhs), std::move(rhs));
   }
   return lhs;
 }
@@ -248,7 +251,7 @@ ASTPtr Parser::unary(void) {
     next(); // 消耗左括号
     ASTPtr exp = binary_add();
     if (token->tag != Tag::RPAREN) {
-      cout << "error 102" << endl;
+      std::cout << "error 102" << std::endl;
       exit(102);
     }
     next(); // 消耗右括号
@@ -256,7 +259,7 @@ ASTPtr Parser::unary(void) {
   } else if (match_token(Tag::NUM)) {
     // NUM
     Num *token_casted = (Num *)token;
-    ASTPtr num = make_unique<NumAST>(token_casted->val);
+    ASTPtr num = std::make_unique<NumAST>(token_casted->val);
     next();
     return num;
   } else if (match_token(Tag::ADD)) {
@@ -266,7 +269,7 @@ ASTPtr Parser::unary(void) {
     if (!exp) {
       exit(103);
     }
-    return make_unique<UnaryAST>(move(exp), Operator::add_op);
+    return std::make_unique<UnaryAST>(std::move(exp), Operator::add_op);
   } else if (match_token(Tag::SUB)) {
     // - EXP
     next();
@@ -274,7 +277,7 @@ ASTPtr Parser::unary(void) {
     if (!exp) {
       exit(104);
     }
-    return make_unique<UnaryAST>(move(exp), Operator::sub_op);
+    return std::make_unique<UnaryAST>(std::move(exp), Operator::sub_op);
   } else if (match_token(Tag::NOT)) {
     // ! EXP
     next();
@@ -282,17 +285,17 @@ ASTPtr Parser::unary(void) {
     if (!exp) {
       exit(105);
     }
-    return make_unique<UnaryAST>(move(exp), Operator::not_op);
+    return std::make_unique<UnaryAST>(std::move(exp), Operator::not_op);
   } else if (match_token(Tag::ID)) {
     Id *token_casted = (Id *)token;
-    string id_name = token_casted->name;
+    std::string id_name = token_casted->name;
     next();
     // Function call: Id (params)
     if (match_token(Tag::LPAREN)) {
       next();
       // id(): no params
       if (match_token(Tag::RPAREN)) {
-        ASTPtr function_call = make_unique<FuncCallAST>(id_name);
+        ASTPtr function_call = std::make_unique<FuncCallAST>(id_name);
         next(); // 消耗右括号
         return function_call;
       } else {
@@ -302,7 +305,7 @@ ASTPtr Parser::unary(void) {
           if (!param) {
             exit(106);
           }
-          params.push_back(move(param));
+          params.push_back(std::move(param));
           // id(a,b,c)
           if (match_token(Tag::COMMA) == false)
             break;
@@ -312,50 +315,50 @@ ASTPtr Parser::unary(void) {
           exit(107);
         }
         next(); // )
-        return make_unique<FuncCallAST>(id_name, move(params));
+        return std::make_unique<FuncCallAST>(id_name, std::move(params));
       }
     } else if (match_token(Tag::LBRACKET)) { // LVal: array (id[exp])
       ASTPtrList position;
       while (match_token(Tag::LBRACKET)) {
         next(); // [
         ASTPtr sub_position = binary_add();
-        position.push_back(move(sub_position));
+        position.push_back(std::move(sub_position));
         if (match_token(Tag::RBRACKET) == false) {
           exit(108);
         }
         next();
       }
-      return make_unique<LValAST>(id_name, array_t, move(position));
+      return std::make_unique<LValAST>(id_name, array_t, std::move(position));
     } else { // LVal: var (id)
-      return make_unique<LValAST>(id_name, var_t);
+      return std::make_unique<LValAST>(id_name, var_t);
     }
   }
-  cout << "error 55" << endl;
+  std::cout << "error 55" << std::endl;
   exit(55);
 }
 
 ASTPtr Parser::statement(void) {
   if (match_token(Tag::SEMICON)) {
     next(); // ;
-    return make_unique<StmtAST>(make_unique<EmptyAST>());
+    return std::make_unique<StmtAST>(std::make_unique<EmptyAST>());
   } else if (match_token(Tag::LBRACE)) {
     ASTPtr body = block();
     if (!body) {
       exit(106);
     }
-    return make_unique<StmtAST>(move(body));
+    return std::make_unique<StmtAST>(std::move(body));
   } else if (match_token(Tag::KW_WHILE)) {
     ASTPtr stmt = while_loop();
     if (!stmt) {
       exit(107);
     }
-    return make_unique<StmtAST>(move(stmt));
+    return std::make_unique<StmtAST>(std::move(stmt));
   } else if (match_token(Tag::KW_IF)) {
     ASTPtr stmt = if_else();
     if (!stmt) {
       exit(108);
     }
-    return make_unique<StmtAST>(move(stmt));
+    return std::make_unique<StmtAST>(std::move(stmt));
   } else if (match_token(Tag::KW_BREAK) || match_token(Tag::KW_CONTINUE) ||
              match_token(Tag::KW_RETURN)) {
     Tag temp = token->tag;
@@ -379,7 +382,7 @@ ASTPtr Parser::statement(void) {
       default:
         break;
       }
-      stmt = make_unique<ControlAST>(command);
+      stmt = std::make_unique<ControlAST>(command);
     } else { // return exp;
       ASTPtr return_exp = binary_add();
       if (!return_exp) {
@@ -388,10 +391,11 @@ ASTPtr Parser::statement(void) {
       if (!match_token(Tag::SEMICON)) {
         exit(110);
       }
-      stmt = make_unique<ControlAST>(Control::return_c, move(return_exp));
+      stmt = std::make_unique<ControlAST>(Control::return_c,
+                                          std::move(return_exp));
     }
     next(); // ;
-    return make_unique<StmtAST>(move(stmt));
+    return std::make_unique<StmtAST>(std::move(stmt));
   } else {
     ASTPtr exp = binary_add();
     if (!exp) {
@@ -405,16 +409,17 @@ ASTPtr Parser::statement(void) {
         if (!rhs) {
           exit(112);
         }
-        ASTPtr stmt = make_unique<AssignAST>(move(exp), move(rhs));
+        ASTPtr stmt =
+            std::make_unique<AssignAST>(std::move(exp), std::move(rhs));
         if (!match_token(Tag::SEMICON)) {
           exit(113);
         }
         next(); // ;
-        return make_unique<StmtAST>(move(stmt));
+        return std::make_unique<StmtAST>(std::move(stmt));
       } else if (match_token(Tag::SEMICON)) {
         // exp;
         next(); // ;
-        return make_unique<StmtAST>(move(exp));
+        return std::make_unique<StmtAST>(std::move(exp));
       } else {
         exit(114);
       }
@@ -424,7 +429,7 @@ ASTPtr Parser::statement(void) {
         exit(115);
       }
       next(); // ;
-      return make_unique<StmtAST>(move(exp));
+      return std::make_unique<StmtAST>(std::move(exp));
     }
   }
   exit(56);
@@ -454,10 +459,12 @@ ASTPtr Parser::if_else(void) {
     if (!elseStatement) {
       exit(119);
     }
-    return make_unique<IfAST>(move(condition), move(thenStatement),
-                              move(elseStatement));
+    return std::make_unique<IfAST>(std::move(condition),
+                                   std::move(thenStatement),
+                                   std::move(elseStatement));
   } else {
-    return make_unique<IfAST>(move(condition), move(thenStatement));
+    return std::make_unique<IfAST>(std::move(condition),
+                                   std::move(thenStatement));
   }
   exit(57);
 }
@@ -480,7 +487,7 @@ ASTPtr Parser::while_loop(void) {
   if (!stmt) {
     exit(119);
   }
-  return make_unique<WhileAST>(move(condition), move(stmt));
+  return std::make_unique<WhileAST>(std::move(condition), std::move(stmt));
 }
 
 ASTPtr Parser::init_val(void) {
@@ -488,16 +495,16 @@ ASTPtr Parser::init_val(void) {
     next();
     if (match_token(Tag::RBRACE)) {
       next();
-      return make_unique<InitValAST>(VarType::array_t, ASTPtrList{});
+      return std::make_unique<InitValAST>(VarType::array_t, ASTPtrList{});
     } else {
       ASTPtrList inits;
       while (true) {
         ASTPtr init = init_val();
         if (!init) {
-          cout << "error 999" << endl;
+          std::cout << "error 999" << std::endl;
           exit(999);
         }
-        inits.push_back(move(init));
+        inits.push_back(std::move(init));
         if (!match_token(Tag::COMMA))
           break;
         next(); // ,
@@ -506,17 +513,17 @@ ASTPtr Parser::init_val(void) {
         exit(998);
       }
       next(); // }
-      return make_unique<InitValAST>(VarType::array_t, move(inits));
+      return std::make_unique<InitValAST>(VarType::array_t, std::move(inits));
     }
   } else {
     ASTPtr exp = binary_add();
     if (!exp) {
-      cout << "error 1000" << endl;
+      std::cout << "error 1000" << std::endl;
       exit(1000);
     }
     ASTPtrList expList;
-    expList.push_back(move(exp));
-    return make_unique<InitValAST>(VarType::var_t, move(expList));
+    expList.push_back(std::move(exp));
+    return std::make_unique<InitValAST>(VarType::var_t, std::move(expList));
   }
 }
 
@@ -529,7 +536,7 @@ ASTPtr Parser::var_decl() {
 
   // TODO: only support int here
   if (!match_token(Tag::KW_INT)) {
-    cout << "Only Support Type 'int'." << endl;
+    std::cout << "Only Support Type 'int'." << std::endl;
     exit(450);
   }
   next();
@@ -539,7 +546,7 @@ ASTPtr Parser::var_decl() {
   if (!varDef) {
     exit(451);
   }
-  vars.push_back(move(varDef));
+  vars.push_back(std::move(varDef));
 
   while (match_token(Tag::COMMA)) {
     next(); // ,
@@ -547,14 +554,14 @@ ASTPtr Parser::var_decl() {
     if (!varDef) {
       exit(451);
     }
-    vars.push_back(move(varDef));
+    vars.push_back(std::move(varDef));
   }
 
   if (!match_token(Tag::SEMICON)) {
     exit(452);
   }
   next();
-  return make_unique<VarDeclAST>(isConst, move(vars));
+  return std::make_unique<VarDeclAST>(isConst, std::move(vars));
 }
 
 ASTPtr Parser::var_def(bool isConst) {
@@ -562,7 +569,7 @@ ASTPtr Parser::var_def(bool isConst) {
     exit(452);
   }
   Id *token_casted = (Id *)token;
-  string id_name = token_casted->name;
+  std::string id_name = token_casted->name;
   ASTPtrList dims;
   next(); // id
   while (match_token(Tag::LBRACKET)) {
@@ -571,7 +578,7 @@ ASTPtr Parser::var_def(bool isConst) {
     if (!exp) {
       exit(453);
     }
-    dims.push_back(move(exp));
+    dims.push_back(std::move(exp));
     if (!match_token(Tag::RBRACKET)) {
       exit(454);
     }
@@ -579,21 +586,23 @@ ASTPtr Parser::var_def(bool isConst) {
   }
   ASTPtr var;
   if (dims.empty())
-    var = make_unique<IdAST>(id_name, VarType::var_t, isConst);
+    var = std::make_unique<IdAST>(id_name, VarType::var_t, isConst);
   else
-    var = make_unique<IdAST>(id_name, VarType::array_t, isConst, move(dims));
+    var = std::make_unique<IdAST>(id_name, VarType::array_t, isConst,
+                                  std::move(dims));
   if (match_token(Tag::ASSIGN)) {
     next(); // =
     ASTPtr init = init_val();
     if (!init) {
       exit(456);
     }
-    return make_unique<VarDefAST>(isConst, move(var), move(init));
+    return std::make_unique<VarDefAST>(isConst, std::move(var),
+                                       std::move(init));
   } else {
     if (isConst) {
       exit(457);
     }
-    return make_unique<VarDefAST>(isConst, move(var));
+    return std::make_unique<VarDefAST>(isConst, std::move(var));
   }
 }
 
@@ -601,7 +610,7 @@ ASTPtr Parser::block(void) {
   next(); // {
   if (match_token(Tag::RBRACE)) {
     next(); // }
-    return make_unique<BlockAST>(ASTPtrList{});
+    return std::make_unique<BlockAST>(ASTPtrList{});
   } else {
     ASTPtrList stmts;
     while (!match_token(Tag::RBRACE)) {
@@ -610,17 +619,17 @@ ASTPtr Parser::block(void) {
         if (!var) {
           exit(460);
         }
-        stmts.push_back(move(var));
+        stmts.push_back(std::move(var));
       } else {
         ASTPtr stmt = statement();
         if (!stmt) {
           exit(461);
         }
-        stmts.push_back(move(stmt));
+        stmts.push_back(std::move(stmt));
       }
     }
     next(); // }
-    return make_unique<BlockAST>(move(stmts));
+    return std::make_unique<BlockAST>(std::move(stmts));
   }
 }
 
@@ -639,7 +648,7 @@ ASTPtr Parser::function_def(void) {
   }
   // function name
   Id *token_casted = (Id *)token;
-  string id_name = token_casted->name;
+  std::string id_name = token_casted->name;
   next(); // id
   if (!match_token(Tag::LPAREN)) {
     exit(998);
@@ -658,12 +667,12 @@ ASTPtr Parser::function_def(void) {
       }
       // arg name
       Id *token_casted = (Id *)token;
-      string arg_name = token_casted->name;
+      std::string arg_name = token_casted->name;
       next();                         // id
       if (match_token(Tag::LBRACKET)) // [
       {
         ASTPtrList dim;
-        dim.push_back(make_unique<NumAST>(0));
+        dim.push_back(std::make_unique<NumAST>(0));
         next(); // [
         if (!match_token(Tag::RBRACKET)) {
           exit(997);
@@ -675,16 +684,17 @@ ASTPtr Parser::function_def(void) {
           if (!_dim) {
             exit(995);
           }
-          dim.push_back(move(_dim));
+          dim.push_back(std::move(_dim));
           if (!match_token(Tag::RBRACKET)) {
             exit(994);
           }
           next(); // ]
         }
-        args.push_back(
-            make_unique<IdAST>(arg_name, VarType::array_t, false, move(dim)));
+        args.push_back(std::make_unique<IdAST>(arg_name, VarType::array_t,
+                                               false, std::move(dim)));
       } else {
-        args.push_back(make_unique<IdAST>(arg_name, VarType::var_t, false));
+        args.push_back(
+            std::make_unique<IdAST>(arg_name, VarType::var_t, false));
       }
       if (!match_token(Tag::COMMA))
         break;
@@ -696,7 +706,8 @@ ASTPtr Parser::function_def(void) {
   }
   next(); // )
   ASTPtr body = block();
-  return make_unique<FuncDefAST>(type, id_name, move(args), move(body));
+  return std::make_unique<FuncDefAST>(type, id_name, std::move(args),
+                                      std::move(body));
 }
 
 bool Parser::is_done(void) const { return lexer.is_done(); }

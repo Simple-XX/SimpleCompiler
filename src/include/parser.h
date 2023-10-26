@@ -28,8 +28,6 @@
 #include "lexical.h"
 #include "token.h"
 
-using namespace std;
-
 extern Error *error;
 
 // 语法分析
@@ -52,7 +50,7 @@ private:
   // 一元表达式
   ASTPtr unary(void);
   // 二元表达式
-  ASTPtr binary(const function<ASTPtr()> &parser,
+  ASTPtr binary(const std::function<ASTPtr()> &parser,
                 std::initializer_list<Operator> ops);
   ASTPtr binary_add(void);
   ASTPtr binary_mul(void);

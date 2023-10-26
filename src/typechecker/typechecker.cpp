@@ -16,8 +16,8 @@
 
 #include "typechecker.h"
 
-bool TypeCheck::FillInValue(int *memory, InitValAST *init, vector<int> &dim,
-                            size_t i) {
+bool TypeCheck::FillInValue(int *memory, InitValAST *init,
+                            std::vector<int> &dim, size_t i) {
   int idx = 0;
   int i_idx = 0;
   int elem = 1;
@@ -100,7 +100,7 @@ bool TypeCheck::FillInValue(int *memory, InitValAST *init, vector<int> &dim,
   return true;
 }
 
-unique_ptr<VarDeclAST> TypeCheck::EvalVarDecl(VarDeclAST &varDecl) {
+std::unique_ptr<VarDeclAST> TypeCheck::EvalVarDecl(VarDeclAST &varDecl) {
   if (!(varDecl.isConst())) {
     ASTPtrList list;
     for (const auto &def : varDecl.getVarDefs()) {
@@ -110,7 +110,7 @@ unique_ptr<VarDeclAST> TypeCheck::EvalVarDecl(VarDeclAST &varDecl) {
       }
       list.push_back(move(varDef));
     }
-    return make_unique<VarDeclAST>(varDecl.isConst(), move(list));
+    return std::make_unique<VarDeclAST>(varDecl.isConst(), move(list));
   } else {
     ASTPtrList list;
     for (const auto &def : varDecl.getVarDefs()) {
@@ -121,12 +121,12 @@ unique_ptr<VarDeclAST> TypeCheck::EvalVarDecl(VarDeclAST &varDecl) {
         list.push_back(move(nDef));
       }
     }
-    return make_unique<VarDeclAST>(varDecl.isConst(), move(list));
+    return std::make_unique<VarDeclAST>(varDecl.isConst(), move(list));
   }
 }
 
-unique_ptr<ProcessedIdAST> TypeCheck::EvalId(IdAST &id) {
-  vector<int> ndim;
+std::unique_ptr<ProcessedIdAST> TypeCheck::EvalId(IdAST &id) {
+  std::vector<int> ndim;
   for (const auto &exp : id.getDim()) {
     if (dynamic_cast<NumAST *>(exp.get())) {
       ndim.push_back(dynamic_cast<NumAST *>(exp.get())->getVal());
@@ -150,19 +150,19 @@ unique_ptr<ProcessedIdAST> TypeCheck::EvalId(IdAST &id) {
       ndim.push_back(dynamic_cast<NumAST *>(result.get())->getVal());
     }
   }
-  return make_unique<ProcessedIdAST>(id.getName(), id.getType(), id.isConst(),
-                                     move(ndim));
+  return std::make_unique<ProcessedIdAST>(id.getName(), id.getType(),
+                                          id.isConst(), move(ndim));
 }
 
-unique_ptr<VarDefAST> TypeCheck::EvalVarDef(VarDefAST &varDef) {
+std::unique_ptr<VarDefAST> TypeCheck::EvalVarDef(VarDefAST &varDef) {
   if (varDef.isConst()) {
     if (!varDef.getInitVal()) {
       return nullptr;
     }
     auto id = varDef.getVar()->Eval(*this);
-    string name = dynamic_cast<ProcessedIdAST *>(id.get())->getName();
+    std::string name = dynamic_cast<ProcessedIdAST *>(id.get())->getName();
     VarType type = dynamic_cast<ProcessedIdAST *>(id.get())->getType();
-    vector<int> ndim = dynamic_cast<ProcessedIdAST *>(id.get())->getDim();
+    std::vector<int> ndim = dynamic_cast<ProcessedIdAST *>(id.get())->getDim();
     auto initVal = varDef.getInitVal()->Eval(*this);
     if (!initVal) {
       return nullptr;
@@ -193,19 +193,20 @@ unique_ptr<VarDefAST> TypeCheck::EvalVarDef(VarDefAST &varDef) {
         return nullptr;
       }
       BlockVars[currentBlock][name] = Var(
-          name, VarType::var_t, varDef.isConst(), vector<int>{},
+          name, VarType::var_t, varDef.isConst(), std::vector<int>{},
           dynamic_cast<NumAST *>(
               dynamic_cast<InitValAST *>(initVal.get())->getValues()[0].get())
               ->getVal());
     }
 
     dynamic_cast<InitValAST *>(initVal.get())->setDim(ndim);
-    return make_unique<VarDefAST>(varDef.isConst(), move(id), move(initVal));
+    return std::make_unique<VarDefAST>(varDef.isConst(), move(id),
+                                       move(initVal));
   } else {
     auto id = varDef.getVar()->Eval(*this);
-    string name = dynamic_cast<ProcessedIdAST *>(id.get())->getName();
+    std::string name = dynamic_cast<ProcessedIdAST *>(id.get())->getName();
     VarType type = dynamic_cast<ProcessedIdAST *>(id.get())->getType();
-    vector<int> ndim = dynamic_cast<ProcessedIdAST *>(id.get())->getDim();
+    std::vector<int> ndim = dynamic_cast<ProcessedIdAST *>(id.get())->getDim();
     if (type == VarType::array_t) {
       int size = 1;
       for (auto x : ndim) {
@@ -230,10 +231,10 @@ unique_ptr<VarDefAST> TypeCheck::EvalVarDef(VarDefAST &varDef) {
           }
         }
         dynamic_cast<InitValAST *>(initVal.get())->setDim(ndim);
-        return make_unique<VarDefAST>(varDef.isConst(), move(id),
-                                      move(initVal));
+        return std::make_unique<VarDefAST>(varDef.isConst(), move(id),
+                                           move(initVal));
       } else {
-        return make_unique<VarDefAST>(varDef.isConst(), move(id));
+        return std::make_unique<VarDefAST>(varDef.isConst(), move(id));
       }
     } else {
       if (BlockVars[currentBlock].find(name) != BlockVars[currentBlock].end()) {
@@ -251,37 +252,37 @@ unique_ptr<VarDefAST> TypeCheck::EvalVarDef(VarDefAST &varDef) {
             return nullptr;
           }
           BlockVars[currentBlock][name] = Var(
-              name, VarType::var_t, varDef.isConst(), vector<int>{},
+              name, VarType::var_t, varDef.isConst(), std::vector<int>{},
               dynamic_cast<NumAST *>(dynamic_cast<InitValAST *>(initVal.get())
                                          ->getValues()[0]
                                          .get())
                   ->getVal());
         } else {
           BlockVars[currentBlock][name] =
-              Var(name, VarType::var_t, varDef.isConst(), vector<int>{});
+              Var(name, VarType::var_t, varDef.isConst(), std::vector<int>{});
         }
-        return make_unique<VarDefAST>(varDef.isConst(), move(id),
-                                      move(initVal));
+        return std::make_unique<VarDefAST>(varDef.isConst(), move(id),
+                                           move(initVal));
       } else {
         if (currentBlock == 0) {
-          BlockVars[currentBlock][name] =
-              Var(name, VarType::var_t, varDef.isConst(), vector<int>{}, 0);
+          BlockVars[currentBlock][name] = Var(
+              name, VarType::var_t, varDef.isConst(), std::vector<int>{}, 0);
           ASTPtrList retlist;
-          retlist.push_back(make_unique<NumAST>(0));
-          return make_unique<VarDefAST>(
+          retlist.push_back(std::make_unique<NumAST>(0));
+          return std::make_unique<VarDefAST>(
               varDef.isConst(), move(id),
-              make_unique<InitValAST>(VarType::var_t, move(retlist)));
+              std::make_unique<InitValAST>(VarType::var_t, move(retlist)));
         } else {
           BlockVars[currentBlock][name] =
-              Var(name, VarType::var_t, varDef.isConst(), vector<int>{});
-          return make_unique<VarDefAST>(varDef.isConst(), move(id));
+              Var(name, VarType::var_t, varDef.isConst(), std::vector<int>{});
+          return std::make_unique<VarDefAST>(varDef.isConst(), move(id));
         }
       }
     }
   }
 }
 
-unique_ptr<FuncCallAST> TypeCheck::EvalFuncCall(FuncCallAST &func) {
+std::unique_ptr<FuncCallAST> TypeCheck::EvalFuncCall(FuncCallAST &func) {
   if (FuncTable.find(func.getName()) == FuncTable.end()) {
     return nullptr;
   } else {
@@ -309,7 +310,7 @@ unique_ptr<FuncCallAST> TypeCheck::EvalFuncCall(FuncCallAST &func) {
         }
         if (dynamic_cast<LValAST *>(arg.get())) {
           int tmpCurrentBlock = currentBlock;
-          map<string, Var>::iterator iter;
+          std::map<std::string, Var>::iterator iter;
           while (tmpCurrentBlock != -1) {
             iter = BlockVars[tmpCurrentBlock].find(
                 dynamic_cast<LValAST *>(arg.get())->getName());
@@ -344,7 +345,7 @@ unique_ptr<FuncCallAST> TypeCheck::EvalFuncCall(FuncCallAST &func) {
       } else {
         if (dynamic_cast<LValAST *>(arg.get())) {
           int tmpCurrentBlock = currentBlock;
-          map<string, Var>::iterator iter;
+          std::map<std::string, Var>::iterator iter;
           while (tmpCurrentBlock != -1) {
             iter = BlockVars[tmpCurrentBlock].find(
                 dynamic_cast<LValAST *>(arg.get())->getName());
@@ -364,11 +365,11 @@ unique_ptr<FuncCallAST> TypeCheck::EvalFuncCall(FuncCallAST &func) {
       }
       newArgs.push_back(move(arg));
     }
-    return make_unique<FuncCallAST>(func.getName(), move(newArgs));
+    return std::make_unique<FuncCallAST>(func.getName(), move(newArgs));
   }
 }
 
-unique_ptr<BlockAST> TypeCheck::EvalBlock(BlockAST &block) {
+std::unique_ptr<BlockAST> TypeCheck::EvalBlock(BlockAST &block) {
   ASTPtrList stmts;
   parentBlock.push_back(currentBlock);
   currentBlock = parentBlock.size() - 1;
@@ -380,10 +381,10 @@ unique_ptr<BlockAST> TypeCheck::EvalBlock(BlockAST &block) {
     stmts.push_back(move(nStmt));
   }
   currentBlock = parentBlock[currentBlock];
-  return make_unique<BlockAST>(move(stmts));
+  return std::make_unique<BlockAST>(move(stmts));
 }
 
-unique_ptr<IfAST> TypeCheck::EvalIfElse(IfAST &stmt) {
+std::unique_ptr<IfAST> TypeCheck::EvalIfElse(IfAST &stmt) {
   auto cond = stmt.getCond()->Eval(*this);
   if (!cond) {
     return nullptr;
@@ -397,12 +398,12 @@ unique_ptr<IfAST> TypeCheck::EvalIfElse(IfAST &stmt) {
     if (!els) {
       return nullptr;
     }
-    return make_unique<IfAST>(move(cond), move(then), move(els));
+    return std::make_unique<IfAST>(move(cond), move(then), move(els));
   }
-  return make_unique<IfAST>(move(cond), move(then));
+  return std::make_unique<IfAST>(move(cond), move(then));
 }
 
-unique_ptr<WhileAST> TypeCheck::EvalWhile(WhileAST &stmt) {
+std::unique_ptr<WhileAST> TypeCheck::EvalWhile(WhileAST &stmt) {
   auto cond = stmt.getCond()->Eval(*this);
   if (!cond) {
     return nullptr;
@@ -411,10 +412,10 @@ unique_ptr<WhileAST> TypeCheck::EvalWhile(WhileAST &stmt) {
   if (!body) {
     return nullptr;
   }
-  return make_unique<WhileAST>(move(cond), move(body));
+  return std::make_unique<WhileAST>(move(cond), move(body));
 }
 
-unique_ptr<ControlAST> TypeCheck::EvalControl(ControlAST &stmt) {
+std::unique_ptr<ControlAST> TypeCheck::EvalControl(ControlAST &stmt) {
   if (stmt.getControl() == Control::return_c) {
     if (FuncTable[currentFunc].funcType == Type::void_t) {
       if (stmt.getReturnExp() != nullptr) {
@@ -427,14 +428,14 @@ unique_ptr<ControlAST> TypeCheck::EvalControl(ControlAST &stmt) {
         if (!exp) {
           return nullptr;
         }
-        return make_unique<ControlAST>(stmt.getControl(), move(exp));
+        return std::make_unique<ControlAST>(stmt.getControl(), move(exp));
       }
     }
   }
-  return make_unique<ControlAST>(stmt.getControl());
+  return std::make_unique<ControlAST>(stmt.getControl());
 }
 
-unique_ptr<AssignAST> TypeCheck::EvalAssign(AssignAST &assign) {
+std::unique_ptr<AssignAST> TypeCheck::EvalAssign(AssignAST &assign) {
   auto lhs = assign.getLeft()->Eval(*this);
   if (!lhs) {
     return nullptr;
@@ -443,7 +444,7 @@ unique_ptr<AssignAST> TypeCheck::EvalAssign(AssignAST &assign) {
     return nullptr;
   }
   int tmpCurrentBlock = currentBlock;
-  map<string, Var>::iterator iter;
+  std::map<std::string, Var>::iterator iter;
   while (tmpCurrentBlock != -1) {
     iter = BlockVars[tmpCurrentBlock].find(
         dynamic_cast<LValAST *>(lhs.get())->getName());
@@ -469,7 +470,7 @@ unique_ptr<AssignAST> TypeCheck::EvalAssign(AssignAST &assign) {
   }
   if (dynamic_cast<LValAST *>(rhs.get())) {
     int tmpCurrentBlock = currentBlock;
-    map<string, Var>::iterator iter;
+    std::map<std::string, Var>::iterator iter;
     while (tmpCurrentBlock != -1) {
       iter = BlockVars[tmpCurrentBlock].find(
           dynamic_cast<LValAST *>(rhs.get())->getName());
@@ -487,7 +488,7 @@ unique_ptr<AssignAST> TypeCheck::EvalAssign(AssignAST &assign) {
       return nullptr;
     }
   }
-  return make_unique<AssignAST>(move(lhs), move(rhs));
+  return std::make_unique<AssignAST>(move(lhs), move(rhs));
 }
 
 ASTPtr TypeCheck::EvalLVal(LValAST &lval) {
@@ -500,9 +501,9 @@ ASTPtr TypeCheck::EvalLVal(LValAST &lval) {
       }
       pos.push_back(move(val));
     }
-    const string &name = lval.getName();
+    const std::string &name = lval.getName();
     int tmpCurrentBlock = currentBlock;
-    map<string, Var>::iterator iter;
+    std::map<std::string, Var>::iterator iter;
     while (tmpCurrentBlock != -1) {
       iter = BlockVars[tmpCurrentBlock].find(name);
       if (iter != BlockVars[tmpCurrentBlock].end()) {
@@ -513,12 +514,12 @@ ASTPtr TypeCheck::EvalLVal(LValAST &lval) {
     if (tmpCurrentBlock == -1) {
       return nullptr;
     }
-    return make_unique<LValAST>(lval.getName(), lval.getType(), move(pos));
+    return std::make_unique<LValAST>(lval.getName(), lval.getType(), move(pos));
 
   } else {
-    const string &name = lval.getName();
+    const std::string &name = lval.getName();
     int tmpCurrentBlock = currentBlock;
-    map<string, Var>::iterator iter;
+    std::map<std::string, Var>::iterator iter;
     while (tmpCurrentBlock != -1) {
       iter = BlockVars[tmpCurrentBlock].find(name);
       if (iter != BlockVars[tmpCurrentBlock].end()) {
@@ -530,14 +531,14 @@ ASTPtr TypeCheck::EvalLVal(LValAST &lval) {
       return nullptr;
     }
     if (iter->second.isConst) {
-      return make_unique<NumAST>(iter->second.val);
+      return std::make_unique<NumAST>(iter->second.val);
     } else {
-      return make_unique<LValAST>(lval.getName(), lval.getType());
+      return std::make_unique<LValAST>(lval.getName(), lval.getType());
     }
   }
 }
 
-unique_ptr<InitValAST> TypeCheck::EvalInitVal(InitValAST &init) {
+std::unique_ptr<InitValAST> TypeCheck::EvalInitVal(InitValAST &init) {
   ASTPtrList newInitVals;
   for (const auto &val : init.getValues()) {
     auto newVal = val->Eval(*this);
@@ -546,7 +547,7 @@ unique_ptr<InitValAST> TypeCheck::EvalInitVal(InitValAST &init) {
     }
     newInitVals.push_back(move(newVal));
   }
-  return make_unique<InitValAST>(init.getType(), move(newInitVals));
+  return std::make_unique<InitValAST>(init.getType(), move(newInitVals));
 }
 
 ASTPtr TypeCheck::EvalAddExp(BinaryAST &exp) {
@@ -560,16 +561,18 @@ ASTPtr TypeCheck::EvalAddExp(BinaryAST &exp) {
   }
   if (!dynamic_cast<NumAST *>(lval.get()) ||
       !dynamic_cast<NumAST *>(rval.get())) {
-    return make_unique<BinaryAST>(exp.getOp(), move(lval), move(rval));
+    return std::make_unique<BinaryAST>(exp.getOp(), move(lval), move(rval));
   }
   switch (exp.getOp()) {
   case Operator::add_op: {
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lval.get())->getVal() +
-                               dynamic_cast<NumAST *>(rval.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lval.get())->getVal() +
+        dynamic_cast<NumAST *>(rval.get())->getVal());
   }
   case Operator::sub_op: {
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lval.get())->getVal() -
-                               dynamic_cast<NumAST *>(rval.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lval.get())->getVal() -
+        dynamic_cast<NumAST *>(rval.get())->getVal());
   }
   default:
     return nullptr;
@@ -587,26 +590,29 @@ ASTPtr TypeCheck::EvalMulExp(BinaryAST &exp) {
   }
   if (!dynamic_cast<NumAST *>(lval.get()) ||
       !dynamic_cast<NumAST *>(rval.get())) {
-    return make_unique<BinaryAST>(exp.getOp(), move(lval), move(rval));
+    return std::make_unique<BinaryAST>(exp.getOp(), move(lval), move(rval));
   }
   switch (exp.getOp()) {
   case Operator::mul_op: {
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lval.get())->getVal() *
-                               dynamic_cast<NumAST *>(rval.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lval.get())->getVal() *
+        dynamic_cast<NumAST *>(rval.get())->getVal());
   }
   case Operator::div_op: {
     if (dynamic_cast<NumAST *>(rval.get())->getVal() == 0) {
       return nullptr;
     }
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lval.get())->getVal() /
-                               dynamic_cast<NumAST *>(rval.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lval.get())->getVal() /
+        dynamic_cast<NumAST *>(rval.get())->getVal());
   }
   case Operator::mod_op: {
     if (dynamic_cast<NumAST *>(rval.get())->getVal() == 0) {
       return nullptr;
     }
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lval.get())->getVal() %
-                               dynamic_cast<NumAST *>(rval.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lval.get())->getVal() %
+        dynamic_cast<NumAST *>(rval.get())->getVal());
   }
   default:
     return nullptr;
@@ -624,21 +630,25 @@ ASTPtr TypeCheck::EvalRelExp(BinaryAST &exp) {
   }
   if (!dynamic_cast<NumAST *>(lhs.get()) ||
       !dynamic_cast<NumAST *>(rhs.get())) {
-    return make_unique<BinaryAST>(exp.getOp(), move(lhs), move(rhs));
+    return std::make_unique<BinaryAST>(exp.getOp(), move(lhs), move(rhs));
   }
   switch (exp.getOp()) {
   case Operator::lt_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() <
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() <
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   case Operator::gt_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() >
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() >
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   case Operator::le_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() <=
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() <=
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   case Operator::ge_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() >=
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() >=
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   default:
     return nullptr;
   }
@@ -648,7 +658,7 @@ ASTPtr TypeCheck::EvalLAndExp(BinaryAST &exp) {
   auto lhs = exp.getLHS()->Eval(*this);
   if (dynamic_cast<NumAST *>(lhs.get()) &&
       dynamic_cast<NumAST *>(lhs.get())->getVal() == 0) {
-    return make_unique<NumAST>(0);
+    return std::make_unique<NumAST>(0);
   }
   auto rhs = exp.getRHS()->Eval(*this);
   if (!rhs) {
@@ -656,11 +666,11 @@ ASTPtr TypeCheck::EvalLAndExp(BinaryAST &exp) {
   }
   if (dynamic_cast<NumAST *>(rhs.get()) &&
       dynamic_cast<NumAST *>(lhs.get())->getVal()) {
-    return make_unique<NumAST>(1);
+    return std::make_unique<NumAST>(1);
   } else if (dynamic_cast<NumAST *>(rhs.get())) {
-    return make_unique<NumAST>(0);
+    return std::make_unique<NumAST>(0);
   } else {
-    return make_unique<BinaryAST>(Operator::and_op, move(lhs), move(rhs));
+    return std::make_unique<BinaryAST>(Operator::and_op, move(lhs), move(rhs));
   }
 }
 
@@ -668,7 +678,7 @@ ASTPtr TypeCheck::EvalLOrExp(BinaryAST &exp) {
   auto lhs = exp.getLHS()->Eval(*this);
   if (dynamic_cast<NumAST *>(lhs.get()) &&
       dynamic_cast<NumAST *>(lhs.get())->getVal()) {
-    return make_unique<NumAST>(1);
+    return std::make_unique<NumAST>(1);
   }
   auto rhs = exp.getRHS()->Eval(*this);
   if (!rhs) {
@@ -676,11 +686,11 @@ ASTPtr TypeCheck::EvalLOrExp(BinaryAST &exp) {
   }
   if (dynamic_cast<NumAST *>(rhs.get()) &&
       dynamic_cast<NumAST *>(rhs.get())->getVal()) {
-    return make_unique<NumAST>(1);
+    return std::make_unique<NumAST>(1);
   } else if (dynamic_cast<NumAST *>(rhs.get())) {
-    return make_unique<NumAST>(0);
+    return std::make_unique<NumAST>(0);
   } else {
-    return make_unique<BinaryAST>(Operator::or_op, move(lhs), move(rhs));
+    return std::make_unique<BinaryAST>(Operator::or_op, move(lhs), move(rhs));
   }
 }
 
@@ -695,15 +705,17 @@ ASTPtr TypeCheck::EvalEqExp(BinaryAST &exp) {
   }
   if (!dynamic_cast<NumAST *>(lhs.get()) ||
       !dynamic_cast<NumAST *>(rhs.get())) {
-    return make_unique<BinaryAST>(exp.getOp(), move(lhs), move(rhs));
+    return std::make_unique<BinaryAST>(exp.getOp(), move(lhs), move(rhs));
   }
   switch (exp.getOp()) {
   case Operator::equ_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() ==
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() ==
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   case Operator::nequ_op:
-    return make_unique<NumAST>(dynamic_cast<NumAST *>(lhs.get())->getVal() !=
-                               dynamic_cast<NumAST *>(rhs.get())->getVal());
+    return std::make_unique<NumAST>(
+        dynamic_cast<NumAST *>(lhs.get())->getVal() !=
+        dynamic_cast<NumAST *>(rhs.get())->getVal());
   default:
     return nullptr;
   }
@@ -712,18 +724,18 @@ ASTPtr TypeCheck::EvalEqExp(BinaryAST &exp) {
 ASTPtr TypeCheck::EvalUnaryExp(UnaryAST &exp) {
   if (dynamic_cast<NumAST *>(exp.getNode().get())) {
     if (exp.getOp() == Operator::ERROR) {
-      return make_unique<NumAST>(
+      return std::make_unique<NumAST>(
           dynamic_cast<NumAST *>(exp.getNode().get())->getVal());
     } else {
       switch (exp.getOp()) {
       case Operator::not_op:
-        return make_unique<NumAST>(
+        return std::make_unique<NumAST>(
             !dynamic_cast<NumAST *>(exp.getNode().get())->getVal());
       case Operator::sub_op:
-        return make_unique<NumAST>(
+        return std::make_unique<NumAST>(
             -dynamic_cast<NumAST *>(exp.getNode().get())->getVal());
       case Operator::add_op:
-        return make_unique<NumAST>(
+        return std::make_unique<NumAST>(
             dynamic_cast<NumAST *>(exp.getNode().get())->getVal());
       default:
         return nullptr;
@@ -738,29 +750,29 @@ ASTPtr TypeCheck::EvalUnaryExp(UnaryAST &exp) {
       int value = dynamic_cast<NumAST *>(lval.get())->getVal();
       switch (exp.getOp()) {
       case Operator::not_op:
-        return make_unique<NumAST>(!value);
+        return std::make_unique<NumAST>(!value);
       case Operator::sub_op:
-        return make_unique<NumAST>(-value);
+        return std::make_unique<NumAST>(-value);
       case Operator::add_op:
-        return make_unique<NumAST>(+value);
+        return std::make_unique<NumAST>(+value);
       case Operator::ERROR:
-        return make_unique<NumAST>(value);
+        return std::make_unique<NumAST>(value);
       default:
         return nullptr;
       }
     } else {
-      return make_unique<UnaryAST>(move(lval), exp.getOp());
+      return std::make_unique<UnaryAST>(move(lval), exp.getOp());
     }
   }
 }
 
-unique_ptr<FuncDefAST> TypeCheck::EvalFuncDef(FuncDefAST &funcDef) {
+std::unique_ptr<FuncDefAST> TypeCheck::EvalFuncDef(FuncDefAST &funcDef) {
   currentFunc = funcDef.getName();
   ASTPtrList newArgs;
-  vector<Var> args;
+  std::vector<Var> args;
   for (const auto &arg : funcDef.getArgs()) {
     if (dynamic_cast<IdAST *>(arg.get())->getType() == VarType::array_t) {
-      vector<int> dims;
+      std::vector<int> dims;
       for (const auto &exp : dynamic_cast<IdAST *>(arg.get())->getDim()) {
         auto res = exp->Eval(*this);
         if (!res || !dynamic_cast<NumAST *>(res.get())) {
@@ -768,13 +780,13 @@ unique_ptr<FuncDefAST> TypeCheck::EvalFuncDef(FuncDefAST &funcDef) {
         }
         dims.push_back(dynamic_cast<NumAST *>(res.get())->getVal());
       }
-      newArgs.push_back(make_unique<ProcessedIdAST>(
+      newArgs.push_back(std::make_unique<ProcessedIdAST>(
           dynamic_cast<IdAST *>(arg.get())->getName(), VarType::array_t, false,
           dims));
       args.emplace_back(dynamic_cast<IdAST *>(arg.get())->getName(),
                         VarType::array_t, false, dims);
     } else {
-      newArgs.push_back(make_unique<ProcessedIdAST>(
+      newArgs.push_back(std::make_unique<ProcessedIdAST>(
           dynamic_cast<IdAST *>(arg.get())->getName(), VarType::var_t, false));
       args.emplace_back(dynamic_cast<IdAST *>(arg.get())->getName(),
                         VarType::var_t, false);
@@ -792,11 +804,11 @@ unique_ptr<FuncDefAST> TypeCheck::EvalFuncDef(FuncDefAST &funcDef) {
     return nullptr;
   }
   currentFunc = "";
-  return make_unique<FuncDefAST>(funcDef.getType(), funcDef.getName(),
-                                 move(newArgs), move(block));
+  return std::make_unique<FuncDefAST>(funcDef.getType(), funcDef.getName(),
+                                      move(newArgs), move(block));
 }
 
-unique_ptr<CompUnitAST> TypeCheck::EvalCompUnit(CompUnitAST &unit) {
+std::unique_ptr<CompUnitAST> TypeCheck::EvalCompUnit(CompUnitAST &unit) {
   ASTPtrList newNodes;
   parentBlock.push_back(-1);
   for (const auto &node : unit.getNodes()) {
@@ -809,27 +821,29 @@ unique_ptr<CompUnitAST> TypeCheck::EvalCompUnit(CompUnitAST &unit) {
   if (FuncTable.find("main") == FuncTable.end()) {
     return nullptr;
   }
-  return make_unique<CompUnitAST>(move(newNodes));
+  return std::make_unique<CompUnitAST>(move(newNodes));
 }
 
-unique_ptr<StmtAST> TypeCheck::EvalStmt(StmtAST &stmt) {
+std::unique_ptr<StmtAST> TypeCheck::EvalStmt(StmtAST &stmt) {
   if (!stmt.getStmt())
-    return make_unique<StmtAST>(nullptr);
+    return std::make_unique<StmtAST>(nullptr);
   else {
     auto nStmt = stmt.getStmt()->Eval(*this);
     if (!nStmt) {
       return nullptr;
     }
-    return make_unique<StmtAST>(move(nStmt));
+    return std::make_unique<StmtAST>(move(nStmt));
   }
 }
 
-unique_ptr<NumAST> TypeCheck::EvalNumber(NumAST &num) {
-  return make_unique<NumAST>(num.getVal());
+std::unique_ptr<NumAST> TypeCheck::EvalNumber(NumAST &num) {
+  return std::make_unique<NumAST>(num.getVal());
 }
 
-unique_ptr<EmptyAST> TypeCheck::EvalEmpty() { return make_unique<EmptyAST>(); }
+std::unique_ptr<EmptyAST> TypeCheck::EvalEmpty() {
+  return std::make_unique<EmptyAST>();
+}
 
-unique_ptr<ProcessedIdAST> TypeCheck::EvalProcessedId(ProcessedIdAST &id) {
-  return make_unique<ProcessedIdAST>(id);
+std::unique_ptr<ProcessedIdAST> TypeCheck::EvalProcessedId(ProcessedIdAST &id) {
+  return std::make_unique<ProcessedIdAST>(id);
 }

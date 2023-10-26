@@ -20,8 +20,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Pos {
 public:
   Pos(unsigned int l, unsigned int c);
@@ -36,14 +34,14 @@ public:
 class Error {
 private:
   // 保存当前文件名
-  const string filename;
+  const std::string filename;
   // 保存当前错误号
   int err_no;
   // 保存错误位置
   Pos *pos;
 
 public:
-  Error(const string &f);
+  Error(const std::string &f);
   virtual ~Error();
   void set_line(unsigned int l);
   void set_col(unsigned int c);

@@ -59,7 +59,7 @@ Operator tag_to_op(Tag t) {
   }
 }
 
-string type_to_string(Type t) {
+std::string type_to_string(Type t) {
   switch (t) {
   case Type::int_t:
     return "INT";
@@ -72,7 +72,7 @@ string type_to_string(Type t) {
   }
 }
 
-string vartype_to_string(VarType t) {
+std::string vartype_to_string(VarType t) {
   switch (t) {
   case VarType::var_t:
     return "var";
@@ -83,7 +83,7 @@ string vartype_to_string(VarType t) {
   }
 }
 
-string op_to_string(Operator p) {
+std::string op_to_string(Operator p) {
   switch (p) {
   case Operator::add_op:
     return "add";

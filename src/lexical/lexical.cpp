@@ -14,12 +14,10 @@
  * </table>
  */
 
-#include "lexical.h"
 #include <iostream>
 #include <string>
 
-
-using namespace std;
+#include "lexical.h"
 
 Keywords Lexer::keywords;
 
@@ -61,7 +59,7 @@ void Lexer::identifier() {
   Token *t = NULL;
   // 标识符
   while (COND_IDENTIFIER) {
-    string name = "";
+    std::string name = "";
     do {
       // 记录字符
       name.push_back(ch);
@@ -144,7 +142,7 @@ void Lexer::character() {
 
 void Lexer::str() {
   Token *t = NULL;
-  string s = "";
+  std::string s = "";
   do {
     // 过滤掉第一个双引号
     if (ch == '"') {
@@ -269,7 +267,7 @@ void Lexer::operation() {
       }
       // 没有闭合
       if (ch == EOF) {
-        cout << "多行注释未正常结束" << endl;
+        std::cout << "多行注释未正常结束" << std::endl;
       }
     }
     // 否则为除号

@@ -19,8 +19,6 @@
 
 #include "token.h"
 
-using namespace std;
-
 enum Type { int_t, char_t, void_t };
 
 enum VarType { array_t, var_t };
@@ -50,9 +48,10 @@ enum Control { continue_c, break_c, return_c };
 
 Operator tag_to_op(Tag t);
 
-string op_to_string(Operator p);
+std::string op_to_string(Operator p);
 
-string type_to_string(Type t);
+std::string type_to_string(Type t);
 
-string vartype_to_string(VarType t);
+std::string vartype_to_string(VarType t);
+
 #endif /* _TYPE_H_ */

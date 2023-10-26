@@ -23,8 +23,6 @@
 #include "ast.h"
 #include "utils.h"
 
-using namespace std;
-
 class IRGenerator {
 private:
   int t_num;
@@ -34,17 +32,17 @@ private:
   int cur_continue_l;
   int currentDepth;
   int currentBlock;
-  string currentFunc;
+  std::string currentFunc;
 
-  map<int, map<string, GenVar>> BlockSymbolTable;
-  vector<int> parentBlock;
-  map<string, Function> FuncTable;
-  vector<GenVar> ReverseSymbolTable;
+  std::map<int, std::map<std::string, GenVar>> BlockSymbolTable;
+  std::vector<int> parentBlock;
+  std::map<std::string, Function> FuncTable;
+  std::vector<GenVar> ReverseSymbolTable;
 
 public:
-  IRGenerator(map<string, Function> __FuncTable,
-              const map<int, map<string, Var>> &BlockVars)
-      : FuncTable(move(__FuncTable)) {
+  IRGenerator(std::map<std::string, Function> __FuncTable,
+              const std::map<int, std::map<std::string, Var>> &BlockVars)
+      : FuncTable(std::move(__FuncTable)) {
     for (auto &item1 : BlockVars) {
       for (auto &item2 : item1.second) {
         if (item2.second.isConst && item2.second.type == VarType::var_t)
@@ -64,48 +62,49 @@ public:
     currentFunc = "";
   }
 
-  void GenerateValue(const string &varName, int &idx, int indx,
-                     InitValAST *init, vector<int> dim, int i, string &code);
+  void GenerateValue(const std::string &varName, int &idx, int indx,
+                     InitValAST *init, std::vector<int> dim, int i,
+                     std::string &code);
 
-  void GenVarDecl(VarDeclAST &varDecl, string &code);
+  void GenVarDecl(VarDeclAST &varDecl, std::string &code);
 
-  string GenId(ProcessedIdAST &id, string &code);
+  std::string GenId(ProcessedIdAST &id, std::string &code);
 
-  string GenNumber(NumAST &num, string &code);
+  std::string GenNumber(NumAST &num, std::string &code);
 
-  string GenVarDef(VarDefAST &varDef, string &code);
+  std::string GenVarDef(VarDefAST &varDef, std::string &code);
 
-  string GenAssign(AssignAST &assign, string &code);
+  std::string GenAssign(AssignAST &assign, std::string &code);
 
-  string GenBinaryExp(BinaryAST &exp, string &code);
+  std::string GenBinaryExp(BinaryAST &exp, std::string &code);
 
-  string GenInitVal(InitValAST &init, string &code);
+  std::string GenInitVal(InitValAST &init, std::string &code);
 
-  static string op2char(Operator op);
+  static std::string op2char(Operator op);
 
-  void GenBlock(BlockAST &block, string &code);
+  void GenBlock(BlockAST &block, std::string &code);
 
-  string GenFuncCall(FuncCallAST &func, string &code);
+  std::string GenFuncCall(FuncCallAST &func, std::string &code);
 
-  string GenLVal(LValAST &lval, string &code);
+  std::string GenLVal(LValAST &lval, std::string &code);
 
-  string GenUnaryExp(UnaryAST &exp, string &code);
+  std::string GenUnaryExp(UnaryAST &exp, std::string &code);
 
-  string GenLAndExp(BinaryAST &exp, string &code);
+  std::string GenLAndExp(BinaryAST &exp, std::string &code);
 
-  string GenLOrExp(BinaryAST &exp, string &code);
+  std::string GenLOrExp(BinaryAST &exp, std::string &code);
 
-  void GenFuncDef(FuncDefAST &funcDef, string &code);
+  void GenFuncDef(FuncDefAST &funcDef, std::string &code);
 
-  void GenCompUnit(CompUnitAST &unit, string &code);
+  void GenCompUnit(CompUnitAST &unit, std::string &code);
 
-  void GenIfElse(IfAST &stmt, string &code);
+  void GenIfElse(IfAST &stmt, std::string &code);
 
-  void GenWhile(WhileAST &stmt, string &code);
+  void GenWhile(WhileAST &stmt, std::string &code);
 
-  void GenControl(ControlAST &stmt, string &code);
+  void GenControl(ControlAST &stmt, std::string &code);
 
-  void GenStmt(StmtAST &stmt, string &code);
+  void GenStmt(StmtAST &stmt, std::string &code);
 };
 
 #define _IRGEN_H_

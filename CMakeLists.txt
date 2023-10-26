@@ -43,8 +43,6 @@ configure_file(
         "${PROJECT_SOURCE_DIR}/src/include/config.h"
 )
 
-add_definitions(-w)
-
 # 添加要编译的目录
 add_subdirectory(src)
 add_subdirectory(test)

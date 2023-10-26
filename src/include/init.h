@@ -20,17 +20,15 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 // 源文件
 extern std::vector<std::string> src_files;
 // 输出文件
-extern string dest_file;
+extern std::string dest_file;
 
 class Init {
 private:
   // 绝对路径
-  string abs_path;
+  std::string abs_path;
   // 路径缓存大小
   static const int PATH_BUFFER = 1024;
   // 路径缓存

@@ -19,9 +19,9 @@
 #include "scanner.h"
 
 Scanner::Scanner(const std::string &f) {
-  fin.open(f, ios::in);
+  fin.open(f, std::ios::in);
   if (fin.is_open() == false) {
-    std::cout << "File not open!" << endl;
+    std::cout << "File not open!" << std::endl;
   }
   prev_char = ' ';
   curr_char = ' ';

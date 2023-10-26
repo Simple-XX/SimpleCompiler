@@ -20,8 +20,6 @@
 #include "ast.h"
 #include "irgen.h"
 
-using namespace std;
-
 void IRGenerator::GenerateValue(const std::string &varName, int &idx, int indx,
                                 InitValAST *init, std::vector<int> dim, int i,
                                 std::string &code) {

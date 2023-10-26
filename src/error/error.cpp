@@ -20,7 +20,7 @@ Pos::Pos(unsigned int l, unsigned int c) : line(l), col(c) { return; }
 
 Pos::~Pos() { return; }
 
-Error::Error(const string &f) : filename(f) {
+Error::Error(const std::string &f) : filename(f) {
   err_no = 0;
   pos = new Pos(1, 1);
   return;
@@ -53,8 +53,8 @@ int Error::get_err_no() const { return err_no; }
 Pos *Error::get_pos() const { return pos; }
 
 void Error::display_err() const {
-  cout << "\033[;31mErr:\033[0m " << err_no << ", \033[;31mFile:\033[0m "
-       << filename << ", \033[;31mLine:\033[0m " << pos->line
-       << ", \033[;31mCOL:\033[0m " << pos->col << endl;
+  std::cout << "\033[;31mErr:\033[0m " << err_no << ", \033[;31mFile:\033[0m "
+            << filename << ", \033[;31mLine:\033[0m " << pos->line
+            << ", \033[;31mCOL:\033[0m " << pos->col << std::endl;
   return;
 }

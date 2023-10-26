@@ -22,8 +22,6 @@
 #include "irgen.h"
 #include "typechecker.h"
 
-using namespace std;
-
 ASTPtr FuncDefAST::Eval(TypeCheck &checker) {
   return checker.EvalFuncDef(*this);
 }
@@ -31,26 +29,26 @@ ASTPtr FuncDefAST::Eval(TypeCheck &checker) {
 ASTPtr BlockAST::Eval(TypeCheck &checker) { return checker.EvalBlock(*this); }
 
 ASTPtr BinaryAST::Eval(TypeCheck &checker) {
-  initializer_list<Operator> opAdd = {Operator::add_op, Operator::sub_op};
-  initializer_list<Operator> opMul = {Operator::mul_op, Operator::div_op,
-                                      Operator::mod_op};
-  initializer_list<Operator> opRel = {Operator::le_op, Operator::ge_op,
-                                      Operator::lt_op, Operator::gt_op};
-  initializer_list<Operator> opEq = {Operator::equ_op, Operator::nequ_op};
-  initializer_list<Operator> opLAnd = {Operator::and_op};
-  initializer_list<Operator> opLOr = {Operator::or_op};
+  std::initializer_list<Operator> opAdd = {Operator::add_op, Operator::sub_op};
+  std::initializer_list<Operator> opMul = {Operator::mul_op, Operator::div_op,
+                                           Operator::mod_op};
+  std::initializer_list<Operator> opRel = {Operator::le_op, Operator::ge_op,
+                                           Operator::lt_op, Operator::gt_op};
+  std::initializer_list<Operator> opEq = {Operator::equ_op, Operator::nequ_op};
+  std::initializer_list<Operator> opLAnd = {Operator::and_op};
+  std::initializer_list<Operator> opLOr = {Operator::or_op};
 
-  if (find(opLOr.begin(), opLOr.end(), op) != opLOr.end()) {
+  if (std::find(opLOr.begin(), opLOr.end(), op) != opLOr.end()) {
     return checker.EvalLOrExp(*this);
-  } else if (find(opLAnd.begin(), opLAnd.end(), op) != opLAnd.end()) {
+  } else if (std::find(opLAnd.begin(), opLAnd.end(), op) != opLAnd.end()) {
     return checker.EvalLAndExp(*this);
-  } else if (find(opEq.begin(), opEq.end(), op) != opEq.end()) {
+  } else if (std::find(opEq.begin(), opEq.end(), op) != opEq.end()) {
     return checker.EvalEqExp(*this);
-  } else if (find(opRel.begin(), opRel.end(), op) != opRel.end()) {
+  } else if (std::find(opRel.begin(), opRel.end(), op) != opRel.end()) {
     return checker.EvalRelExp(*this);
-  } else if (find(opAdd.begin(), opAdd.end(), op) != opAdd.end()) {
+  } else if (std::find(opAdd.begin(), opAdd.end(), op) != opAdd.end()) {
     return checker.EvalAddExp(*this);
-  } else if (find(opMul.begin(), opMul.end(), op) != opMul.end()) {
+  } else if (std::find(opMul.begin(), opMul.end(), op) != opMul.end()) {
     return checker.EvalMulExp(*this);
   } else {
     return nullptr;

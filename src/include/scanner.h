@@ -22,15 +22,13 @@
 
 #include "error.h"
 
-using namespace std;
-
 extern Error *error;
 
 // 扫描器
 class Scanner {
 private:
   // 输入流
-  ifstream fin;
+  std::ifstream fin;
   // 前一个读到的字符
   char prev_char;
   // 当前读到的字符

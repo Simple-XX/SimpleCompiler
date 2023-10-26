@@ -6,7 +6,7 @@
 # 依赖管理
 
 # 设置依赖下载路径
-set(CPM_SOURCE_CACHE ${CMAKE_SOURCE_DIR}/3rd)
+set(CPM_SOURCE_CACHE ${PROJECT_SOURCE_DIR}/3rd)
 # 优先使用本地文件
 set(CPM_USE_LOCAL_PACKAGES True)
 # https://github.com/cpm-cmake/CPM.cmake
@@ -18,7 +18,7 @@ if (CPM_SOURCE_CACHE)
 elseif (DEFINED ENV{CPM_SOURCE_CACHE})
     set(CPM_DOWNLOAD_LOCATION "$ENV{CPM_SOURCE_CACHE}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 else ()
-    set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
+    set(CPM_DOWNLOAD_LOCATION "${PROJECT_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 endif ()
 
 # Expand relative path. This is important if the provided path contains a tilde (~)
@@ -95,26 +95,26 @@ if (NOT CPPCHECK_EXE)
             "Following https://cppcheck.sourceforge.io to install.")
 endif ()
 add_custom_target(cppcheck
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Run cppcheck on ${CMAKE_BINARY_DIR}/compile_commands.json ..."
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMENT "Run cppcheck on ${PROJECT_BINARY_DIR}/compile_commands.json ..."
         COMMAND
         ${CPPCHECK_EXE}
         --enable=all
-        --project=${CMAKE_BINARY_DIR}/compile_commands.json
-        --suppress-xml=${CMAKE_SOURCE_DIR}/tools/cppcheck-suppressions.xml
-        --output-file=${CMAKE_BINARY_DIR}/cppcheck_report.log
+        --project=${PROJECT_BINARY_DIR}/compile_commands.json
+        --suppress-xml=${PROJECT_SOURCE_DIR}/tools/cppcheck-suppressions.xml
+        --output-file=${PROJECT_BINARY_DIR}/cppcheck_report.log
 )
 
 # 获取全部源文件
 file(GLOB_RECURSE ALL_SOURCE_FILES
-        ${CMAKE_SOURCE_DIR}/src/*.h
-        ${CMAKE_SOURCE_DIR}/src/*.hpp
-        ${CMAKE_SOURCE_DIR}/src/*.c
-        ${CMAKE_SOURCE_DIR}/src/*.cpp
-        ${CMAKE_SOURCE_DIR}/test/*.h
-        ${CMAKE_SOURCE_DIR}/test/*.hpp
-        ${CMAKE_SOURCE_DIR}/test/*.c
-        ${CMAKE_SOURCE_DIR}/test/*.cpp
+        ${PROJECT_SOURCE_DIR}/src/*.h
+        ${PROJECT_SOURCE_DIR}/src/*.hpp
+        ${PROJECT_SOURCE_DIR}/src/*.c
+        ${PROJECT_SOURCE_DIR}/src/*.cpp
+        ${PROJECT_SOURCE_DIR}/test/*.h
+        ${PROJECT_SOURCE_DIR}/test/*.hpp
+        ${PROJECT_SOURCE_DIR}/test/*.c
+        ${PROJECT_SOURCE_DIR}/test/*.cpp
 )
 
 # clang-tidy
@@ -124,14 +124,14 @@ if (NOT CLANG_TIDY_EXE)
             "Following https://clang.llvm.org/extra/clang-tidy to install.")
 endif ()
 add_custom_target(clang-tidy
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Run clang-tidy on ${ALL_SOURCE_FILES} ..."
         COMMAND
         ${CLANG_TIDY_EXE}
-        --config-file=${CMAKE_SOURCE_DIR}/.clang-tidy
-        -p=${CMAKE_BINARY_DIR}
+        --config-file=${PROJECT_SOURCE_DIR}/.clang-tidy
+        -p=${PROJECT_BINARY_DIR}
         ${ALL_SOURCE_FILES}
-        > ${CMAKE_BINARY_DIR}/clang_tidy_report.log 2>&1
+        > ${PROJECT_BINARY_DIR}/clang_tidy_report.log 2>&1
 )
 
 # clang-format
@@ -141,7 +141,7 @@ if (NOT CLANG_FORMAT_EXE)
             "Following https://clang.llvm.org/docs/ClangFormat.html to install.")
 endif ()
 add_custom_target(clang-format
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Run clang-format on ${ALL_SOURCE_FILES} ..."
         COMMAND ${CLANG_FORMAT_EXE} -i -style=file ${ALL_SOURCE_FILES}
 )

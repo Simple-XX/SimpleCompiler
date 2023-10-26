@@ -21,8 +21,6 @@
 #include "scanner.h"
 #include "token.h"
 
-using namespace std;
-
 extern Error *error;
 
 // TODO: 宏替换为函数/constexpr

@@ -19,7 +19,6 @@
 #include <iostream>
 #include <unistd.h>
 
-
 #include "init.h"
 
 // 命令行参数解析相关定义
@@ -49,18 +48,18 @@ int Init::init(int &argc, char **&argv) {
     switch (c) {
     // 显示帮助信息
     case 'h':
-      cout << "c-sub v0.01\nCopyright(C) Simple-XX 2020\n"
-           << "命令格式：[源文件[源文件] -o 输出文件 [选项]][-h|-v]\n"
-           << "\t源文件\t\t必须是以.c结尾的文件\n"
-           << "\t-o\t\t指定输出文件\n"
-           << "\t--lexical[指定文件(可选)]\t显示词法分析过程\n"
-           << "\t-h\t\t显示帮助信息\n"
-           << "\t-v\t\t显示版本信息" << endl;
+      std::cout << "c-sub v0.01\nCopyright(C) Simple-XX 2020\n"
+                << "命令格式：[源文件[源文件] -o 输出文件 [选项]][-h|-v]\n"
+                << "\t源文件\t\t必须是以.c结尾的文件\n"
+                << "\t-o\t\t指定输出文件\n"
+                << "\t--lexical[指定文件(可选)]\t显示词法分析过程\n"
+                << "\t-h\t\t显示帮助信息\n"
+                << "\t-v\t\t显示版本信息" << std::endl;
       break;
     // 显示版本信息
     case 'v':
-      cout << "c-sub v0.01\nCopyright(C) Simple-XX 2020\n"
-           << "简单的 C 语言子集编译器" << endl;
+      std::cout << "c-sub v0.01\nCopyright(C) Simple-XX 2020\n"
+                << "简单的 C 语言子集编译器" << std::endl;
       break;
     case 'o':
       // 寻找源文件，寻找区间 argv[1:-2]
@@ -75,15 +74,15 @@ int Init::init(int &argc, char **&argv) {
       break;
 
     case LEXICAL_OPT:
-      cout << "输出词法分析结果，可指定输出到文件\n"
-           << "[--lexical 输出文件]" << endl;
+      std::cout << "输出词法分析结果，可指定输出到文件\n"
+                << "[--lexical 输出文件]" << std::endl;
       break;
     // 表示选项不支持
     case '?':
-      cout << "unknow option" << endl;
+      std::cout << "unknow option" << std::endl;
       break;
     default:
-      cout << "bikbib" << endl;
+      std::cout << "bikbib" << std::endl;
       break;
     }
   }

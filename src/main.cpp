@@ -19,16 +19,13 @@
 #include <string>
 #include <vector>
 
-
 #include "common.h"
-
-using namespace std;
 
 // TODO: 由 init 处理
 // 源文件
 std::vector<std::string> src_files;
 // 输出文件
-string dest_file = "";
+std::string dest_file = "";
 
 Error *error = NULL;
 
@@ -39,13 +36,13 @@ int main(int argc, char **argv) {
   initer.init(argc, argv);
   // 逐个打开文件
   for (const auto &i : src_files) {
-    cout << "Open file: " << i << endl;
+    std::cout << "Open file: " << i << std::endl;
     error = new Error(i);
     Scanner scanner(i);
     Lexer lexer(scanner);
     Parser parser(lexer);
     ASTPtr prog = parser.parsing();
-    cout << "[AST]:" << endl << prog->to_string() << endl;
+    std::cout << "[AST]:" << std::endl << prog->to_string() << std::endl;
     TypeCheck checker = TypeCheck();
     ASTPtr root = prog->Eval(checker);
     if (!root) {
@@ -57,23 +54,23 @@ int main(int argc, char **argv) {
 
     IRGenerator generator =
         IRGenerator(std::move(FuncTable), std::move(BlockVars));
-    string irout;
+    std::string irout;
     root->GenerateIR(generator, irout);
-    cout << "[IR]:" << endl << irout << endl; // ir
+    std::cout << "[IR]:" << std::endl << irout << std::endl; // ir
 
     std::istringstream stream_stmt(irout);
     IRParser irparser = IRParser(stream_stmt);
     IRPtr irroot = irparser.ParseProgram();
     LowIRGenerator lowirgenerator = LowIRGenerator();
-    string lowirout;
+    std::string lowirout;
     irroot->Generate(lowirgenerator, lowirout);
-    cout << "[LowIR]:" << endl << lowirout << endl; // low ir
+    std::cout << "[LowIR]:" << std::endl << lowirout << std::endl; // low ir
 
     std::istringstream stream_stmt2(lowirout);
     CodeGen codegenerator = CodeGen(stream_stmt2);
-    string riscV;
+    std::string riscV;
     codegenerator.Generate(riscV);
-    cout << "[RiscV]:" << endl << riscV << std::endl;
+    std::cout << "[RiscV]:" << std::endl << riscV << std::endl;
   }
 
   return 0;

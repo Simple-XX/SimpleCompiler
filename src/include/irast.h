@@ -25,10 +25,8 @@
 #include <utility>
 #include <vector>
 
-
 #include "ir.h"
 #include "utils.h"
-
 
 class LowIRGenerator;
 
