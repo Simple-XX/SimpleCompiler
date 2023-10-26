@@ -22,7 +22,7 @@
 
 class Pos {
 public:
-  Pos(unsigned int l, unsigned int c);
+  Pos(unsigned int _l, unsigned int _c);
   ~Pos();
   // 保存当前行号
   unsigned int line;
@@ -41,11 +41,11 @@ private:
   Pos *pos;
 
 public:
-  Error(const std::string &f);
+  Error(const std::string &_f);
   virtual ~Error();
-  void set_line(unsigned int l);
-  void set_col(unsigned int c);
-  void set_err_no(int e);
+  void set_line(unsigned int _l);
+  void set_col(unsigned int _c);
+  void set_err_no(int _e);
   int get_err_no() const;
   Pos *get_pos() const;
   virtual void display_err() const;

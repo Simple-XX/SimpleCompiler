@@ -16,11 +16,11 @@
 
 #include "error.h"
 
-Pos::Pos(unsigned int l, unsigned int c) : line(l), col(c) { return; }
+Pos::Pos(unsigned int _l, unsigned int _c) : line(_l), col(_c) { return; }
 
 Pos::~Pos() { return; }
 
-Error::Error(const std::string &f) : filename(f) {
+Error::Error(const std::string &_f) : filename(_f) {
   err_no = 0;
   pos = new Pos(1, 1);
   return;
@@ -33,18 +33,18 @@ Error::~Error() {
   return;
 }
 
-void Error::set_line(unsigned int l) {
-  pos->line = l;
+void Error::set_line(unsigned int _l) {
+  pos->line = _l;
   return;
 }
 
-void Error::set_col(unsigned int c) {
-  pos->col = c;
+void Error::set_col(unsigned int _c) {
+  pos->col = _c;
   return;
 }
 
-void Error::set_err_no(int e) {
-  err_no = e;
+void Error::set_err_no(int _e) {
+  err_no = _e;
   return;
 }
 
