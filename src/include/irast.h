@@ -35,8 +35,8 @@ public:
   int lineno;
   BaseIR(int l) : lineno(l) {}
   virtual ~BaseIR() = default;
-  virtual std::string Generate(LowIRGenerator &generator,
-                               std::string &code) = 0;
+  virtual std::string Generate(LowIRGenerator &_generator,
+                               std::string &_code) = 0;
 };
 
 using IRPtr = std::unique_ptr<BaseIR>;
@@ -48,14 +48,14 @@ class DeclIR : public BaseIR {
   std::string name;
 
 public:
-  DeclIR(VarType _type, int _size, std::string _name, int line)
-      : BaseIR(line), varType(_type), size(_size), name(std::move(_name)) {}
+  DeclIR(VarType _type, int _size, std::string _name, int _line)
+      : BaseIR(_line), varType(_type), size(_size), name(std::move(_name)) {}
 
   const VarType getType() const { return varType; }
   const int getSize() const { return size; }
   const std::string getName() const { return name; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class InitIR : public BaseIR {
@@ -65,8 +65,8 @@ class InitIR : public BaseIR {
   int val;
 
 public:
-  InitIR(VarType _type, std::string _name, int _p, int _v, int line)
-      : BaseIR(line), varType(_type), name(std::move(_name)), pos(_p), val(_v) {
+  InitIR(VarType _type, std::string _name, int _p, int _v, int _line)
+      : BaseIR(_line), varType(_type), name(std::move(_name)), pos(_p), val(_v) {
   }
 
   const VarType getType() const { return varType; }
@@ -74,7 +74,7 @@ public:
   const int getVal() const { return val; }
   const std::string getName() const { return name; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class FuncDefIR : public BaseIR {
@@ -83,9 +83,9 @@ class FuncDefIR : public BaseIR {
   IRPtr body;
 
 public:
-  FuncDefIR(std::string _name, int param, IRPtr body, int line)
-      : BaseIR(line), name(std::move(_name)), paramNum(param),
-        body(std::move(body)) {}
+  FuncDefIR(std::string _name, int _param, IRPtr _body, int _line)
+      : BaseIR(_line), name(std::move(_name)), paramNum(_param),
+        body(std::move(_body)) {}
 
   const std::string getName() const { return name; }
   const int getParamNum() const { return paramNum; }
@@ -98,12 +98,12 @@ class StatementsIR : public BaseIR {
   IRPtrList stmts;
 
 public:
-  StatementsIR(IRPtrList _stmt, int line)
-      : BaseIR(line), stmts(std::move(_stmt)) {}
+  StatementsIR(IRPtrList _stmt, int _line)
+      : BaseIR(_line), stmts(std::move(_stmt)) {}
 
   const IRPtrList &getStmts() const { return stmts; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class BinaryExpIR : public BaseIR {
@@ -112,14 +112,14 @@ class BinaryExpIR : public BaseIR {
   Operator op;
 
 public:
-  BinaryExpIR(IRPtr _l, IRPtr _r, Operator _op, int line)
-      : BaseIR(line), lhs(std::move(_l)), rhs(std::move(_r)), op(_op) {}
+  BinaryExpIR(IRPtr _l, IRPtr _r, Operator _op, int _line)
+      : BaseIR(_line), lhs(std::move(_l)), rhs(std::move(_r)), op(_op) {}
 
   const IRPtr &getLHS() const { return lhs; }
   const IRPtr &getRHS() const { return rhs; }
   const Operator getOp() const { return op; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class UnaryExpIR : public BaseIR {
@@ -127,13 +127,13 @@ class UnaryExpIR : public BaseIR {
   IRPtr exp; // right value;
 
 public:
-  UnaryExpIR(IRPtr _exp, Operator _op, int line)
-      : BaseIR(line), exp(std::move(_exp)), op(_op) {}
+  UnaryExpIR(IRPtr _exp, Operator _op, int _line)
+      : BaseIR(_line), exp(std::move(_exp)), op(_op) {}
 
   const IRPtr &getExp() const { return exp; }
   const Operator &getOp() const { return op; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class AssignIR : public BaseIR {
@@ -141,13 +141,13 @@ class AssignIR : public BaseIR {
   IRPtr rhs;
 
 public:
-  AssignIR(IRPtr _l, IRPtr _r, int line)
-      : BaseIR(line), lhs(std::move(_l)), rhs(std::move(_r)) {}
+  AssignIR(IRPtr _l, IRPtr _r, int _line)
+      : BaseIR(_line), lhs(std::move(_l)), rhs(std::move(_r)) {}
 
   const IRPtr &getLHS() const { return lhs; }
   const IRPtr &getRHS() const { return rhs; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class CondGotoIR : public BaseIR {
@@ -155,13 +155,13 @@ class CondGotoIR : public BaseIR {
   int labelNum; // label
 
 public:
-  CondGotoIR(IRPtr _cond, int num, int line)
-      : BaseIR(line), cond(std::move(_cond)), labelNum(num) {}
+  CondGotoIR(IRPtr _cond, int _num, int _line)
+      : BaseIR(_line), cond(std::move(_cond)), labelNum(_num) {}
 
   const IRPtr &getCond() const { return cond; }
   const int getLabel() const { return labelNum; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class LValIR : public BaseIR {
@@ -170,70 +170,70 @@ class LValIR : public BaseIR {
   IRPtr pos;
 
 public:
-  LValIR(VarType var, std::string _n, int line, IRPtr _p = nullptr)
-      : BaseIR(line), varType(var), name(std::move(_n)), pos(std::move(_p)) {}
+  LValIR(VarType _var, std::string _n, int _line, IRPtr _p = nullptr)
+      : BaseIR(_line), varType(_var), name(std::move(_n)), pos(std::move(_p)) {}
 
   const VarType getType() const { return varType; }
   const IRPtr &getPos() const { return pos; }
   const std::string getName() const { return name; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class GotoIR : public BaseIR {
   int label; // label
 
 public:
-  GotoIR(int l, int line) : BaseIR(line), label(l) {}
+  GotoIR(int _l, int _line) : BaseIR(_line), label(_l) {}
 
   const int getLabel() const { return label; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class Label : public BaseIR {
   int num;
 
 public:
-  Label(int _n, int line) : BaseIR(line), num(_n) {}
+  Label(int _n, int _line) : BaseIR(_line), num(_n) {}
 
   const int getNum() const { return num; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class ParamListIR : public BaseIR {
   IRPtrList params; // right value;
 
 public:
-  ParamListIR(IRPtrList p, int line) : BaseIR(line), params(std::move(p)) {}
+  ParamListIR(IRPtrList _p, int _line) : BaseIR(_line), params(std::move(_p)) {}
 
   const IRPtrList &getParams() const { return params; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class FuncCallIR : public BaseIR {
   std::string funcName;
 
 public:
-  FuncCallIR(std::string name, int line)
-      : BaseIR(line), funcName(std::move(name)) {}
+  FuncCallIR(std::string _name, int _line)
+      : BaseIR(_line), funcName(std::move(_name)) {}
 
   const std::string getName() const { return funcName; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class ReturnIR : public BaseIR {
   IRPtr ret; // right value or null
 
 public:
-  ReturnIR(IRPtr r, int line) : BaseIR(line), ret(std::move(r)) {}
+  ReturnIR(IRPtr _r, int _line) : BaseIR(_line), ret(std::move(_r)) {}
 
   const IRPtr &getReturnValue() const { return ret; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class RightValIR : public BaseIR {
@@ -242,8 +242,8 @@ class RightValIR : public BaseIR {
   int value;
 
 public:
-  RightValIR(IRToken _t, std::string _name, int line)
-      : BaseIR(line), type(_t), name(std::move(_name)) {}
+  RightValIR(IRToken _t, std::string _name, int _line)
+      : BaseIR(_line), type(_t), name(std::move(_name)) {}
   RightValIR(IRToken _t, int val, int line)
       : BaseIR(line), type(_t), value(val) {}
 
@@ -251,18 +251,18 @@ public:
   const int getVal() const { return value; }
   const std::string getName() const { return name; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 class ProgramIR : public BaseIR {
   IRPtrList nodes;
 
 public:
-  ProgramIR(IRPtrList _n, int line) : BaseIR(line), nodes(std::move(_n)) {}
+  ProgramIR(IRPtrList _n, int _line) : BaseIR(_line), nodes(std::move(_n)) {}
 
   const IRPtrList &getNodes() const { return nodes; }
 
-  virtual std::string Generate(LowIRGenerator &generator, std::string &code);
+  virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
 
 #endif /* SIMPLECOMPILER_IRAST_H */

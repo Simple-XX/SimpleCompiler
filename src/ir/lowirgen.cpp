@@ -450,69 +450,69 @@ std::string LowIRGenerator::GenProgram(ProgramIR &program, std::string &code) {
   return {};
 }
 
-std::string DeclIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenDecl(*this, code);
+std::string DeclIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenDecl(*this, _code);
 }
 
-std::string InitIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenInit(*this, code);
+std::string InitIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenInit(*this, _code);
 }
 
 std::string FuncDefIR::Generate(LowIRGenerator &generator, std::string &code) {
   return generator.GenFuncDef(*this, code);
 }
 
-std::string StatementsIR::Generate(LowIRGenerator &generator,
-                                   std::string &code) {
-  return generator.GenStatements(*this, code);
+std::string StatementsIR::Generate(LowIRGenerator &_generator,
+                                   std::string &_code) {
+  return _generator.GenStatements(*this, _code);
 }
 
-std::string BinaryExpIR::Generate(LowIRGenerator &generator,
-                                  std::string &code) {
-  return generator.GenBinaryExp(*this, code);
+std::string BinaryExpIR::Generate(LowIRGenerator &_generator,
+                                  std::string &_code) {
+  return _generator.GenBinaryExp(*this, _code);
 }
 
-std::string UnaryExpIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenUnaryExp(*this, code);
+std::string UnaryExpIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenUnaryExp(*this, _code);
 }
 
-std::string AssignIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenAssign(*this, code);
+std::string AssignIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenAssign(*this, _code);
 }
 
-std::string CondGotoIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenCondGoto(*this, code);
+std::string CondGotoIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenCondGoto(*this, _code);
 }
 
-std::string LValIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenLVal(*this, code);
+std::string LValIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenLVal(*this, _code);
 }
 
-std::string GotoIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenGoto(*this, code);
+std::string GotoIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenGoto(*this, _code);
 }
 
-std::string Label::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenLabel(*this, code);
+std::string Label::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenLabel(*this, _code);
 }
 
-std::string ParamListIR::Generate(LowIRGenerator &generator,
-                                  std::string &code) {
-  return generator.GenParamList(*this, code);
+std::string ParamListIR::Generate(LowIRGenerator &_generator,
+                                  std::string &_code) {
+  return _generator.GenParamList(*this, _code);
 }
 
-std::string FuncCallIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenFuncCall(*this, code);
+std::string FuncCallIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenFuncCall(*this, _code);
 }
 
-std::string ReturnIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenReturn(*this, code);
+std::string ReturnIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenReturn(*this, _code);
 }
 
-std::string RightValIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenRightVal(*this, code);
+std::string RightValIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenRightVal(*this, _code);
 }
 
-std::string ProgramIR::Generate(LowIRGenerator &generator, std::string &code) {
-  return generator.GenProgram(*this, code);
+std::string ProgramIR::Generate(LowIRGenerator &_generator, std::string &_code) {
+  return _generator.GenProgram(*this, _code);
 }
