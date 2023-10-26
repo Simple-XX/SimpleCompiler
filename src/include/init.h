@@ -40,7 +40,7 @@ private:
 public:
   Init();
   ~Init();
-  int init(int &argc, char **&argv);
+  int init(int &_argc, char **&_argv);
 };
 
 #endif /* SIMPLECOMPILER_INIT_H */
