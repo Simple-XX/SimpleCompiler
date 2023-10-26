@@ -16,9 +16,9 @@
 
 #include "lowirgen.h"
 
-std::string LowIRGenerator::op2char(Operator op) {
+std::string LowIRGenerator::op2char(Operator _op) {
   std::string c;
-  switch (op) {
+  switch (_op) {
   case Operator::add_op:
     c = "+";
     break;
@@ -59,26 +59,26 @@ std::string LowIRGenerator::op2char(Operator op) {
   return c;
 }
 
-std::string LowIRGenerator::GenDecl(DeclIR &decl, std::string &code) {
+std::string LowIRGenerator::GenDecl(DeclIR &_decl, std::string &_code) {
   if (currentFunc.empty()) {
-    // global decl
-    if (decl.getType() == VarType::array_t) {
-      globalVars[decl.getName()] = Variable(v_num, VarType::array_t);
-      code += "v" + std::to_string(v_num++) + " = malloc " +
-              std::to_string(decl.getSize()) + "\n";
+    // global _decl
+    if (_decl.getType() == VarType::array_t) {
+      globalVars[_decl.getName()] = Variable(v_num, VarType::array_t);
+      _code += "v" + std::to_string(v_num++) + " = malloc " +
+              std::to_string(_decl.getSize()) + "\n";
     } else {
-      globalVars[decl.getName()] = Variable(v_num, VarType::var_t);
-      code += "v" + std::to_string(v_num++) + " = 0\n";
+      globalVars[_decl.getName()] = Variable(v_num, VarType::var_t);
+      _code += "v" + std::to_string(v_num++) + " = 0\n";
     }
   } else {
     // local var
-    if (decl.getType() == VarType::array_t) {
-      varStack[decl.getName()] = StackVar(
-          funcStack[currentFunc], funcStack[currentFunc] + decl.getSize() / 4,
+    if (_decl.getType() == VarType::array_t) {
+      varStack[_decl.getName()] = StackVar(
+          funcStack[currentFunc], funcStack[currentFunc] + _decl.getSize() / 4,
           currentFunc, VarType::array_t);
-      funcStack[currentFunc] += decl.getSize() / 4;
+      funcStack[currentFunc] += _decl.getSize() / 4;
     } else {
-      varStack[decl.getName()] =
+      varStack[_decl.getName()] =
           StackVar(funcStack[currentFunc], funcStack[currentFunc], currentFunc,
                    VarType::var_t);
       funcStack[currentFunc]++;
@@ -87,91 +87,91 @@ std::string LowIRGenerator::GenDecl(DeclIR &decl, std::string &code) {
   return {};
 }
 
-std::string LowIRGenerator::GenInit(InitIR &init, std::string &code) {
+std::string LowIRGenerator::GenInit(InitIR &_init, std::string &_code) {
   if (currentFunc.empty()) {
-    if (init.getType() == VarType::var_t) {
-      globalVars[init.getName()] = Variable(v_num, VarType::var_t);
-      code += "v" + std::to_string(v_num++) + " = " +
-              std::to_string(init.getVal()) + "\n";
+    if (_init.getType() == VarType::var_t) {
+      globalVars[_init.getName()] = Variable(v_num, VarType::var_t);
+      _code += "v" + std::to_string(v_num++) + " = " +
+              std::to_string(_init.getVal()) + "\n";
     } else {
-      code += "loadaddr v" + std::to_string(globalVars[init.getName()].v_num) +
+      _code += "loadaddr v" + std::to_string(globalVars[_init.getName()].v_num) +
               " s" + std::to_string(reg_num) + " " + "\n";
-      code += "s" + std::to_string(reg_num) + "[" +
-              std::to_string(init.getPos()) +
-              "] = " + std::to_string(init.getVal()) + "\n";
+      _code += "s" + std::to_string(reg_num) + "[" +
+              std::to_string(_init.getPos()) +
+              "] = " + std::to_string(_init.getVal()) + "\n";
       // reg_num--;
     }
   } else {
-    code += "\ts" + std::to_string(reg_num) + " = " +
-            std::to_string(init.getVal()) + "\n";
-    code += "\tstore s" + std::to_string(reg_num) + " " +
+    _code += "\ts" + std::to_string(reg_num) + " = " +
+            std::to_string(_init.getVal()) + "\n";
+    _code += "\tstore s" + std::to_string(reg_num) + " " +
             std::to_string(
-                varStack[init.getName()].pos_min +
-                (init.getType() == VarType::array_t ? init.getPos() : 0)) +
+                varStack[_init.getName()].pos_min +
+                (_init.getType() == VarType::array_t ? _init.getPos() : 0)) +
             "\n";
     // reg_num--;
   }
   return {};
 }
 
-std::string LowIRGenerator::GenFuncDef(FuncDefIR &funcDef, std::string &code) {
-  currentFunc = funcDef.getName();
-  funcStack[currentFunc] = funcDef.getParamNum();
-  for (int i = 0; i < funcDef.getParamNum(); i++) {
+std::string LowIRGenerator::GenFuncDef(FuncDefIR &_funcDef, std::string &_code) {
+  currentFunc = _funcDef.getName();
+  funcStack[currentFunc] = _funcDef.getParamNum();
+  for (int i = 0; i < _funcDef.getParamNum(); i++) {
     varStack["p" + std::to_string(i)].pos_min =
         varStack["p" + std::to_string(i)].pos_max = i;
   }
   std::string funcHeader =
-      currentFunc + " [" + std::to_string(funcDef.getParamNum()) + "] [";
+      currentFunc + " [" + std::to_string(_funcDef.getParamNum()) + "] [";
   std::string funcBody;
   std::string funcEnd = "end " + currentFunc + "\n";
-  funcDef.getBody()->Generate(*this, funcBody);
+  _funcDef.getBody()->Generate(*this, funcBody);
   funcHeader += std::to_string(funcStack[currentFunc]) + "]\n";
   reg_num = 1;
   currentFunc = "";
-  code += funcHeader;
-  for (int i = 0; i < funcDef.getParamNum(); i++) {
-    code += "\tstore a" + std::to_string(i) + " " + std::to_string(i) + "\n";
+  _code += funcHeader;
+  for (int i = 0; i < _funcDef.getParamNum(); i++) {
+    _code += "\tstore a" + std::to_string(i) + " " + std::to_string(i) + "\n";
   }
-  code += funcBody + funcEnd;
+  _code += funcBody + funcEnd;
   return {};
 }
 
-std::string LowIRGenerator::GenFuncCall(FuncCallIR &funcCall,
-                                        std::string &code) {
-  code += "\tcall " + funcCall.getName() + "\n";
+std::string LowIRGenerator::GenFuncCall(FuncCallIR &_funcCall,
+                                        std::string &_code) {
+  _code += "\tcall " + _funcCall.getName() + "\n";
   return {};
 }
 
-std::string LowIRGenerator::GenLVal(LValIR &lval, std::string &code) {
-  if (lval.getName()[0] == 'T') {
-    if (globalVars.find(lval.getName()) != globalVars.end()) {
+std::string LowIRGenerator::GenLVal(LValIR &_lval, std::string &_code) {
+  if (_lval.getName()[0] == 'T') {
+    if (globalVars.find(_lval.getName()) != globalVars.end()) {
       // global var
-      code += "\tloadaddr v" +
-              std::to_string(globalVars[lval.getName()].v_num) + " s" +
+      _code += "\tloadaddr v" +
+              std::to_string(globalVars[_lval.getName()].v_num) + " s" +
               std::to_string(reg_num) + "\n";
-      if (lval.getType() == VarType::var_t) {
+      if (_lval.getType() == VarType::var_t) {
         std::string ret = "s" + std::to_string(reg_num) + "[0]";
         reg_num++;
         return ret;
       } else {
-        if (dynamic_cast<RightValIR *>(lval.getPos().get())->getType() ==
+        if (dynamic_cast<RightValIR *>(_lval.getPos().get())->getType() ==
             IRToken::NUMBER_IR) {
           std::string ret =
               "s" + std::to_string(reg_num) + "[" +
               std::to_string(
-                  dynamic_cast<RightValIR *>(lval.getPos().get())->getVal()) +
+                  dynamic_cast<RightValIR *>(_lval.getPos().get())->getVal()) +
               "]";
           reg_num++;
           return ret;
         } else {
-          code += "\tload " +
+          _code += "\tload " +
                   std::to_string(
-                      varStack[dynamic_cast<RightValIR *>(lval.getPos().get())
+                      varStack[dynamic_cast<RightValIR *>(_lval.getPos().get())
                                    ->getName()]
                           .pos_min) +
                   " t0\n";
-          code += "\ts" + std::to_string(reg_num) + " = s" +
+          _code += "\ts" + std::to_string(reg_num) + " = s" +
                   std::to_string(reg_num) + " + t0\n";
           std::string ret = "s" + std::to_string(reg_num) + "[0]";
           reg_num++;
@@ -179,27 +179,27 @@ std::string LowIRGenerator::GenLVal(LValIR &lval, std::string &code) {
         }
       }
     } else {
-      if (lval.getType() == VarType::array_t) {
-        code += "\tloadaddr " +
-                std::to_string(varStack[lval.getName()].pos_min) + " s" +
+      if (_lval.getType() == VarType::array_t) {
+        _code += "\tloadaddr " +
+                std::to_string(varStack[_lval.getName()].pos_min) + " s" +
                 std::to_string(reg_num) + "\n";
-        if (dynamic_cast<RightValIR *>(lval.getPos().get())->getType() ==
+        if (dynamic_cast<RightValIR *>(_lval.getPos().get())->getType() ==
             IRToken::NUMBER_IR) {
           std::string ret =
               "s" + std::to_string(reg_num) + "[" +
               std::to_string(
-                  dynamic_cast<RightValIR *>(lval.getPos().get())->getVal()) +
+                  dynamic_cast<RightValIR *>(_lval.getPos().get())->getVal()) +
               "]";
           reg_num++;
           return ret;
         } else {
-          code += "\tload " +
+          _code += "\tload " +
                   std::to_string(
-                      varStack[dynamic_cast<RightValIR *>(lval.getPos().get())
+                      varStack[dynamic_cast<RightValIR *>(_lval.getPos().get())
                                    ->getName()]
                           .pos_min) +
                   " t0\n";
-          code += "\ts" + std::to_string(reg_num) + " = s" +
+          _code += "\ts" + std::to_string(reg_num) + " = s" +
                   std::to_string(reg_num) + " + t0\n";
           std::string ret = "s" + std::to_string(reg_num) + "[0]";
           reg_num++;
@@ -207,26 +207,26 @@ std::string LowIRGenerator::GenLVal(LValIR &lval, std::string &code) {
         }
       } else {
         std::string ret = "s" + std::to_string(reg_num);
-        code += "\tload " + std::to_string(varStack[lval.getName()].pos_min) +
+        _code += "\tload " + std::to_string(varStack[_lval.getName()].pos_min) +
                 " s" + std::to_string(reg_num) + "\n";
         reg_num++;
         return ret;
       }
     }
-  } else if (lval.getName()[0] == 'p') {
-    if (lval.getType() == VarType::var_t) {
-      std::string ret = lval.getName();
+  } else if (_lval.getName()[0] == 'p') {
+    if (_lval.getType() == VarType::var_t) {
+      std::string ret = _lval.getName();
       ret[0] = 'a';
-      code += "\tload " + std::to_string(varStack[lval.getName()].pos_min) +
+      _code += "\tload " + std::to_string(varStack[_lval.getName()].pos_min) +
               " " + ret + "\n";
       return ret;
     } else {
-      std::string ret = lval.getName();
+      std::string ret = _lval.getName();
       ret[0] = 'a';
-      code += "\tload " + std::to_string(varStack[lval.getName()].pos_min) +
+      _code += "\tload " + std::to_string(varStack[_lval.getName()].pos_min) +
               " " + ret + "\n";
-      std::string pos = lval.getPos()->Generate(*this, code);
-      code +=
+      std::string pos = _lval.getPos()->Generate(*this, _code);
+      _code +=
           "\ts" + std::to_string(reg_num) + " = " + ret + " + " + pos + "\n";
       ret = "s" + std::to_string(reg_num);
       reg_num++;
@@ -235,23 +235,23 @@ std::string LowIRGenerator::GenLVal(LValIR &lval, std::string &code) {
     }
   } else {
     std::string ret = "s" + std::to_string(reg_num);
-    code += "\tload " + std::to_string(varStack[lval.getName()].pos_min) +
+    _code += "\tload " + std::to_string(varStack[_lval.getName()].pos_min) +
             " s" + std::to_string(reg_num) + "\n";
     reg_num++;
     return ret;
   }
 }
 
-std::string LowIRGenerator::GenAssign(AssignIR &assign, std::string &code) {
-  std::string lhs = assign.getLHS()->Generate(*this, code);
-  std::string rhs = assign.getRHS()->Generate(*this, code);
-  if (dynamic_cast<FuncCallIR *>(assign.getRHS().get())) {
-    code += "\t" + lhs + " = a0\n";
+std::string LowIRGenerator::GenAssign(AssignIR &_assign, std::string &_code) {
+  std::string lhs = _assign.getLHS()->Generate(*this, _code);
+  std::string rhs = _assign.getRHS()->Generate(*this, _code);
+  if (dynamic_cast<FuncCallIR *>(_assign.getRHS().get())) {
+    _code += "\t" + lhs + " = a0\n";
     if (lhs.find("[") == std::string::npos) {
-      code +=
+      _code +=
           "\tstore " + lhs + " " +
           std::to_string(
-              varStack[dynamic_cast<LValIR *>(assign.getLHS().get())->getName()]
+              varStack[dynamic_cast<LValIR *>(_assign.getLHS().get())->getName()]
                   .pos_min) +
           "\n";
     }
@@ -262,22 +262,22 @@ std::string LowIRGenerator::GenAssign(AssignIR &assign, std::string &code) {
     return {};
   } else {
     if (!(rhs[0] == 'a' || rhs[0] == 's' || rhs[0] == 't')) {
-      code += "\ts" + std::to_string(reg_num) + " = " + rhs + "\n";
+      _code += "\ts" + std::to_string(reg_num) + " = " + rhs + "\n";
       rhs = "s" + std::to_string(reg_num);
       reg_num++;
     }
-    if (dynamic_cast<RightValIR *>(assign.getRHS().get()) && rhs[0] == 's') {
+    if (dynamic_cast<RightValIR *>(_assign.getRHS().get()) && rhs[0] == 's') {
       // reg_num--;
     }
-    if (dynamic_cast<LValIR *>(assign.getRHS().get()) && rhs[0] == 's') {
+    if (dynamic_cast<LValIR *>(_assign.getRHS().get()) && rhs[0] == 's') {
       // reg_num--;
     }
-    code += "\t" + lhs + " = " + rhs + "\n";
+    _code += "\t" + lhs + " = " + rhs + "\n";
     if (lhs.find("[") == std::string::npos) {
-      code +=
+      _code +=
           "\tstore " + lhs + " " +
           std::to_string(
-              varStack[dynamic_cast<LValIR *>(assign.getLHS().get())->getName()]
+              varStack[dynamic_cast<LValIR *>(_assign.getLHS().get())->getName()]
                   .pos_min) +
           "\n";
     }
@@ -289,57 +289,57 @@ std::string LowIRGenerator::GenAssign(AssignIR &assign, std::string &code) {
   }
 }
 
-std::string LowIRGenerator::GenUnaryExp(UnaryExpIR &unary, std::string &code) {
-  if (dynamic_cast<RightValIR *>(unary.getExp().get())->getType() ==
+std::string LowIRGenerator::GenUnaryExp(UnaryExpIR &_unary, std::string &_code) {
+  if (dynamic_cast<RightValIR *>(_unary.getExp().get())->getType() ==
       IRToken::SYMBOL_IR) {
-    code +=
+    _code +=
         "\tload " +
-        std::to_string(varStack[dynamic_cast<RightValIR *>(unary.getExp().get())
+        std::to_string(varStack[dynamic_cast<RightValIR *>(_unary.getExp().get())
                                     ->getName()]
                            .pos_min) +
         " s" + std::to_string(reg_num) + "\n";
-    if (unary.getOp() == Operator::add_op) {
+    if (_unary.getOp() == Operator::add_op) {
       return "s" + std::to_string(reg_num);
     }
-    return op2char(unary.getOp()) + "s" + std::to_string(reg_num);
+    return op2char(_unary.getOp()) + "s" + std::to_string(reg_num);
   } else {
-    if (unary.getOp() == Operator::sub_op) {
+    if (_unary.getOp() == Operator::sub_op) {
       return std::to_string(
-          -dynamic_cast<RightValIR *>(unary.getExp().get())->getVal());
-    } else if (unary.getOp() == Operator::not_op) {
+          -dynamic_cast<RightValIR *>(_unary.getExp().get())->getVal());
+    } else if (_unary.getOp() == Operator::not_op) {
       return std::to_string(
-          !dynamic_cast<RightValIR *>(unary.getExp().get())->getVal());
+          !dynamic_cast<RightValIR *>(_unary.getExp().get())->getVal());
     } else {
       return std::to_string(
-          dynamic_cast<RightValIR *>(unary.getExp().get())->getVal());
+          dynamic_cast<RightValIR *>(_unary.getExp().get())->getVal());
     }
   }
 }
 
-std::string LowIRGenerator::GenBinaryExp(BinaryExpIR &binary,
-                                         std::string &code) {
-  std::string lhs = binary.getLHS()->Generate(*this, code);
-  std::string rhs = binary.getRHS()->Generate(*this, code);
+std::string LowIRGenerator::GenBinaryExp(BinaryExpIR &_binary,
+                                         std::string &_code) {
+  std::string lhs = _binary.getLHS()->Generate(*this, _code);
+  std::string rhs = _binary.getRHS()->Generate(*this, _code);
   std::set<std::string> logicOp{">=", "<=", "==", "!=", ">", "<"};
-  if (dynamic_cast<RightValIR *>(binary.getRHS().get())->getType() ==
+  if (dynamic_cast<RightValIR *>(_binary.getRHS().get())->getType() ==
           IRToken::NUMBER_IR &&
-      logicOp.find(op2char(binary.getOp())) != logicOp.end()) {
-    code += "\ts" + std::to_string(reg_num) + " = " + rhs + "\n";
+      logicOp.find(op2char(_binary.getOp())) != logicOp.end()) {
+    _code += "\ts" + std::to_string(reg_num) + " = " + rhs + "\n";
     rhs = "s" + std::to_string(reg_num);
     reg_num++;
   }
-  if (dynamic_cast<RightValIR *>(binary.getLHS().get())->getType() ==
+  if (dynamic_cast<RightValIR *>(_binary.getLHS().get())->getType() ==
           IRToken::NUMBER_IR &&
-      logicOp.find(op2char(binary.getOp())) != logicOp.end()) {
-    code += "\ts" + std::to_string(reg_num) + " = " + lhs + "\n";
+      logicOp.find(op2char(_binary.getOp())) != logicOp.end()) {
+    _code += "\ts" + std::to_string(reg_num) + " = " + lhs + "\n";
     lhs = "s" + std::to_string(reg_num);
     reg_num++;
   }
-  if (dynamic_cast<RightValIR *>(binary.getLHS().get())->getType() ==
+  if (dynamic_cast<RightValIR *>(_binary.getLHS().get())->getType() ==
           IRToken::NUMBER_IR &&
-      dynamic_cast<RightValIR *>(binary.getRHS().get())->getType() ==
+      dynamic_cast<RightValIR *>(_binary.getRHS().get())->getType() ==
           IRToken::SYMBOL_IR) {
-    code += "\ts" + std::to_string(reg_num) + " = " + lhs + "\n";
+    _code += "\ts" + std::to_string(reg_num) + " = " + lhs + "\n";
     lhs = "s" + std::to_string(reg_num);
     reg_num++;
   }
@@ -349,65 +349,65 @@ std::string LowIRGenerator::GenBinaryExp(BinaryExpIR &binary,
   if (lhs[0] == 's') {
     // reg_num--;
   }
-  return lhs + " " + op2char(binary.getOp()) + " " + rhs;
+  return lhs + " " + op2char(_binary.getOp()) + " " + rhs;
 }
 
-std::string LowIRGenerator::GenLabel(Label &label, std::string &code) {
-  code += "l" + std::to_string(label.getNum()) + ":\n";
+std::string LowIRGenerator::GenLabel(Label &_label, std::string &_code) {
+  _code += "l" + std::to_string(_label.getNum()) + ":\n";
   return {};
 }
 
-std::string LowIRGenerator::GenCondGoto(CondGotoIR &cond, std::string &code) {
-  std::string conds = cond.getCond()->Generate(*this, code);
-  code += "\tif " + conds + " goto l" + std::to_string(cond.getLabel()) + "\n";
+std::string LowIRGenerator::GenCondGoto(CondGotoIR &_cond, std::string &_code) {
+  std::string conds = _cond.getCond()->Generate(*this, _code);
+  _code += "\tif " + conds + " goto l" + std::to_string(_cond.getLabel()) + "\n";
   return {};
 }
 
-std::string LowIRGenerator::GenGoto(GotoIR &gt, std::string &code) {
-  code += "\tgoto l" + std::to_string(gt.getLabel()) + "\n";
+std::string LowIRGenerator::GenGoto(GotoIR &_gt, std::string &_code) {
+  _code += "\tgoto l" + std::to_string(_gt.getLabel()) + "\n";
   return {};
 }
 
-std::string LowIRGenerator::GenRightVal(RightValIR &rightval,
-                                        std::string &code) {
-  if (rightval.getType() == IRToken::NUMBER_IR) {
-    return std::to_string(rightval.getVal());
+std::string LowIRGenerator::GenRightVal(RightValIR &_rightval,
+                                        std::string &_code) {
+  if (_rightval.getType() == IRToken::NUMBER_IR) {
+    return std::to_string(_rightval.getVal());
   } else {
     std::string ret;
-    if (rightval.getName()[0] == 'p') {
-      ret = rightval.getName();
+    if (_rightval.getName()[0] == 'p') {
+      ret = _rightval.getName();
       ret[0] = 'a';
-      code += "\tload " + std::to_string(varStack[rightval.getName()].pos_min) +
+      _code += "\tload " + std::to_string(varStack[_rightval.getName()].pos_min) +
               " " + ret + "\n";
       return ret;
     }
-    if (globalVars.find(rightval.getName()) == globalVars.end()) {
-      if (varStack[rightval.getName()].type == VarType::var_t) {
-        code += "\tload " +
-                std::to_string(varStack[rightval.getName()].pos_min) + " s" +
+    if (globalVars.find(_rightval.getName()) == globalVars.end()) {
+      if (varStack[_rightval.getName()].type == VarType::var_t) {
+        _code += "\tload " +
+                std::to_string(varStack[_rightval.getName()].pos_min) + " s" +
                 std::to_string(reg_num) + "\n";
         ret = "s" + std::to_string(reg_num);
         reg_num++;
         return ret;
       } else {
-        code += "\tloadaddr " +
-                std::to_string(varStack[rightval.getName()].pos_min) + " s" +
+        _code += "\tloadaddr " +
+                std::to_string(varStack[_rightval.getName()].pos_min) + " s" +
                 std::to_string(reg_num) + "\n";
         ret = "s" + std::to_string(reg_num);
         reg_num++;
         return ret;
       }
     } else {
-      if (globalVars[rightval.getName()].varType == VarType::var_t) {
-        code += "\tload v" +
-                std::to_string(globalVars[rightval.getName()].v_num) + " s" +
+      if (globalVars[_rightval.getName()].varType == VarType::var_t) {
+        _code += "\tload v" +
+                std::to_string(globalVars[_rightval.getName()].v_num) + " s" +
                 std::to_string(reg_num) + "\n";
         ret = "s" + std::to_string(reg_num);
         reg_num++;
         return ret;
       } else {
-        code += "\tloadaddr v" +
-                std::to_string(globalVars[rightval.getName()].v_num) + " s" +
+        _code += "\tloadaddr v" +
+                std::to_string(globalVars[_rightval.getName()].v_num) + " s" +
                 std::to_string(reg_num) + "\n";
         ret = "s" + std::to_string(reg_num);
         reg_num++;
@@ -417,35 +417,35 @@ std::string LowIRGenerator::GenRightVal(RightValIR &rightval,
   }
 }
 
-std::string LowIRGenerator::GenReturn(ReturnIR &ret, std::string &code) {
-  if (ret.getReturnValue()) {
-    std::string r = ret.getReturnValue()->Generate(*this, code);
-    code += "\ta0 = " + r + "\n";
+std::string LowIRGenerator::GenReturn(ReturnIR &_ret, std::string &_code) {
+  if (_ret.getReturnValue()) {
+    std::string r = _ret.getReturnValue()->Generate(*this, _code);
+    _code += "\ta0 = " + r + "\n";
   }
-  code += "\treturn\n";
+  _code += "\treturn\n";
   return {};
 }
 
-std::string LowIRGenerator::GenParamList(ParamListIR &params,
-                                         std::string &code) {
-  for (int i = 0; i < params.getParams().size(); i++) {
-    std::string param = params.getParams()[i]->Generate(*this, code);
-    code += "\ta" + std::to_string(i) + " = " + param + "\n";
-  }
-  return {};
-}
-
-std::string LowIRGenerator::GenStatements(StatementsIR &stmts,
-                                          std::string &code) {
-  for (const auto &stmt : stmts.getStmts()) {
-    stmt->Generate(*this, code);
+std::string LowIRGenerator::GenParamList(ParamListIR &_params,
+                                         std::string &_code) {
+  for (int i = 0; i < _params.getParams().size(); i++) {
+    std::string param = _params.getParams()[i]->Generate(*this, _code);
+    _code += "\ta" + std::to_string(i) + " = " + param + "\n";
   }
   return {};
 }
 
-std::string LowIRGenerator::GenProgram(ProgramIR &program, std::string &code) {
-  for (const auto &stmt : program.getNodes()) {
-    stmt->Generate(*this, code);
+std::string LowIRGenerator::GenStatements(StatementsIR &_stmts,
+                                          std::string &_code) {
+  for (const auto &stmt : _stmts.getStmts()) {
+    stmt->Generate(*this, _code);
+  }
+  return {};
+}
+
+std::string LowIRGenerator::GenProgram(ProgramIR &_program, std::string &_code) {
+  for (const auto &stmt : _program.getNodes()) {
+    stmt->Generate(*this, _code);
   }
   return {};
 }

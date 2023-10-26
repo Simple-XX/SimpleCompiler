@@ -57,39 +57,39 @@ public:
     reg_num = 1;
   }
 
-  std::string op2char(Operator op);
+  std::string op2char(Operator _op);
 
-  std::string GenDecl(DeclIR &decl, std::string &code);
+  std::string GenDecl(DeclIR &_decl, std::string &_code);
 
-  std::string GenInit(InitIR &init, std::string &code);
+  std::string GenInit(InitIR &_init, std::string &_code);
 
-  std::string GenFuncDef(FuncDefIR &funcDef, std::string &code);
+  std::string GenFuncDef(FuncDefIR &_funcDef, std::string &_code);
 
-  std::string GenStatements(StatementsIR &stmts, std::string &code);
+  std::string GenStatements(StatementsIR &_stmts, std::string &_code);
 
-  std::string GenBinaryExp(BinaryExpIR &binary, std::string &code);
+  std::string GenBinaryExp(BinaryExpIR &_binary, std::string &_code);
 
-  std::string GenUnaryExp(UnaryExpIR &unary, std::string &code);
+  std::string GenUnaryExp(UnaryExpIR &_unary, std::string &_code);
 
-  std::string GenAssign(AssignIR &assign, std::string &code);
+  std::string GenAssign(AssignIR &_assign, std::string &_code);
 
-  std::string GenCondGoto(CondGotoIR &cond, std::string &code);
+  std::string GenCondGoto(CondGotoIR &_cond, std::string &_code);
 
-  std::string GenLVal(LValIR &lval, std::string &code);
+  std::string GenLVal(LValIR &_lval, std::string &_code);
 
-  std::string GenGoto(GotoIR &gt, std::string &code);
+  std::string GenGoto(GotoIR &_gt, std::string &_code);
 
-  std::string GenLabel(Label &label, std::string &code);
+  std::string GenLabel(Label &_label, std::string &_code);
 
-  std::string GenParamList(ParamListIR &params, std::string &code);
+  std::string GenParamList(ParamListIR &_params, std::string &_code);
 
-  std::string GenFuncCall(FuncCallIR &funcCall, std::string &code);
+  std::string GenFuncCall(FuncCallIR &_funcCall, std::string &_code);
 
-  std::string GenReturn(ReturnIR &ret, std::string &code);
+  std::string GenReturn(ReturnIR &_ret, std::string &_code);
 
-  std::string GenRightVal(RightValIR &rightval, std::string &code);
+  std::string GenRightVal(RightValIR &_rightval, std::string &_code);
 
-  std::string GenProgram(ProgramIR &program, std::string &code);
+  std::string GenProgram(ProgramIR &_program, std::string &_code);
 };
 
 #endif /* SIMPLECOMPILER_LOWIRGEN_H */
