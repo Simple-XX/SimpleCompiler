@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _TOKEN_H_
-#define _TOKEN_H_
+#ifndef SIMPLECOMPILER_TOKEN_H
+#define SIMPLECOMPILER_TOKEN_H
 
 #include <string>
 #include <unordered_map>
@@ -124,4 +124,4 @@ public:
   Tag get_tag(std::string name);
 };
 
-#endif /* _TOKEN_H_ */
+#endif /* SIMPLECOMPILER_TOKEN_H */

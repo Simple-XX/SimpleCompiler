@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _SCANNER_H_
-#define _SCANNER_H_
+#ifndef SIMPLECOMPILER_SCANNER_H
+#define SIMPLECOMPILER_SCANNER_H
 
 #include <fstream>
 #include <string>
@@ -54,4 +54,4 @@ public:
   bool is_done(void);
 };
 
-#endif /* _SCANNER_H_ */
+#endif /* SIMPLECOMPILER_SCANNER_H */

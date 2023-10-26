@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _PARSER_H_
-#define _PARSER_H_
+#ifndef SIMPLECOMPILER_PARSER_H
+#define SIMPLECOMPILER_PARSER_H
 
 #include <functional>
 #include <initializer_list>
@@ -84,4 +84,4 @@ public:
   bool is_done(void) const;
 };
 
-#endif /* _PARSER_H_ */
+#endif /* SIMPLECOMPILER_PARSER_H */

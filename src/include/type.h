@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _TYPE_H_
-#define _TYPE_H_
+#ifndef SIMPLECOMPILER_TYPE_H
+#define SIMPLECOMPILER_TYPE_H
 
 #include "token.h"
 
@@ -54,4 +54,4 @@ std::string type_to_string(Type t);
 
 std::string vartype_to_string(VarType t);
 
-#endif /* _TYPE_H_ */
+#endif /* SIMPLECOMPILER_TYPE_H */

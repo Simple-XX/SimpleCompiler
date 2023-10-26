@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _AST_H_
-#define _AST_H_
+#ifndef SIMPLECOMPILER_AST_H
+#define SIMPLECOMPILER_AST_H
 
 #include <memory>
 #include <string>
@@ -662,4 +662,4 @@ public:
   std::string GenerateIR(IRGenerator &gen, std::string &code) override;
 };
 
-#endif /* _AST_H_ */
+#endif /* SIMPLECOMPILER_AST_H */

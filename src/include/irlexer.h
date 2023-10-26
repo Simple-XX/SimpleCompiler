@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _IRLEXER_H
-#define _IRLEXER_H
+#ifndef SIMPLECOMPILER_IRLEXER_H
+#define SIMPLECOMPILER_IRLEXER_H
 
 #include <iostream>
 #include <string>
@@ -46,4 +46,4 @@ private:
   IRToken ParseComment();
 };
 
-#endif
+#endif /* SIMPLECOMPILER_IRLEXER_H */

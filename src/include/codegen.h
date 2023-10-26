@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _CODEGEN_H_
-#define _CODEGEN_H_
+#ifndef SIMPLECOMPILER_CODEGEN_H
+#define SIMPLECOMPILER_CODEGEN_H
 
 #include <iostream>
 #include <map>
@@ -31,4 +31,4 @@ public:
   CodeGen(std::istream &_cinstream) : cinstream(_cinstream) {}
 };
 
-#endif
+#endif /* SIMPLECOMPILER_CODEGEN_H */

@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _TYCK_H_
-#define _TYCK_H_
+#ifndef SIMPLECOMPILER_TYCK_H
+#define SIMPLECOMPILER_TYCK_H
 
 #include <map>
 #include <set>
@@ -114,4 +114,4 @@ public:
   std::unique_ptr<EmptyAST> EvalEmpty();
 };
 
-#endif /* _TYCK_H_ */
+#endif /* SIMPLECOMPILER_TYCK_H */

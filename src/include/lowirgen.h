@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _LOWIRGEN_H_
-#define _LOWIRGEN_H_
+#ifndef SIMPLECOMPILER_LOWIRGEN_H
+#define SIMPLECOMPILER_LOWIRGEN_H
 
 #include <map>
 #include <utility>
@@ -92,4 +92,4 @@ public:
   std::string GenProgram(ProgramIR &program, std::string &code);
 };
 
-#endif /* _LOWIRGEN_H_ */
+#endif /* SIMPLECOMPILER_LOWIRGEN_H */

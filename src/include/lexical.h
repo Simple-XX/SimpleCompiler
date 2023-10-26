@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _LEXICAL_H_
-#define _LEXICAL_H_
+#ifndef SIMPLECOMPILER_LEXICAL_H
+#define SIMPLECOMPILER_LEXICAL_H
 
 #include "error.h"
 #include "scanner.h"
@@ -107,4 +107,4 @@ public:
   bool is_done(void) const;
 };
 
-#endif /* _LEXICAL_H_ */
+#endif /* SIMPLECOMPILER_LEXICAL_H */

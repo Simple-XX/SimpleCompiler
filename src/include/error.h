@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _ERROR_H_
-#define _ERROR_H_
+#ifndef SIMPLECOMPILER_ERROR_H
+#define SIMPLECOMPILER_ERROR_H
 
 #include <iostream>
 #include <string>
@@ -51,4 +51,4 @@ public:
   virtual void display_err(void) const;
 };
 
-#endif /* _ERROR_H_ */
+#endif /* SIMPLECOMPILER_ERROR_H */

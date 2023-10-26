@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#ifndef SIMPLECOMPILER_UTILS_H
+#define SIMPLECOMPILER_UTILS_H
 
 #include "ast.h"
 #include "token.h"
@@ -57,4 +57,4 @@ struct Function {
       : funcName(std::move(_n)), funcType(_t), argTable(std::move(_a)) {}
 };
 
-#endif
+#endif /* SIMPLECOMPILER_UTILS_H */

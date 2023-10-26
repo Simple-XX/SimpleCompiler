@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _COMMON_H_
-#define _COMMON_H_
+#ifndef SIMPLECOMPILER_COMMON_H
+#define SIMPLECOMPILER_COMMON_H
 
 #include "ast.h"
 #include "codegen.h"
@@ -49,4 +49,4 @@ extern Error *error;
 
 extern const char *tokenName[];
 
-#endif /* _COMMON_H_ */
+#endif /* SIMPLECOMPILER_COMMON_H */

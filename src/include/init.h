@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _INIT_H_
-#define _INIT_H_
+#ifndef SIMPLECOMPILER_INIT_H
+#define SIMPLECOMPILER_INIT_H
 
 #include <string>
 #include <vector>
@@ -43,4 +43,4 @@ public:
   int init(int &argc, char **&argv);
 };
 
-#endif /* _INIT_H_ */
+#endif /* SIMPLECOMPILER_INIT_H */

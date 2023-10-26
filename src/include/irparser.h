@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _IRPARSER_H_
-#define _IRPARSER_H_
+#ifndef SIMPLECOMPILER_IRPARSER_H
+#define SIMPLECOMPILER_IRPARSER_H
 
 #include <iostream>
 
@@ -60,4 +60,4 @@ private:
   IRToken current;
 };
 
-#endif
+#endif /* SIMPLECOMPILER_IRPARSER_H */

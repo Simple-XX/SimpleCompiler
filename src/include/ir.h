@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _IR_H_
-#define _IR_H_
+#ifndef SIMPLECOMPILER_IR_H
+#define SIMPLECOMPILER_IR_H
 
 enum IRToken {
   VARDECL_IR,
@@ -37,4 +37,4 @@ enum IRToken {
   COMMENT_IR
 };
 
-#endif /* _IR_H_ */
+#endif /* SIMPLECOMPILER_IR_H */

@@ -14,7 +14,8 @@
  * </table>
  */
 
-#ifndef _IRGEN_H_
+#ifndef SIMPLECOMPILER_IRGEN_H
+#define SIMPLECOMPILER_IRGEN_H
 
 #include <iostream>
 #include <map>
@@ -107,6 +108,4 @@ public:
   void GenStmt(StmtAST &stmt, std::string &code);
 };
 
-#define _IRGEN_H_
-
-#endif /* _IRGEN_H_ */
+#endif /* SIMPLECOMPILER_IRGEN_H */

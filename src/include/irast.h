@@ -14,8 +14,8 @@
  * </table>
  */
 
-#ifndef _IRAST_H_
-#define _IRAST_H_
+#ifndef SIMPLECOMPILER_IRAST_H
+#define SIMPLECOMPILER_IRAST_H
 
 #include <iostream>
 #include <memory>
@@ -265,4 +265,4 @@ public:
   virtual std::string Generate(LowIRGenerator &generator, std::string &code);
 };
 
-#endif /* _IRAST_H_ */
+#endif /* SIMPLECOMPILER_IRAST_H */
