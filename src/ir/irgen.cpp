@@ -692,92 +692,92 @@ std::string IRGenerator::GenLOrExp(BinaryAST &exp, std::string &code) {
   return t2;
 }
 
-std::string FuncDefAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenFuncDef(*this, code);
+std::string FuncDefAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenFuncDef(*this, _code);
   return {};
 }
 
-std::string BlockAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenBlock(*this, code);
+std::string BlockAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenBlock(*this, _code);
   return {};
 }
 
-std::string BinaryAST::GenerateIR(IRGenerator &gen, std::string &code) {
+std::string BinaryAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
   if (this->getOp() == Operator::and_op) {
-    return gen.GenLAndExp(*this, code);
+    return _gen.GenLAndExp(*this, _code);
   } else if (this->getOp() == Operator::or_op) {
-    return gen.GenLOrExp(*this, code);
+    return _gen.GenLOrExp(*this, _code);
   } else {
-    return gen.GenBinaryExp(*this, code);
+    return _gen.GenBinaryExp(*this, _code);
   }
 }
 
-std::string IfAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenIfElse(*this, code);
+std::string IfAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenIfElse(*this, _code);
   return {};
 }
 
-std::string WhileAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenWhile(*this, code);
+std::string WhileAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenWhile(*this, _code);
   return {};
 }
 
-std::string NumAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenNumber(*this, code);
+std::string NumAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenNumber(*this, _code);
 }
 
-std::string IdAST::GenerateIR(IRGenerator &gen, std::string &code) {
+std::string IdAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
   return this->getName();
 }
 
-std::string ProcessedIdAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenId(*this, code);
+std::string ProcessedIdAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenId(*this, _code);
 }
 
-std::string UnaryAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenUnaryExp(*this, code);
+std::string UnaryAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenUnaryExp(*this, _code);
 }
 
-std::string ControlAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenControl(*this, code);
+std::string ControlAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenControl(*this, _code);
   return {};
 }
 
-std::string AssignAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenAssign(*this, code);
+std::string AssignAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenAssign(*this, _code);
 }
 
-std::string StmtAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenStmt(*this, code);
+std::string StmtAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenStmt(*this, _code);
   return {};
 }
 
-std::string LValAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenLVal(*this, code);
+std::string LValAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenLVal(*this, _code);
 }
 
-std::string FuncCallAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenFuncCall(*this, code);
+std::string FuncCallAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenFuncCall(*this, _code);
 }
 
-std::string VarDeclAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenVarDecl(*this, code);
+std::string VarDeclAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenVarDecl(*this, _code);
   return {};
 }
 
-std::string VarDefAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenVarDef(*this, code);
+std::string VarDefAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenVarDef(*this, _code);
 }
 
-std::string InitValAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  return gen.GenInitVal(*this, code);
+std::string InitValAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  return _gen.GenInitVal(*this, _code);
 }
 
-std::string EmptyAST::GenerateIR(IRGenerator &gen, std::string &code) {
+std::string EmptyAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
   return {};
 }
 
-std::string CompUnitAST::GenerateIR(IRGenerator &gen, std::string &code) {
-  gen.GenCompUnit(*this, code);
+std::string CompUnitAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+  _gen.GenCompUnit(*this, _code);
   return {};
 }

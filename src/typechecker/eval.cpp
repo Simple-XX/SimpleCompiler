@@ -22,13 +22,13 @@
 #include "irgen.h"
 #include "typechecker.h"
 
-ASTPtr FuncDefAST::Eval(TypeCheck &checker) {
-  return checker.EvalFuncDef(*this);
+ASTPtr FuncDefAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalFuncDef(*this);
 }
 
-ASTPtr BlockAST::Eval(TypeCheck &checker) { return checker.EvalBlock(*this); }
+ASTPtr BlockAST::Eval(TypeCheck &_checker) { return _checker.EvalBlock(*this); }
 
-ASTPtr BinaryAST::Eval(TypeCheck &checker) {
+ASTPtr BinaryAST::Eval(TypeCheck &_checker) {
   std::initializer_list<Operator> opAdd = {Operator::add_op, Operator::sub_op};
   std::initializer_list<Operator> opMul = {Operator::mul_op, Operator::div_op,
                                            Operator::mod_op};
@@ -39,64 +39,64 @@ ASTPtr BinaryAST::Eval(TypeCheck &checker) {
   std::initializer_list<Operator> opLOr = {Operator::or_op};
 
   if (std::find(opLOr.begin(), opLOr.end(), op) != opLOr.end()) {
-    return checker.EvalLOrExp(*this);
+    return _checker.EvalLOrExp(*this);
   } else if (std::find(opLAnd.begin(), opLAnd.end(), op) != opLAnd.end()) {
-    return checker.EvalLAndExp(*this);
+    return _checker.EvalLAndExp(*this);
   } else if (std::find(opEq.begin(), opEq.end(), op) != opEq.end()) {
-    return checker.EvalEqExp(*this);
+    return _checker.EvalEqExp(*this);
   } else if (std::find(opRel.begin(), opRel.end(), op) != opRel.end()) {
-    return checker.EvalRelExp(*this);
+    return _checker.EvalRelExp(*this);
   } else if (std::find(opAdd.begin(), opAdd.end(), op) != opAdd.end()) {
-    return checker.EvalAddExp(*this);
+    return _checker.EvalAddExp(*this);
   } else if (std::find(opMul.begin(), opMul.end(), op) != opMul.end()) {
-    return checker.EvalMulExp(*this);
+    return _checker.EvalMulExp(*this);
   } else {
     return nullptr;
   }
 }
 
-ASTPtr IfAST::Eval(TypeCheck &checker) { return checker.EvalIfElse(*this); }
+ASTPtr IfAST::Eval(TypeCheck &_checker) { return _checker.EvalIfElse(*this); }
 
-ASTPtr WhileAST::Eval(TypeCheck &checker) { return checker.EvalWhile(*this); }
+ASTPtr WhileAST::Eval(TypeCheck &_checker) { return _checker.EvalWhile(*this); }
 
-ASTPtr NumAST::Eval(TypeCheck &checker) { return checker.EvalNumber(*this); }
+ASTPtr NumAST::Eval(TypeCheck &_checker) { return _checker.EvalNumber(*this); }
 
-ASTPtr ProcessedIdAST::Eval(TypeCheck &checker) {
-  return checker.EvalProcessedId(*this);
+ASTPtr ProcessedIdAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalProcessedId(*this);
 }
 
-ASTPtr IdAST::Eval(TypeCheck &checker) { return checker.EvalId(*this); }
+ASTPtr IdAST::Eval(TypeCheck &_checker) { return _checker.EvalId(*this); }
 
-ASTPtr UnaryAST::Eval(TypeCheck &checker) {
-  return checker.EvalUnaryExp(*this);
+ASTPtr UnaryAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalUnaryExp(*this);
 }
 
-ASTPtr ControlAST::Eval(TypeCheck &checker) {
-  return checker.EvalControl(*this);
+ASTPtr ControlAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalControl(*this);
 }
 
-ASTPtr AssignAST::Eval(TypeCheck &checker) { return checker.EvalAssign(*this); }
+ASTPtr AssignAST::Eval(TypeCheck &_checker) { return _checker.EvalAssign(*this); }
 
-ASTPtr StmtAST::Eval(TypeCheck &checker) { return checker.EvalStmt(*this); }
+ASTPtr StmtAST::Eval(TypeCheck &_checker) { return _checker.EvalStmt(*this); }
 
-ASTPtr LValAST::Eval(TypeCheck &checker) { return checker.EvalLVal(*this); }
+ASTPtr LValAST::Eval(TypeCheck &_checker) { return _checker.EvalLVal(*this); }
 
-ASTPtr FuncCallAST::Eval(TypeCheck &checker) {
-  return checker.EvalFuncCall(*this);
+ASTPtr FuncCallAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalFuncCall(*this);
 }
 
-ASTPtr VarDeclAST::Eval(TypeCheck &checker) {
-  return checker.EvalVarDecl(*this);
+ASTPtr VarDeclAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalVarDecl(*this);
 }
 
-ASTPtr VarDefAST::Eval(TypeCheck &checker) { return checker.EvalVarDef(*this); }
+ASTPtr VarDefAST::Eval(TypeCheck &_checker) { return _checker.EvalVarDef(*this); }
 
-ASTPtr InitValAST::Eval(TypeCheck &checker) {
-  return checker.EvalInitVal(*this);
+ASTPtr InitValAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalInitVal(*this);
 }
 
-ASTPtr CompUnitAST::Eval(TypeCheck &checker) {
-  return checker.EvalCompUnit(*this);
+ASTPtr CompUnitAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalCompUnit(*this);
 }
 
-ASTPtr EmptyAST::Eval(TypeCheck &checker) { return checker.EvalEmpty(); }
+ASTPtr EmptyAST::Eval(TypeCheck &_checker) { return _checker.EvalEmpty(); }

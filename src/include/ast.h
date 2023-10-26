@@ -34,8 +34,8 @@ class MetaAST {
 public:
   virtual ~MetaAST() = default;
   virtual std::string to_string() = 0;
-  virtual ASTPtr Eval(TypeCheck &checker) = 0;
-  virtual std::string GenerateIR(IRGenerator &gen, std::string &code) = 0;
+  virtual ASTPtr Eval(TypeCheck &_checker) = 0;
+  virtual std::string GenerateIR(IRGenerator &_gen, std::string &_code) = 0;
 };
 
 // Compile Unit 编译单元
@@ -44,7 +44,7 @@ private:
   ASTPtrList units;
 
 public:
-  CompUnitAST(ASTPtrList u) : units(std::move(u)) {}
+  CompUnitAST(ASTPtrList _u) : units(std::move(_u)) {}
   // construction
   ~CompUnitAST() override {
     for (auto &unit : units) {
@@ -61,9 +61,9 @@ public:
     return "CompUnit: [" + output + "]\n";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtrList &getNodes() const { return units; }
 };
@@ -74,7 +74,7 @@ private:
   ASTPtr stmt;
 
 public:
-  StmtAST(ASTPtr s) : stmt(std::move(s)) {}
+  StmtAST(ASTPtr _s) : stmt(std::move(_s)) {}
   // construction
   ~StmtAST() override {
     if (stmt)
@@ -85,9 +85,9 @@ public:
     return "Statement: {" + stmt->to_string() + "}\n";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getStmt() const { return stmt; }
 };
@@ -104,8 +104,8 @@ private:
   ASTPtr body;
   // function body 函数体
 public:
-  FuncDefAST(Type t, const std::string &n, ASTPtrList p, ASTPtr b)
-      : type(t), name(n), params(std::move(p)), body(std::move(b)) {}
+  FuncDefAST(Type t, const std::string &_n, ASTPtrList _p, ASTPtr _b)
+      : type(t), name(_n), params(std::move(_p)), body(std::move(_b)) {}
   // construction
   ~FuncDefAST() override {
     for (auto &param : params) {
@@ -128,9 +128,9 @@ public:
     return output;
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   Type getType() const { return type; }
 
@@ -148,8 +148,8 @@ private:
   ASTPtrList args;
 
 public:
-  FuncCallAST(const std::string &n, ASTPtrList a = ASTPtrList{})
-      : name(n), args(std::move(a)) {}
+  FuncCallAST(const std::string &_n, ASTPtrList _a = ASTPtrList{})
+      : name(_n), args(std::move(_a)) {}
   // construction
   ~FuncCallAST() override {
     for (auto &arg : args) {
@@ -160,9 +160,9 @@ public:
   // destruction
   std::string to_string() override { return "FuncCallAST"; }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const std::string &getName() const { return name; }
 
@@ -177,7 +177,7 @@ private:
   bool Const;
   // const or not
 public:
-  VarDeclAST(bool i, ASTPtrList v) : vars(std::move(v)), Const(i) {}
+  VarDeclAST(bool _i, ASTPtrList _v) : vars(std::move(_v)), Const(_i) {}
   // construction
   ~VarDeclAST() override {
     for (auto &var : vars) {
@@ -197,9 +197,9 @@ public:
     return "VarDeclAST: {" + output + "}";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   bool isConst() const { return Const; }
 
@@ -216,8 +216,8 @@ private:
   bool Const;
   // const or not
 public:
-  VarDefAST(bool i, ASTPtr v, ASTPtr init = nullptr)
-      : var(std::move(v)), initVal(std::move(init)), Const(i) {}
+  VarDefAST(bool _i, ASTPtr _v, ASTPtr _init = nullptr)
+      : var(std::move(_v)), initVal(std::move(_init)), Const(_i) {}
   // construction
   ~VarDefAST() override {
     if (var)
@@ -233,9 +233,9 @@ public:
     return "VarDefAST: { " + var->to_string() + " }";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getVar() const { return var; }
 
@@ -253,8 +253,9 @@ private:
   bool Const;
 
 public:
-  IdAST(const std::string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{})
-      : name(n), type(t), dim(std::move(d)), Const(i) {}
+  IdAST(const std::string &_n, VarType _t, bool _i,
+        ASTPtrList _d = ASTPtrList{})
+      : name(_n), type(_t), dim(std::move(_d)), Const(_i) {}
   // construction
   ~IdAST() override {
     for (auto &d : dim) {
@@ -269,9 +270,9 @@ public:
     return "IdAST(" + vartype_to_string(type) + "): " + name;
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const std::string getName() const { return name; }
 
@@ -291,9 +292,9 @@ private:
   bool Const;
 
 public:
-  ProcessedIdAST(const std::string &n, VarType t, bool i,
-                 std::vector<int> d = std::vector<int>{})
-      : name(n), type(t), dim(std::move(d)), Const(i) {}
+  ProcessedIdAST(const std::string &_n, VarType _t, bool _i,
+                 std::vector<int> _d = std::vector<int>{})
+      : name(_n), type(_t), dim(std::move(_d)), Const(_i) {}
   // construction
   ~ProcessedIdAST() override {}
   // destruction
@@ -305,9 +306,9 @@ public:
     return "ProcessedIdAST(" + vartype_to_string(type) + "): " + name;
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const std::string &getName() const { return std::move(name); }
 
@@ -326,9 +327,9 @@ private:
   std::vector<int> dims;
 
 public:
-  InitValAST(VarType t, ASTPtrList v,
-             std::vector<int> _dims = std::vector<int>{})
-      : type(t), values(std::move(v)), dims(_dims) {}
+  InitValAST(VarType _t, ASTPtrList _v,
+             std::vector<int> _d = std::vector<int>{})
+      : type(_t), values(std::move(_v)), dims(_d) {}
   // construction
   ~InitValAST() override {
     for (auto &value : values) {
@@ -341,9 +342,9 @@ public:
     return "InitValAST(" + vartype_to_string(type) + ")";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   bool setDim(std::vector<int> _dims) {
     dims = std::move(_dims);
@@ -363,7 +364,7 @@ private:
   ASTPtrList stmts;
   // block statements 一串语句
 public:
-  BlockAST(ASTPtrList s) : stmts(std::move(s)) {}
+  BlockAST(ASTPtrList _s) : stmts(std::move(_s)) {}
   // construction
   ~BlockAST() override {
     for (auto &s : stmts) {
@@ -380,9 +381,9 @@ public:
     return "BlockAST: {" + output + "}";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtrList &getStmts() const { return stmts; };
 };
@@ -397,8 +398,8 @@ private:
   ASTPtr right;
   // right expression
 public:
-  BinaryAST(Operator o, ASTPtr l, ASTPtr r)
-      : op(o), left(std::move(l)), right(std::move(r)) {}
+  BinaryAST(Operator _o, ASTPtr _l, ASTPtr _r)
+      : op(_o), left(std::move(_l)), right(std::move(_r)) {}
   // construction
   ~BinaryAST() override {
     if (left)
@@ -412,9 +413,9 @@ public:
            (right->to_string()) + ')';
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const Operator &getOp() const { return op; }
 
@@ -432,7 +433,8 @@ private:
 
   // expression
 public:
-  UnaryAST(ASTPtr e, Operator o = Operator::ERROR) : op(o), exp(std::move(e)) {}
+  UnaryAST(ASTPtr _e, Operator _o = Operator::ERROR)
+      : op(_o), exp(std::move(_e)) {}
   // construction
   ~UnaryAST() override {
     if (exp)
@@ -443,9 +445,9 @@ public:
     return '(' + op_to_string(op) + ' ' + exp->to_string() + ')';
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getNode() const { return exp; }
 
@@ -458,15 +460,15 @@ private:
   int val;
   // number value
 public:
-  NumAST(int v) : val(v) {}
+  NumAST(int _v) : val(_v) {}
   // construction
   ~NumAST() override {}
   // destruction
   std::string to_string() override { return std::to_string(val); }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const int &getVal() const { return val; }
 };
@@ -481,9 +483,9 @@ private:
   ASTPtr elseAST;
   // else branch
 public:
-  IfAST(ASTPtr c, ASTPtr t, ASTPtr e = nullptr)
-      : conditionExp(std::move(c)), thenAST(std::move(t)),
-        elseAST(std::move(e)) {}
+  IfAST(ASTPtr _c, ASTPtr _t, ASTPtr _e = nullptr)
+      : conditionExp(std::move(_c)), thenAST(std::move(_t)),
+        elseAST(std::move(_e)) {}
   // construction
   ~IfAST() override {
     if (conditionExp)
@@ -503,9 +505,9 @@ public:
              thenAST->to_string() + " ) }";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getCond() const { return conditionExp; }
 
@@ -522,8 +524,8 @@ private:
   ASTPtr body;
   // loop body
 public:
-  WhileAST(ASTPtr c, ASTPtr b)
-      : conditionExp(std::move(c)), body(std::move(b)) {}
+  WhileAST(ASTPtr _c, ASTPtr b)
+      : conditionExp(std::move(_c)), body(std::move(b)) {}
   // construction
   ~WhileAST() override {
     if (conditionExp)
@@ -537,9 +539,9 @@ public:
            body->to_string() + " ) }";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getCond() const { return conditionExp; }
 
@@ -554,8 +556,8 @@ private:
   ASTPtr returnStmt;
   // to which statement (destination)
 public:
-  ControlAST(Control t, ASTPtr r = nullptr)
-      : type(t), returnStmt(std::move(r)) {}
+  ControlAST(Control _t, ASTPtr _r = nullptr)
+      : type(_t), returnStmt(std::move(_r)) {}
   // construction
   ~ControlAST() override {
     if (returnStmt)
@@ -578,9 +580,9 @@ public:
     return "ERROR";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   Control getControl() const { return type; }
 
@@ -595,7 +597,7 @@ private:
   ASTPtr right;
   // Expression
 public:
-  AssignAST(ASTPtr l, ASTPtr r) : left(std::move(l)), right(std::move(r)) {}
+  AssignAST(ASTPtr _l, ASTPtr _r) : left(std::move(_l)), right(std::move(_r)) {}
   // construction
   ~AssignAST() override {
     if (left)
@@ -609,9 +611,9 @@ public:
            " }";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtr &getLeft() const { return left; }
 
@@ -626,8 +628,8 @@ private:
   ASTPtrList position;
 
 public:
-  LValAST(const std::string &n, VarType t, ASTPtrList p = ASTPtrList{})
-      : name(n), type(t), position(std::move(p)) {}
+  LValAST(const std::string &_n, VarType _t, ASTPtrList _p = ASTPtrList{})
+      : name(_n), type(_t), position(std::move(_p)) {}
   // construction
   ~LValAST() override {
     for (auto &pos : position) {
@@ -640,9 +642,9 @@ public:
     return "LValAST:(" + vartype_to_string(type) + "):  { " + name + " }";
   }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 
   const ASTPtrList &getPosition() const { return position; }
 
@@ -660,9 +662,9 @@ public:
   // destruction
   std::string to_string() override { return "EmptyAST"; }
 
-  ASTPtr Eval(TypeCheck &checker) override;
+  ASTPtr Eval(TypeCheck &_checker) override;
 
-  std::string GenerateIR(IRGenerator &gen, std::string &code) override;
+  std::string GenerateIR(IRGenerator &_gen, std::string &_code) override;
 };
 
 #endif /* SIMPLECOMPILER_AST_H */
