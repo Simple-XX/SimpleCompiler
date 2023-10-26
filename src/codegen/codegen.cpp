@@ -1,14 +1,25 @@
 
-// This file is a part of Simple-XX/SimpleCompiler
-// (https://github.com/Simple-XX/SimpleCompiler).
-//
-// codegen.cpp for Simple-XX/SimpleCompiler.
+/**
+ * @file codegen.cpp
+ * @brief 代码生成
+ * @author Zone.N (Zone.Niuzh@hotmail.com)
+ * @version 1.0
+ * @date 2023-10-26
+ * @copyright MIT LICENSE
+ * https://github.com/Simple-XX/SimpleCompiler
+ * @par change log:
+ * <table>
+ * <tr><th>Date<th>Author<th>Description
+ * <tr><td>2023-10-26<td>Zone.N<td>迁移到 doxygen
+ * </table>
+ */
 
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <sstream>
 #include <set>
+
 #include "codegen.h"
 
 void CodeGen::Generate(std::string &code) {
