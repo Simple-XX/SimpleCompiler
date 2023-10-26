@@ -17,8 +17,8 @@
 #ifndef _TOKEN_H_
 #define _TOKEN_H_
 
-#include "string"
-#include "unordered_map"
+#include <string>
+#include <unordered_map>
 
 enum Tag {
   ERR = -2,  // 错误

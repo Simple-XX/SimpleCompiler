@@ -17,47 +17,47 @@
 #ifndef _IRPARSER_H_
 #define _IRPARSER_H_
 
+#include <iostream>
+
 #include "ir.h"
 #include "irast.h"
-#include <iostream>
 #include "irlexer.h"
 
 class IRParser {
 public:
-    IRParser(std::istream &_cinstream): lexer(_cinstream) {}
+  IRParser(std::istream &_cinstream) : lexer(_cinstream) {}
 
-    void NextIRToken();
+  void NextIRToken();
 
-    IRPtr ParseDecl();
+  IRPtr ParseDecl();
 
-    IRPtr ParseInit();
+  IRPtr ParseInit();
 
-    IRPtr ParseFuncDef();
+  IRPtr ParseFuncDef();
 
-    IRPtr ParseStatements();
+  IRPtr ParseStatements();
 
-    IRPtr ParseAssign();
+  IRPtr ParseAssign();
 
-    IRPtr ParseCondGoto();
+  IRPtr ParseCondGoto();
 
-    IRPtr ParseLVal();
+  IRPtr ParseLVal();
 
-    IRPtr ParseGoto();
+  IRPtr ParseGoto();
 
-    IRPtr ParseLabel();
+  IRPtr ParseLabel();
 
-    IRPtr ParseParams();
+  IRPtr ParseParams();
 
-    IRPtr ParseFuncCall();
+  IRPtr ParseFuncCall();
 
-    IRPtr ParseReturn();
+  IRPtr ParseReturn();
 
-    IRPtr ParseProgram();
+  IRPtr ParseProgram();
 
 private:
-    IRLexer lexer;
-    IRToken current;
+  IRLexer lexer;
+  IRToken current;
 };
-
 
 #endif

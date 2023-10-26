@@ -17,20 +17,20 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "init.h"
-#include "error.h"
-#include "scanner.h"
-#include "lexical.h"
-#include "parser.h"
 #include "ast.h"
-#include "typechecker.h"
-#include "irgen.h"
+#include "codegen.h"
+#include "error.h"
+#include "init.h"
 #include "ir.h"
 #include "irast.h"
+#include "irgen.h"
 #include "irlexer.h"
 #include "irparser.h"
+#include "lexical.h"
 #include "lowirgen.h"
-#include "codegen.h"
+#include "parser.h"
+#include "scanner.h"
+#include "typechecker.h"
 #include "utils.h"
 
 class Init;

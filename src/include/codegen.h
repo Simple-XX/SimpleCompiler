@@ -17,17 +17,18 @@
 #ifndef _CODEGEN_H_
 #define _CODEGEN_H_
 
+#include <iostream>
 #include <map>
 #include <string>
-#include <iostream>
 
 class CodeGen {
-    std::map<std::string, int> funcStack;
-    std::string currentFunc;
-    std::istream &cinstream;
+  std::map<std::string, int> funcStack;
+  std::string currentFunc;
+  std::istream &cinstream;
+
 public:
-    void Generate(std::string &code);
-    CodeGen(std::istream &_cinstream): cinstream(_cinstream) {}
+  void Generate(std::string &code);
+  CodeGen(std::istream &_cinstream) : cinstream(_cinstream) {}
 };
 
 #endif
