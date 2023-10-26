@@ -21,7 +21,7 @@
 
 Keywords Lexer::keywords;
 
-Lexer::Lexer(Scanner &sc) : scanner(sc) {
+Lexer::Lexer(Scanner &_sc) : scanner(_sc) {
   ch = ' ';
   token = NULL;
   return;
@@ -34,10 +34,10 @@ Lexer::~Lexer() {
   return;
 }
 
-bool Lexer::scan(char need) {
+bool Lexer::scan(char _need) {
   ch = scanner.scan();
-  if (need) {
-    if (ch != need)
+  if (_need) {
+    if (ch != _need)
       return false;
     ch = scanner.scan();
     return true;
