@@ -44,7 +44,7 @@ private:
   ASTPtrList units;
 
 public:
-  CompUnitAST(ASTPtrList u) : units(move(u)) {}
+  CompUnitAST(ASTPtrList u) : units(std::move(u)) {}
   // construction
   ~CompUnitAST() override {
     for (auto &unit : units) {
@@ -74,7 +74,7 @@ private:
   ASTPtr stmt;
 
 public:
-  StmtAST(ASTPtr s) : stmt(move(s)) {}
+  StmtAST(ASTPtr s) : stmt(std::move(s)) {}
   // construction
   ~StmtAST() override {
     if (stmt)
@@ -105,7 +105,7 @@ private:
   // function body 函数体
 public:
   FuncDefAST(Type t, const std::string &n, ASTPtrList p, ASTPtr b)
-      : type(t), name(n), params(move(p)), body(move(b)) {}
+      : type(t), name(n), params(std::move(p)), body(std::move(b)) {}
   // construction
   ~FuncDefAST() override {
     for (auto &param : params) {
@@ -149,7 +149,7 @@ private:
 
 public:
   FuncCallAST(const std::string &n, ASTPtrList a = ASTPtrList{})
-      : name(n), args(move(a)) {}
+      : name(n), args(std::move(a)) {}
   // construction
   ~FuncCallAST() override {
     for (auto &arg : args) {
@@ -177,7 +177,7 @@ private:
   bool Const;
   // const or not
 public:
-  VarDeclAST(bool i, ASTPtrList v) : vars(move(v)), Const(i) {}
+  VarDeclAST(bool i, ASTPtrList v) : vars(std::move(v)), Const(i) {}
   // construction
   ~VarDeclAST() override {
     for (auto &var : vars) {
@@ -217,7 +217,7 @@ private:
   // const or not
 public:
   VarDefAST(bool i, ASTPtr v, ASTPtr init = nullptr)
-      : var(move(v)), initVal(move(init)), Const(i) {}
+      : var(std::move(v)), initVal(std::move(init)), Const(i) {}
   // construction
   ~VarDefAST() override {
     if (var)
@@ -254,7 +254,7 @@ private:
 
 public:
   IdAST(const std::string &n, VarType t, bool i, ASTPtrList d = ASTPtrList{})
-      : name(n), type(t), dim(move(d)), Const(i) {}
+      : name(n), type(t), dim(std::move(d)), Const(i) {}
   // construction
   ~IdAST() override {
     for (auto &d : dim) {
@@ -293,7 +293,7 @@ private:
 public:
   ProcessedIdAST(const std::string &n, VarType t, bool i,
                  std::vector<int> d = std::vector<int>{})
-      : name(n), type(t), dim(move(d)), Const(i) {}
+      : name(n), type(t), dim(std::move(d)), Const(i) {}
   // construction
   ~ProcessedIdAST() override {}
   // destruction
@@ -328,7 +328,7 @@ private:
 public:
   InitValAST(VarType t, ASTPtrList v,
              std::vector<int> _dims = std::vector<int>{})
-      : type(t), values(move(v)), dims(_dims) {}
+      : type(t), values(std::move(v)), dims(_dims) {}
   // construction
   ~InitValAST() override {
     for (auto &value : values) {
@@ -363,7 +363,7 @@ private:
   ASTPtrList stmts;
   // block statements 一串语句
 public:
-  BlockAST(ASTPtrList s) : stmts(move(s)) {}
+  BlockAST(ASTPtrList s) : stmts(std::move(s)) {}
   // construction
   ~BlockAST() override {
     for (auto &s : stmts) {
@@ -398,7 +398,7 @@ private:
   // right expression
 public:
   BinaryAST(Operator o, ASTPtr l, ASTPtr r)
-      : op(o), left(move(l)), right(move(r)) {}
+      : op(o), left(std::move(l)), right(std::move(r)) {}
   // construction
   ~BinaryAST() override {
     if (left)
@@ -432,7 +432,7 @@ private:
 
   // expression
 public:
-  UnaryAST(ASTPtr e, Operator o = Operator::ERROR) : op(o), exp(move(e)) {}
+  UnaryAST(ASTPtr e, Operator o = Operator::ERROR) : op(o), exp(std::move(e)) {}
   // construction
   ~UnaryAST() override {
     if (exp)
@@ -482,7 +482,8 @@ private:
   // else branch
 public:
   IfAST(ASTPtr c, ASTPtr t, ASTPtr e = nullptr)
-      : conditionExp(move(c)), thenAST(move(t)), elseAST(move(e)) {}
+      : conditionExp(std::move(c)), thenAST(std::move(t)),
+        elseAST(std::move(e)) {}
   // construction
   ~IfAST() override {
     if (conditionExp)
@@ -521,7 +522,8 @@ private:
   ASTPtr body;
   // loop body
 public:
-  WhileAST(ASTPtr c, ASTPtr b) : conditionExp(move(c)), body(move(b)) {}
+  WhileAST(ASTPtr c, ASTPtr b)
+      : conditionExp(std::move(c)), body(std::move(b)) {}
   // construction
   ~WhileAST() override {
     if (conditionExp)
@@ -552,7 +554,8 @@ private:
   ASTPtr returnStmt;
   // to which statement (destination)
 public:
-  ControlAST(Control t, ASTPtr r = nullptr) : type(t), returnStmt(move(r)) {}
+  ControlAST(Control t, ASTPtr r = nullptr)
+      : type(t), returnStmt(std::move(r)) {}
   // construction
   ~ControlAST() override {
     if (returnStmt)
@@ -592,7 +595,7 @@ private:
   ASTPtr right;
   // Expression
 public:
-  AssignAST(ASTPtr l, ASTPtr r) : left(move(l)), right(move(r)) {}
+  AssignAST(ASTPtr l, ASTPtr r) : left(std::move(l)), right(std::move(r)) {}
   // construction
   ~AssignAST() override {
     if (left)
@@ -624,7 +627,7 @@ private:
 
 public:
   LValAST(const std::string &n, VarType t, ASTPtrList p = ASTPtrList{})
-      : name(n), type(t), position(move(p)) {}
+      : name(n), type(t), position(std::move(p)) {}
   // construction
   ~LValAST() override {
     for (auto &pos : position) {
