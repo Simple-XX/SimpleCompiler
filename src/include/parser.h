@@ -36,10 +36,10 @@ private:
   // 词法分析器
   Lexer &lexer;
   // 超前查看的 token
-  Token *token;
+  token_base_t *token;
   // 获取下一个 token
   void next();
-  // 匹配指定 Token
+  // 匹配指定 token_base_t
   bool match_token(Tag _tag);
 
   // 程序

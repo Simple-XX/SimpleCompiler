@@ -46,11 +46,11 @@ private:
   // 扫描器对象，用于从文件中获取字符
   Scanner &scanner;
   // 关键字
-  static Keywords keywords;
+  static keywords_t keywords;
   // 当前字符
   char ch;
   // 保存结果
-  Token *token;
+  token_base_t *token;
   // 扫描
   bool scan(char _need = 0);
   // 返回错误号
@@ -74,7 +74,7 @@ public:
   Lexer(Scanner &_sc);
   ~Lexer();
 
-  Token *lexing();
+  token_base_t *lexing();
   bool is_done() const;
 };
 

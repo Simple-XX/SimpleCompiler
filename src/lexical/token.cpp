@@ -25,35 +25,36 @@ static const std::string tokenName[] = {
     "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
 };
 
-Token::Token(Tag _t) : tag(_t) { ; }
+token_base_t::token_base_t(Tag _t) : tag(_t) { ; }
 
-auto Token::to_string() -> const std::string { return tokenName[tag]; }
+auto token_base_t::to_string() -> const std::string { return tokenName[tag]; }
 
-Id::Id(std::string _n) : Token(ID), name(_n) {}
+Id::Id(std::string _n) : token_base_t(ID), name(_n) {}
 
 const std::string Id::to_string() {
-  return Token::to_string() + "(" + name + ")";
+  return token_base_t::to_string() + "(" + name + ")";
 }
 
-Num::Num(int _v) : Token(NUM), val(_v) {}
+token_num_t::token_num_t(int _v) : token_base_t(NUM), val(_v) {}
 
-const std::string Num::to_string() {
-  return Token::to_string() + "(" + std::to_string(val) + ")";
+const std::string token_num_t::to_string() {
+  return token_base_t::to_string() + "(" + std::to_string(val) + ")";
 }
 
-Char::Char(char _c) : Token(CHAR), ch(_c) {}
+token_char_t::token_char_t(char _c) : token_base_t(CHAR), ch(_c) {}
 
-const std::string Char::to_string() {
-  return Token::to_string() + "(" + std::to_string(ch) + ")";
+const std::string token_char_t::to_string() {
+  return token_base_t::to_string() + "(" + std::to_string(ch) + ")";
 }
 
-Str::Str(const std::string &_string) : Token(STR), str(_string) {}
+token_string_t::token_string_t(const std::string &_string)
+    : token_base_t(STR), str(_string) {}
 
-const std::string Str::to_string() {
-  return Token::to_string() + "(" + str + ")";
+const std::string token_string_t::to_string() {
+  return token_base_t::to_string() + "(" + str + ")";
 }
 
-Keywords::Keywords() {
+keywords_t::keywords_t() {
   keywords["int"] = KW_INT;
   keywords["char"] = KW_CHAR;
   keywords["void"] = KW_VOID;
@@ -67,6 +68,6 @@ Keywords::Keywords() {
   keywords["return"] = KW_RETURN;
 }
 
-Tag Keywords::get_tag(std::string _name) {
+Tag keywords_t::get_tag(std::string _name) {
   return keywords.find(_name) != keywords.end() ? keywords[_name] : ID;
 }

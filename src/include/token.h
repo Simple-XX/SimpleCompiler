@@ -131,7 +131,7 @@ enum Tag : ssize_t {
 /**
  * 基类
  */
-class Token {
+class token_base_t {
 public:
   /// 保存的 tag
   Tag tag;
@@ -140,16 +140,16 @@ public:
    * 构造函数
    * @param _tag tag
    */
-  explicit Token(Tag _tag);
+  explicit token_base_t(Tag _tag);
 
   /// @name 默认构造/析构函数
   /// @{
-  Token() = default;
-  Token(const Token &_token) = default;
-  Token(Token &&_token) = default;
-  auto operator=(const Token &_token) -> Token & = default;
-  auto operator=(Token &&_token) -> Token & = default;
-  virtual ~Token() = default;
+  token_base_t() = default;
+  token_base_t(const token_base_t &_token) = default;
+  token_base_t(token_base_t &&_token) = default;
+  auto operator=(const token_base_t &_token) -> token_base_t & = default;
+  auto operator=(token_base_t &&_token) -> token_base_t & = default;
+  virtual ~token_base_t() = default;
   /// @}
 
   /**
@@ -163,7 +163,7 @@ public:
 /**
  * 标识符
  */
-class Id : public Token {
+class Id : public token_base_t {
 public:
   std::string name;
 
@@ -185,20 +185,20 @@ public:
 /**
  * 数字
  */
-class Num : public Token {
+class token_num_t : public token_base_t {
 public:
   int val;
 
-  explicit Num(int _val);
+  explicit token_num_t(int _val);
 
   /// @name 默认构造/析构函数
   /// @{
-  Num() = default;
-  Num(const Num &_num) = default;
-  Num(Num &&_num) = default;
-  auto operator=(const Num &_num) -> Num & = default;
-  auto operator=(Num &&_num) -> Num & = default;
-  ~Num() = default;
+  token_num_t() = default;
+  token_num_t(const token_num_t &_num) = default;
+  token_num_t(token_num_t &&_num) = default;
+  auto operator=(const token_num_t &_num) -> token_num_t & = default;
+  auto operator=(token_num_t &&_num) -> token_num_t & = default;
+  ~token_num_t() = default;
   /// @}
 
   [[nodiscard]] auto to_string() -> const std::string override;
@@ -207,20 +207,20 @@ public:
 /**
  * 字符
  */
-class Char : public Token {
+class token_char_t : public token_base_t {
 public:
   char ch;
 
-  explicit Char(char _ch);
+  explicit token_char_t(char _ch);
 
   /// @name 默认构造/析构函数
   /// @{
-  Char() = default;
-  Char(const Char &_char) = default;
-  Char(Char &&_char) = default;
-  auto operator=(const Char &_char) -> Char & = default;
-  auto operator=(Char &&_char) -> Char & = default;
-  ~Char() = default;
+  token_char_t() = default;
+  token_char_t(const token_char_t &_char) = default;
+  token_char_t(token_char_t &&_char) = default;
+  auto operator=(const token_char_t &_char) -> token_char_t & = default;
+  auto operator=(token_char_t &&_char) -> token_char_t & = default;
+  ~token_char_t() = default;
   /// @}
 
   [[nodiscard]] auto to_string() -> const std::string override;
@@ -229,20 +229,20 @@ public:
 /**
  * 字符串
  */
-class Str : public Token {
+class token_string_t : public token_base_t {
 public:
   std::string str;
 
-  explicit Str(const std::string &_string);
+  explicit token_string_t(const std::string &_string);
 
   /// @name 默认构造/析构函数
   /// @{
-  Str() = default;
-  Str(const Str &_str) = default;
-  Str(Str &&_str) = default;
-  auto operator=(const Str &_str) -> Str & = default;
-  auto operator=(Str &&_str) -> Str & = default;
-  ~Str() = default;
+  token_string_t() = default;
+  token_string_t(const token_string_t &_str) = default;
+  token_string_t(token_string_t &&_str) = default;
+  auto operator=(const token_string_t &_str) -> token_string_t & = default;
+  auto operator=(token_string_t &&_str) -> token_string_t & = default;
+  ~token_string_t() = default;
   /// @}
 
   [[nodiscard]] auto to_string() -> const std::string override;
@@ -251,17 +251,17 @@ public:
 /**
  * 关键字
  */
-class Keywords {
+class keywords_t {
 public:
-  Keywords();
+  keywords_t();
 
   /// @name 默认构造/析构函数
   /// @{
-  Keywords(const Keywords &_keywords) = default;
-  Keywords(Keywords &&_keywords) = default;
-  auto operator=(const Keywords &_keywords) -> Keywords & = default;
-  auto operator=(Keywords &&_keywords) -> Keywords & = default;
-  ~Keywords() = default;
+  keywords_t(const keywords_t &_keywords) = default;
+  keywords_t(keywords_t &&_keywords) = default;
+  auto operator=(const keywords_t &_keywords) -> keywords_t & = default;
+  auto operator=(keywords_t &&_keywords) -> keywords_t & = default;
+  ~keywords_t() = default;
   /// @}
 
   Tag get_tag(std::string _name);

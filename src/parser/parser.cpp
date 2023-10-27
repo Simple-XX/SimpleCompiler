@@ -27,7 +27,7 @@ void Parser::next() {
   return;
 }
 
-// 匹配指定 Token
+// 匹配指定 token_base_t
 bool Parser::match_token(Tag _tag) {
   if (token->tag == _tag) {
     return true;
@@ -259,7 +259,7 @@ ASTPtr Parser::unary() {
     return exp;
   } else if (match_token(Tag::NUM)) {
     // NUM
-    Num *token_casted = (Num *)token;
+    token_num_t *token_casted = (token_num_t *)token;
     ASTPtr num = std::make_unique<NumAST>(token_casted->val);
     next();
     return num;
