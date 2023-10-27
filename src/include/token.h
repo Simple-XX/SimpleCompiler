@@ -157,7 +157,7 @@ public:
    * @return uint32_t         结果
    * @return const std::string    转换为字符串结果
    */
-  [[nodiscard]] virtual auto to_string() -> const std::string;
+  [[nodiscard]] virtual auto to_string() const -> const std::string;
 };
 
 /**
@@ -179,7 +179,7 @@ public:
   ~Id() = default;
   /// @}
 
-  [[nodiscard]] auto to_string() -> const std::string override;
+  [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
 /**
@@ -201,7 +201,7 @@ public:
   ~token_num_t() = default;
   /// @}
 
-  [[nodiscard]] auto to_string() -> const std::string override;
+  [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
 /**
@@ -223,7 +223,7 @@ public:
   ~token_char_t() = default;
   /// @}
 
-  [[nodiscard]] auto to_string() -> const std::string override;
+  [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
 /**
@@ -245,7 +245,7 @@ public:
   ~token_string_t() = default;
   /// @}
 
-  [[nodiscard]] auto to_string() -> const std::string override;
+  [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
 /**

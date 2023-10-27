@@ -25,32 +25,34 @@ static const std::string tokenName[] = {
     "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
 };
 
-token_base_t::token_base_t(Tag _t) : tag(_t) { ; }
+token_base_t::token_base_t(Tag _t) : tag(_t) {}
 
-auto token_base_t::to_string() -> const std::string { return tokenName[tag]; }
+auto token_base_t::to_string() const -> const std::string {
+  return tokenName[tag];
+}
 
 Id::Id(std::string _n) : token_base_t(ID), name(_n) {}
 
-const std::string Id::to_string() {
+const std::string Id::to_string() const {
   return token_base_t::to_string() + "(" + name + ")";
 }
 
 token_num_t::token_num_t(int _v) : token_base_t(NUM), val(_v) {}
 
-const std::string token_num_t::to_string() {
+const std::string token_num_t::to_string() const {
   return token_base_t::to_string() + "(" + std::to_string(val) + ")";
 }
 
 token_char_t::token_char_t(char _c) : token_base_t(CHAR), ch(_c) {}
 
-const std::string token_char_t::to_string() {
+const std::string token_char_t::to_string() const {
   return token_base_t::to_string() + "(" + std::to_string(ch) + ")";
 }
 
 token_string_t::token_string_t(const std::string &_string)
     : token_base_t(STR), str(_string) {}
 
-const std::string token_string_t::to_string() {
+const std::string token_string_t::to_string() const {
   return token_base_t::to_string() + "(" + str + ")";
 }
 
