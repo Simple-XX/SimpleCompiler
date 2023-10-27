@@ -4,24 +4,24 @@
 #
 # CMakeLists.txt for Simple-XX/SimpleCompiler.
 
-aux_source_directory(./ main_src)
-aux_source_directory(error error_src)
-aux_source_directory(lexical lexical_src)
-aux_source_directory(parser parser_src)
-aux_source_directory(scanner scanner_src)
-aux_source_directory(typechecker typechecker_src)
-aux_source_directory(ir ir_src)
-aux_source_directory(codegen codegen_src)
-
-include_directories(include)
-
 add_executable(SimpleCompiler
-    ${main_src}
-    ${error_src}
-    ${lexical_src}
-    ${parser_src}
-    ${scanner_src}
-    ${ir_src}
-    ${typechecker_src}
-    ${codegen_src}
-    )
+        codegen/codegen.cpp
+        error/error.cpp
+        ir/irgen.cpp
+        ir/irlexer.cpp
+        ir/irparser.cpp
+        ir/lowirgen.cpp
+        lexical/lexical.cpp
+        lexical/token.cpp
+        parser/parser.cpp
+        parser/type.cpp
+        scanner/scanner.cpp
+        typechecker/eval.cpp
+        typechecker/typechecker.cpp
+        init.cpp
+        main.cpp
+)
+
+target_include_directories(SimpleCompiler PRIVATE
+        include
+)

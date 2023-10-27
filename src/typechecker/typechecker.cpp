@@ -514,7 +514,8 @@ ASTPtr TypeCheck::EvalLVal(LValAST &_lval) {
     if (tmpCurrentBlock == -1) {
       return nullptr;
     }
-    return std::make_unique<LValAST>(_lval.getName(), _lval.getType(), move(pos));
+    return std::make_unique<LValAST>(_lval.getName(), _lval.getType(),
+                                     move(pos));
 
   } else {
     const std::string &name = _lval.getName();
@@ -844,6 +845,7 @@ std::unique_ptr<EmptyAST> TypeCheck::EvalEmpty() {
   return std::make_unique<EmptyAST>();
 }
 
-std::unique_ptr<ProcessedIdAST> TypeCheck::EvalProcessedId(ProcessedIdAST &_id) {
+std::unique_ptr<ProcessedIdAST>
+TypeCheck::EvalProcessedId(ProcessedIdAST &_id) {
   return std::make_unique<ProcessedIdAST>(_id);
 }

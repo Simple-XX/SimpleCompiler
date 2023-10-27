@@ -75,7 +75,9 @@ ASTPtr ControlAST::Eval(TypeCheck &_checker) {
   return _checker.EvalControl(*this);
 }
 
-ASTPtr AssignAST::Eval(TypeCheck &_checker) { return _checker.EvalAssign(*this); }
+ASTPtr AssignAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalAssign(*this);
+}
 
 ASTPtr StmtAST::Eval(TypeCheck &_checker) { return _checker.EvalStmt(*this); }
 
@@ -89,7 +91,9 @@ ASTPtr VarDeclAST::Eval(TypeCheck &_checker) {
   return _checker.EvalVarDecl(*this);
 }
 
-ASTPtr VarDefAST::Eval(TypeCheck &_checker) { return _checker.EvalVarDef(*this); }
+ASTPtr VarDefAST::Eval(TypeCheck &_checker) {
+  return _checker.EvalVarDef(*this);
+}
 
 ASTPtr InitValAST::Eval(TypeCheck &_checker) {
   return _checker.EvalInitVal(*this);

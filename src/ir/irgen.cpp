@@ -20,8 +20,9 @@
 #include "ast.h"
 #include "irgen.h"
 
-void IRGenerator::GenerateValue(const std::string &_varName, int &_idx, int _indx,
-                                InitValAST *_init, std::vector<int> _dim, int _i,
+void IRGenerator::GenerateValue(const std::string &_varName, int &_idx,
+                                int _indx, InitValAST *_init,
+                                std::vector<int> _dim, int _i,
                                 std::string &_code) {
   int elem = 1;
   for (int j = _i + 1; j < (int)_dim.size(); j++) {
@@ -86,8 +87,8 @@ void IRGenerator::GenerateValue(const std::string &_varName, int &_idx, int _ind
             for (int j = 0; j < currentDepth; j++) {
               _code += "\t";
             }
-            _code +=
-                (_varName + "[" + std::to_string(_idx * 4) + "] = " + res + "\n");
+            _code += (_varName + "[" + std::to_string(_idx * 4) + "] = " + res +
+                      "\n");
             _idx++;
           }
         } else {
@@ -306,7 +307,8 @@ void IRGenerator::GenCompUnit(CompUnitAST &_unit, std::string &_code) {
       for (int j = 0; j < currentDepth; j++) {
         _code += "\t";
       }
-      _code += ("var " + std::to_string(size) + " T" + std::to_string(i) + "\n");
+      _code +=
+          ("var " + std::to_string(size) + " T" + std::to_string(i) + "\n");
     } else {
       for (int j = 0; j < currentDepth; j++) {
         _code += "\t";
@@ -416,7 +418,7 @@ std::string IRGenerator::GenLVal(LValAST &_lval, std::string &_code) {
           _code += "\t";
         }
         _code += ("t" + std::to_string(t_num) + " = " + var + " * " +
-                 std::to_string(dim[i + 1]) + "\n");
+                  std::to_string(dim[i + 1]) + "\n");
         for (int k = i + 2; k < _lval.getPosition().size(); k++) {
           for (int j = 0; j < currentDepth; j++) {
             _code += "\t";
@@ -436,7 +438,7 @@ std::string IRGenerator::GenLVal(LValAST &_lval, std::string &_code) {
           _code += "\t";
         }
         _code += ("t" + std::to_string(t_num) + " = t" + std::to_string(tmp) +
-                 " + t" + std::to_string(t_num) + "\n");
+                  " + t" + std::to_string(t_num) + "\n");
       }
       tmp = t_num++;
     }
@@ -460,7 +462,7 @@ void IRGenerator::GenFuncDef(FuncDefAST &_funcDef, std::string &_code) {
   }
   if (_funcDef.getName() != "main") {
     _code += ("f_" + _funcDef.getName() + " [" +
-             std::to_string(_funcDef.getArgs().size()) + "]\n");
+              std::to_string(_funcDef.getArgs().size()) + "]\n");
   }
   int T_tmp = T_num;
   int t_tmp = t_num;
@@ -482,7 +484,7 @@ void IRGenerator::GenFuncDef(FuncDefAST &_funcDef, std::string &_code) {
         _code += "\t";
       }
       _code += ("var " + std::to_string(size) + " " + ReverseSymbolTable[i].id +
-               "\n");
+                "\n");
     }
   }
   for (int i = t_tmp; i < t_num; i++) {

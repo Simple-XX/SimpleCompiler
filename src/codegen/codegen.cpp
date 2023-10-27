@@ -56,16 +56,16 @@ void CodeGen::Generate(std::string &_code) {
       funcStack[func_name] = 16 * (int2 / 4 + 1);
       if (16 * (int2 / 4 + 1) - 4 >= -2048 && 16 * (int2 / 4 + 1) <= 2047) {
         _code += "\t.text\n\t.align 2\n\t.global " + func_name + "\n\t.type " +
-                func_name + ", @function\n" + func_name +
-                ":\n\taddi sp, sp, -" + std::to_string(16 * (int2 / 4 + 1)) +
-                "\n\tsw ra, " + std::to_string(16 * (int2 / 4 + 1) - 4) +
-                "(sp)\n";
+                 func_name + ", @function\n" + func_name +
+                 ":\n\taddi sp, sp, -" + std::to_string(16 * (int2 / 4 + 1)) +
+                 "\n\tsw ra, " + std::to_string(16 * (int2 / 4 + 1) - 4) +
+                 "(sp)\n";
       } else {
         _code += "\t.text\n\t.align 2\n\t.global " + func_name + "\n\t.type " +
-                func_name + ", @function\n" + func_name +
-                ":\n\taddi sp, sp, -4\n\tsw ra, 0(sp)\n\tli s0, " +
-                std::to_string(16 * (int2 / 4 + 1) - 4) +
-                "\n\tsub sp, sp, s0\n";
+                 func_name + ", @function\n" + func_name +
+                 ":\n\taddi sp, sp, -4\n\tsw ra, 0(sp)\n\tli s0, " +
+                 std::to_string(16 * (int2 / 4 + 1) - 4) +
+                 "\n\tsub sp, sp, s0\n";
       }
       currentFunc = func_name;
     } else if (first == "end") {
@@ -84,9 +84,9 @@ void CodeGen::Generate(std::string &_code) {
         _code += "\t.comm " + var_name + ", " + size + ", 4\n";
       } else {
         _code += "\t.global " + var_name +
-                "\n\t.section .sdata\n\t.align 2\n\t.type " + var_name +
-                ", @object\n\t.size " + var_name + ", 4\n" + var_name +
-                ":\n\t.word " + init_val + "\n";
+                 "\n\t.section .sdata\n\t.align 2\n\t.type " + var_name +
+                 ", @object\n\t.size " + var_name + ", 4\n" + var_name +
+                 ":\n\t.word " + init_val + "\n";
       }
     } else if (first == "goto") {
       std::string label;
@@ -103,10 +103,10 @@ void CodeGen::Generate(std::string &_code) {
       int stk = funcStack[currentFunc];
       if (stk - 4 >= -2048 && stk <= 2047) {
         _code += "\tlw ra, " + std::to_string(stk - 4) +
-                "(sp)\n\taddi sp, sp, " + std::to_string(stk) + "\n\tret\n";
+                 "(sp)\n\taddi sp, sp, " + std::to_string(stk) + "\n\tret\n";
       } else {
         _code += "\tli s0, " + std::to_string(stk - 4) +
-                "\n\tadd sp, sp, s0\n\tlw ra, 0(sp)\naddi sp, sp, 4\n\tret\n";
+                 "\n\tadd sp, sp, s0\n\tlw ra, 0(sp)\naddi sp, sp, 4\n\tret\n";
       }
     } else if (first == "store") {
       std::string reg;
@@ -116,23 +116,24 @@ void CodeGen::Generate(std::string &_code) {
         _code += "\tsw " + reg + ", " + std::to_string(int10 * 4) + "(sp)\n";
       } else {
         _code += "\tli s0, " + std::to_string(int10) + "\n\tadd s0, s0, s0\n" +
-                "\tadd s0, s0, s0\n\tadd sp, sp, s0\n\tsw " + reg +
-                ", 0(sp)\n\tsub sp, sp, s0\n";
+                 "\tadd s0, s0, s0\n\tadd sp, sp, s0\n\tsw " + reg +
+                 ", 0(sp)\n\tsub sp, sp, s0\n";
       }
     } else if (first == "load") {
       std::string var, reg;
       stream_stmt >> var >> reg;
       if (var[0] == 'v') {
         _code += "\tlui " + reg + ", %hi(" + var + ")\n\tlw " + reg + ", %lo(" +
-                var + ")(" + reg + ")\n";
+                 var + ")(" + reg + ")\n";
       } else {
         int int10 = std::stoi(var);
         if (int10 >= -512 && int10 <= 511) {
           _code += "\tlw " + reg + ", " + std::to_string(int10 * 4) + "(sp)\n";
         } else {
-          _code += "\tli s0, " + std::to_string(int10) + "\n\tadd s0, s0, s0\n" +
-                  "\tadd s0, s0, s0\n\tadd sp, sp, s0\n\tlw " + reg +
-                  ", 0(sp)\n\tsub sp, sp, s0\n";
+          _code += "\tli s0, " + std::to_string(int10) +
+                   "\n\tadd s0, s0, s0\n" +
+                   "\tadd s0, s0, s0\n\tadd sp, sp, s0\n\tlw " + reg +
+                   ", 0(sp)\n\tsub sp, sp, s0\n";
         }
       }
     } else if (first == "loadaddr") {
@@ -143,11 +144,12 @@ void CodeGen::Generate(std::string &_code) {
       } else {
         int int10 = std::stoi(var);
         if (int10 >= -512 && int10 <= 511) {
-          _code += "\taddi " + reg + ", sp, " + std::to_string(int10 * 4) + "\n";
+          _code +=
+              "\taddi " + reg + ", sp, " + std::to_string(int10 * 4) + "\n";
         } else {
           _code += "\tli s0, " + var +
-                  "\n\tadd s0, s0, s0\n\tadd s0, s0, s0\n\tadd " + reg +
-                  ", sp, s0\n";
+                   "\n\tadd s0, s0, s0\n\tadd s0, s0, s0\n\tadd " + reg +
+                   ", sp, s0\n";
         }
       }
     } else if (first == "if") {
@@ -237,27 +239,27 @@ void CodeGen::Generate(std::string &_code) {
             int offset = std::stoi(var1.substr(rlidx + 1, rridx - rlidx - 1));
             if (offset >= -2048 && offset <= 2047) {
               _code += "\tlw " + lhs + ", " + std::to_string(offset) + "(" +
-                      var1.substr(0, rlidx) + ")\n";
+                       var1.substr(0, rlidx) + ")\n";
             } else {
               std::string array = var1.substr(0, rlidx);
               _code += "\tli s0, " + std::to_string(offset) + "\n\tadd " +
-                      var1.substr(0, rlidx) + ", " + var1.substr(0, rlidx) +
-                      ", s0\n\tlw " + lhs + ", 0(" + var1.substr(0, rlidx) +
-                      ")\n\tsub " + var1.substr(0, rlidx) + ", " +
-                      var1.substr(0, rlidx) + ", s0\n";
+                       var1.substr(0, rlidx) + ", " + var1.substr(0, rlidx) +
+                       ", s0\n\tlw " + lhs + ", 0(" + var1.substr(0, rlidx) +
+                       ")\n\tsub " + var1.substr(0, rlidx) + ", " +
+                       var1.substr(0, rlidx) + ", s0\n";
             }
           } else if (rlidx == std::string::npos) {
             int lridx = lhs.find("]");
             int offset = std::stoi(lhs.substr(llidx + 1, lridx - llidx - 1));
             if (offset >= -2048 && offset <= 2047) {
               _code += "\tsw " + var1 + ", " + std::to_string(offset) + "(" +
-                      lhs.substr(0, llidx) + ")\n";
+                       lhs.substr(0, llidx) + ")\n";
             } else {
               _code += "\tli s0, " + std::to_string(offset) + "\n\tadd " +
-                      lhs.substr(0, llidx) + ", " + lhs.substr(0, llidx) +
-                      ", s0\n\tsw " + var1 + ", 0(" + lhs.substr(0, llidx) +
-                      ")\n\tsub " + lhs.substr(0, llidx) + ", " +
-                      lhs.substr(0, llidx) + ", s0\n";
+                       lhs.substr(0, llidx) + ", " + lhs.substr(0, llidx) +
+                       ", s0\n\tsw " + var1 + ", 0(" + lhs.substr(0, llidx) +
+                       ")\n\tsub " + lhs.substr(0, llidx) + ", " +
+                       lhs.substr(0, llidx) + ", s0\n";
             }
           }
         }
@@ -269,7 +271,7 @@ void CodeGen::Generate(std::string &_code) {
               _code += "\taddi " + lhs + ", " + var1 + ", " + var2 + "\n";
             } else {
               _code += "\tli s0, " + var2 + "\n\tadd " + lhs + ", " + var1 +
-                      ", s0\n";
+                       ", s0\n";
             }
           } else {
             _code += "\tadd " + lhs + ", " + var1 + ", " + var2 + "\n";
@@ -309,7 +311,7 @@ void CodeGen::Generate(std::string &_code) {
               _code += "\tslti " + lhs + ", " + var1 + ", " + var2 + "\n";
             } else {
               _code += "\tli s0, " + var2 + "\n\tslt " + lhs + ", " + var1 +
-                      ", s0\n";
+                       ", s0\n";
             }
           } else {
             _code += "\tslt " + lhs + ", " + var1 + ", " + var2 + "\n";
@@ -324,54 +326,54 @@ void CodeGen::Generate(std::string &_code) {
         } else if (op == "<=") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
             _code += "\tli s0, " + var2 + "\n\tsgt " + lhs + ", " + var1 +
-                    ", s0\n\tseqz " + lhs + ", " + lhs + "\n";
+                     ", s0\n\tseqz " + lhs + ", " + lhs + "\n";
           } else {
             _code += "\tsgt " + lhs + ", " + var1 + ", " + var2 + "\n\tseqz " +
-                    lhs + ", " + lhs + "\n";
+                     lhs + ", " + lhs + "\n";
           }
         } else if (op == ">=") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
             _code += "\tli s0, " + var2 + "\n\tslt " + lhs + ", " + var1 +
-                    ", s0\n\tseqz " + lhs + ", " + lhs + "\n";
+                     ", s0\n\tseqz " + lhs + ", " + lhs + "\n";
           } else {
             _code += "\tslt " + lhs + ", " + var1 + ", " + var2 + "\n\tseqz " +
-                    lhs + ", " + lhs + "\n";
+                     lhs + ", " + lhs + "\n";
           }
         } else if (op == "&&") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
             int tmp = std::stoi(var2);
             if (tmp == 0) {
               _code += "\tli t0, " + var2 + "\n\tsnez " + lhs +
-                      ", t0\n\tsnez s0, t0\n\tand " + lhs + ", " + lhs +
-                      ", s0\n";
+                       ", t0\n\tsnez s0, t0\n\tand " + lhs + ", " + lhs +
+                       ", s0\n";
             }
           } else {
             _code += "\tsnez " + lhs + ", " + var1 + "\n\tsnez s0, " + var2 +
-                    "\n\tand " + lhs + ", " + lhs + ", s0\n";
+                     "\n\tand " + lhs + ", " + lhs + ", s0\n";
           }
         } else if (op == "||") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
             _code += "\tli s0, " + var2 + "\n\tor " + lhs + ", " + var1 +
-                    ", t0\n\tsnez " + lhs + ", " + lhs + "\n";
+                     ", t0\n\tsnez " + lhs + ", " + lhs + "\n";
           } else {
             _code += "\tor " + lhs + ", " + var1 + ", " + var2 + "\n\tsnez " +
-                    lhs + ", " + lhs + "\n";
+                     lhs + ", " + lhs + "\n";
           }
         } else if (op == "!=") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
-            _code += "\tli s0, " + var2 + "\n\txor " + lhs + ", " + var1 + ", " +
-                    var2 + "\n\tsnez " + lhs + ", " + lhs + "\n";
+            _code += "\tli s0, " + var2 + "\n\txor " + lhs + ", " + var1 +
+                     ", " + var2 + "\n\tsnez " + lhs + ", " + lhs + "\n";
           } else {
             _code += "\txor " + lhs + ", " + var1 + ", " + var2 + "\n\tsnez " +
-                    lhs + ", " + lhs + "\n";
+                     lhs + ", " + lhs + "\n";
           }
         } else if (op == "==") {
           if (!(var2[0] >= 'a' && var2[0] <= 'z')) {
-            _code += "\tli s0, " + var2 + "\n\txor " + lhs + ", " + var1 + ", " +
-                    var2 + "\n\tseqz " + lhs + ", " + lhs + "\n";
+            _code += "\tli s0, " + var2 + "\n\txor " + lhs + ", " + var1 +
+                     ", " + var2 + "\n\tseqz " + lhs + ", " + lhs + "\n";
           } else {
             _code += "\txor " + lhs + ", " + var1 + ", " + var2 + "\n\tseqz " +
-                    lhs + ", " + lhs + "\n";
+                     lhs + ", " + lhs + "\n";
           }
         }
       }

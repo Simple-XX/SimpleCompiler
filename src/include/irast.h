@@ -66,8 +66,8 @@ class InitIR : public BaseIR {
 
 public:
   InitIR(VarType _type, std::string _name, int _p, int _v, int _line)
-      : BaseIR(_line), varType(_type), name(std::move(_name)), pos(_p), val(_v) {
-  }
+      : BaseIR(_line), varType(_type), name(std::move(_name)), pos(_p),
+        val(_v) {}
 
   const VarType getType() const { return varType; }
   const int getPos() const { return pos; }
