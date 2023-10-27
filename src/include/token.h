@@ -153,9 +153,8 @@ public:
   /// @}
 
   /**
-   * 转换为 uint32_t
-   * @return uint32_t         结果
-   * @return const std::string    转换为字符串结果
+   * 获得当前 token 的名称字符串
+   * @return const std::string    tag 名
    */
   [[nodiscard]] virtual auto to_string() const -> const std::string;
 };
@@ -179,6 +178,10 @@ public:
   ~Id() = default;
   /// @}
 
+  /**
+   * 获得当前 token 的名称字符串
+   * @return const std::string    tag 名+标识符名称
+   */
   [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
@@ -201,6 +204,10 @@ public:
   ~token_num_t() = default;
   /// @}
 
+  /**
+   * 获得当前 token 的名称字符串
+   * @return const std::string    tag 名+数值
+   */
   [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
@@ -223,6 +230,10 @@ public:
   ~token_char_t() = default;
   /// @}
 
+  /**
+   * 获得当前 token 的名称字符串
+   * @return const std::string    tag 名+字符
+   */
   [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
@@ -245,6 +256,10 @@ public:
   ~token_string_t() = default;
   /// @}
 
+  /**
+   * 获得当前 token 的名称字符串
+   * @return const std::string    tag 名+字符串
+   */
   [[nodiscard]] auto to_string() const -> const std::string override;
 };
 
