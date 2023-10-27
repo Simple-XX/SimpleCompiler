@@ -167,7 +167,7 @@ public:
   /// 标识符名称
   std::string name;
 
-  explicit Id(std::string _n);
+  explicit Id(std::string _name);
 
   /// @name 默认构造/析构函数
   /// @{
@@ -192,9 +192,9 @@ public:
 class token_num_t : public token_base_t {
 public:
   /// 数值
-  int val;
+  int num_val;
 
-  explicit token_num_t(int _val);
+  explicit token_num_t(int _num_val);
 
   /// @name 默认构造/析构函数
   /// @{
@@ -219,9 +219,9 @@ public:
 class token_char_t : public token_base_t {
 public:
   /// 字符值
-  char ch;
+  char char_val;
 
-  explicit token_char_t(char _ch);
+  explicit token_char_t(char _char_val);
 
   /// @name 默认构造/析构函数
   /// @{
@@ -246,9 +246,9 @@ public:
 class token_string_t : public token_base_t {
 public:
   /// 字符串值
-  std::string str;
+  std::string string_val;
 
-  explicit token_string_t(const std::string &_string);
+  explicit token_string_t(const std::string &_string_val);
 
   /// @name 默认构造/析构函数
   /// @{

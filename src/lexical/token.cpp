@@ -31,29 +31,30 @@ auto token_base_t::to_string() const -> const std::string {
   return tokenName[tag];
 }
 
-Id::Id(std::string _n) : token_base_t(ID), name(_n) {}
+Id::Id(std::string _name) : token_base_t(ID), name(_name) {}
 
 const std::string Id::to_string() const {
   return token_base_t::to_string() + "(" + name + ")";
 }
 
-token_num_t::token_num_t(int _v) : token_base_t(NUM), val(_v) {}
+token_num_t::token_num_t(int _num_val) : token_base_t(NUM), num_val(_num_val) {}
 
 const std::string token_num_t::to_string() const {
-  return token_base_t::to_string() + "(" + std::to_string(val) + ")";
+  return token_base_t::to_string() + "(" + std::to_string(num_val) + ")";
 }
 
-token_char_t::token_char_t(char _c) : token_base_t(CHAR), ch(_c) {}
+token_char_t::token_char_t(char _char_val)
+    : token_base_t(CHAR), char_val(_char_val) {}
 
 const std::string token_char_t::to_string() const {
-  return token_base_t::to_string() + "(" + std::to_string(ch) + ")";
+  return token_base_t::to_string() + "(" + std::to_string(char_val) + ")";
 }
 
-token_string_t::token_string_t(const std::string &_string)
-    : token_base_t(STR), str(_string) {}
+token_string_t::token_string_t(const std::string &_string_val)
+    : token_base_t(STR), string_val(_string_val) {}
 
 const std::string token_string_t::to_string() const {
-  return token_base_t::to_string() + "(" + str + ")";
+  return token_base_t::to_string() + "(" + string_val + ")";
 }
 
 keywords_t::keywords_t() {
