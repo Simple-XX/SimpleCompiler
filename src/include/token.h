@@ -167,6 +167,10 @@ public:
   /// 标识符名称
   std::string name;
 
+  /**
+   * 构造函数
+   * @param _name 标识符名称
+   */
   explicit Id(std::string _name);
 
   /// @name 默认构造/析构函数
@@ -194,6 +198,10 @@ public:
   /// 数值
   int num_val;
 
+  /**
+   * 构造函数
+   * @param _num_val 数值
+   */
   explicit token_num_t(int _num_val);
 
   /// @name 默认构造/析构函数
@@ -221,6 +229,10 @@ public:
   /// 字符值
   char char_val;
 
+  /**
+   * 构造函数
+   * @param _char_val 字符值
+   */
   explicit token_char_t(char _char_val);
 
   /// @name 默认构造/析构函数
@@ -248,6 +260,10 @@ public:
   /// 字符串值
   std::string string_val;
 
+  /**
+   * 构造函数
+   * @param _string_val 字符串值
+   */
   explicit token_string_t(const std::string &_string_val);
 
   /// @name 默认构造/析构函数
