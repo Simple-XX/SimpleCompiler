@@ -16,7 +16,43 @@
 
 #include "token.h"
 
-// 初始化
+static const std::string tokenName[] = {
+    "INT",    "CHAR",   "VOID",     "CONST",    "IF",    "ELSE",   "WHILE",
+    "FOR",    "BREAK",  "CONTINUE", "RETURN",   "ID",    "NUM",    "CH",
+    "STR",    "ASSIGN", "ADD",      "SUB",      "MUL",   "DIV",    "MOD",
+    "ORBIT",  "ANDBIT", "EORBIT",   "AND",      "OR",    "NOT",    "GT",
+    "GE",     "LT",     "LE",       "EQU",      "NEQU",  "LPAREN", "RPAREN",
+    "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
+};
+
+Token::Token(Tag _t) : tag(_t) { ; }
+
+auto Token::to_string() -> const std::string { return tokenName[tag]; }
+
+Id::Id(std::string _n) : Token(ID), name(_n) {}
+
+const std::string Id::to_string() {
+  return Token::to_string() + "(" + name + ")";
+}
+
+Num::Num(int _v) : Token(NUM), val(_v) {}
+
+const std::string Num::to_string() {
+  return Token::to_string() + "(" + std::to_string(val) + ")";
+}
+
+Char::Char(char _c) : Token(CHAR), ch(_c) {}
+
+const std::string Char::to_string() {
+  return Token::to_string() + "(" + std::to_string(ch) + ")";
+}
+
+Str::Str(const std::string &_string) : Token(STR), str(_string) {}
+
+const std::string Str::to_string() {
+  return Token::to_string() + "(" + str + ")";
+}
+
 Keywords::Keywords() {
   keywords["int"] = KW_INT;
   keywords["char"] = KW_CHAR;
@@ -34,38 +70,3 @@ Keywords::Keywords() {
 Tag Keywords::get_tag(std::string _name) {
   return keywords.find(_name) != keywords.end() ? keywords[_name] : ID;
 }
-
-const char *tokenName[] = {
-    "INT",    "CHAR",   "VOID",     "CONST",    "IF",    "ELSE",   "WHILE",
-    "FOR",    "BREAK",  "CONTINUE", "RETURN",   "ID",    "NUM",    "CH",
-    "STR",    "ASSIGN", "ADD",      "SUB",      "MUL",   "DIV",    "MOD",
-    "ORBIT",  "ANDBIT", "EORBIT",   "AND",      "OR",    "NOT",    "GT",
-    "GE",     "LT",     "LE",       "EQU",      "NEQU",  "LPAREN", "RPAREN",
-    "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
-};
-
-Token::Token(Tag _t) : tag(_t) { return; }
-
-std::string Token::to_string() { return tokenName[tag]; }
-
-Token::~Token() { return; }
-
-Id::Id(std::string _n) : Token(ID), name(_n) { return; }
-
-std::string Id::to_string() { return Token::to_string() + "(" + name + ")"; }
-
-Num::Num(int _v) : Token(NUM), val(_v) { return; }
-
-std::string Num::to_string() {
-  return Token::to_string() + "(" + std::to_string(val) + ")";
-}
-
-Char::Char(char _c) : Token(CHAR), ch(_c) { return; }
-
-std::string Char::to_string() {
-  return Token::to_string() + "(" + std::to_string(ch) + ")";
-}
-
-Str::Str(std::string _s) : Token(STR), str(_s) { return; }
-
-std::string Str::to_string() { return Token::to_string() + "(" + str + ")"; }
