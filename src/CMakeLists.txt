@@ -25,3 +25,11 @@ add_executable(SimpleCompiler
 target_include_directories(SimpleCompiler PRIVATE
         include
 )
+
+target_compile_options(SimpleCompiler PRIVATE
+        ${DEFAULT_COMPILE_OPTIONS}
+)
+
+target_link_libraries(SimpleCompiler PRIVATE
+        ${DEFAULT_COMPILE_OPTIONS}
+)
