@@ -18,6 +18,7 @@
 #include <string>
 
 #include "lexical.h"
+#include "log.h"
 
 Keywords Lexer::keywords;
 
@@ -267,7 +268,7 @@ void Lexer::operation() {
       }
       // 没有闭合
       if (ch == EOF) {
-        std::cout << "多行注释未正常结束" << std::endl;
+        SPDLOG_LOGGER_ERROR(SCLOG, "多行注释未正常结束");
       }
     }
     // 否则为除号

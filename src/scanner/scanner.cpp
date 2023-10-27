@@ -16,12 +16,13 @@
 
 #include <iostream>
 
+#include "log.h"
 #include "scanner.h"
 
 Scanner::Scanner(const std::string &_filename) {
   fin.open(_filename, std::ios::in);
   if (fin.is_open() == false) {
-    std::cout << "File not open!" << std::endl;
+    SPDLOG_LOGGER_ERROR(SCLOG, "Open file failed");
   }
   prev_char = ' ';
   curr_char = ' ';

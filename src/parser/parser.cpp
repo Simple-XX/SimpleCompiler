@@ -15,6 +15,7 @@
  */
 
 #include "parser.h"
+#include "log.h"
 
 Parser::Parser(Lexer &_lex) : lexer(_lex) { return; }
 
@@ -198,7 +199,7 @@ ASTPtr Parser::binary(const std::function<ASTPtr()> &_parser,
                       std::initializer_list<Operator> _ops) {
   auto lhs = _parser();
   if (!lhs) {
-    std::cout << "error 100" << std::endl;
+    SPDLOG_LOGGER_ERROR(SCLOG, "error 100");
     exit(100);
   }
   while (std::find(_ops.begin(), _ops.end(), tag_to_op(token->tag)) !=
@@ -207,7 +208,7 @@ ASTPtr Parser::binary(const std::function<ASTPtr()> &_parser,
     next();
     auto rhs = _parser();
     if (!rhs) {
-      std::cout << "error 101" << std::endl;
+      SPDLOG_LOGGER_ERROR(SCLOG, "error 101");
       exit(101);
     }
     lhs = std::make_unique<BinaryAST>(op, std::move(lhs), std::move(rhs));
@@ -251,7 +252,7 @@ ASTPtr Parser::unary() {
     next(); // 消耗左括号
     ASTPtr exp = binary_add();
     if (token->tag != Tag::RPAREN) {
-      std::cout << "error 102" << std::endl;
+      SPDLOG_LOGGER_ERROR(SCLOG, "error 102");
       exit(102);
     }
     next(); // 消耗右括号
@@ -333,7 +334,7 @@ ASTPtr Parser::unary() {
       return std::make_unique<LValAST>(id_name, var_t);
     }
   }
-  std::cout << "error 55" << std::endl;
+  SPDLOG_LOGGER_ERROR(SCLOG, "error 55");
   exit(55);
 }
 
@@ -501,7 +502,7 @@ ASTPtr Parser::init_val() {
       while (true) {
         ASTPtr init = init_val();
         if (!init) {
-          std::cout << "error 999" << std::endl;
+          SPDLOG_LOGGER_ERROR(SCLOG, "error 999");
           exit(999);
         }
         inits.push_back(std::move(init));
@@ -518,7 +519,7 @@ ASTPtr Parser::init_val() {
   } else {
     ASTPtr exp = binary_add();
     if (!exp) {
-      std::cout << "error 1000" << std::endl;
+      SPDLOG_LOGGER_ERROR(SCLOG, "error 1000");
       exit(1000);
     }
     ASTPtrList expList;
@@ -536,7 +537,7 @@ ASTPtr Parser::var_decl() {
 
   // TODO: only support int here
   if (!match_token(Tag::KW_INT)) {
-    std::cout << "Only Support Type 'int'." << std::endl;
+    SPDLOG_LOGGER_ERROR(SCLOG, "Only Support Type 'int'.");
     exit(450);
   }
   next();

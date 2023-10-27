@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "common.h"
+#include "log.h"
 
 // TODO: 由 init 处理
 // 源文件
@@ -36,17 +37,17 @@ int main(int _argc, char **_argv) {
   initer.init(_argc, _argv);
   // 逐个打开文件
   for (const auto &i : src_files) {
-    std::cout << "Open file: " << i << std::endl;
+    SPDLOG_LOGGER_INFO(SCLOG, "打开文件：{}", i);
     error = new Error(i);
     Scanner scanner(i);
     Lexer lexer(scanner);
     Parser parser(lexer);
     ASTPtr prog = parser.parsing();
-    std::cout << "[AST]:" << std::endl << prog->to_string() << std::endl;
+    SPDLOG_LOGGER_INFO(SCLOG, "[AST]:\n{}", prog->to_string());
     TypeCheck checker = TypeCheck();
     ASTPtr root = prog->Eval(checker);
     if (!root) {
-      std::cerr << "Type check error\n";
+      SPDLOG_LOGGER_ERROR(SCLOG, "Type check error");
       exit(2);
     }
     std::map<std::string, Function> FuncTable = checker.FuncTable;
@@ -56,7 +57,7 @@ int main(int _argc, char **_argv) {
         IRGenerator(std::move(FuncTable), std::move(BlockVars));
     std::string irout;
     root->GenerateIR(generator, irout);
-    std::cout << "[IR]:" << std::endl << irout << std::endl; // ir
+    SPDLOG_LOGGER_INFO(SCLOG, "[IR]:\n{}", irout);
 
     std::istringstream stream_stmt(irout);
     IRParser irparser = IRParser(stream_stmt);
@@ -64,13 +65,13 @@ int main(int _argc, char **_argv) {
     LowIRGenerator lowirgenerator = LowIRGenerator();
     std::string lowirout;
     irroot->Generate(lowirgenerator, lowirout);
-    std::cout << "[LowIR]:" << std::endl << lowirout << std::endl; // low ir
+    SPDLOG_LOGGER_INFO(SCLOG, "[LOW IR]:\n{}", lowirout);
 
     std::istringstream stream_stmt2(lowirout);
     CodeGen codegenerator = CodeGen(stream_stmt2);
     std::string riscV;
     codegenerator.Generate(riscV);
-    std::cout << "[RiscV]:" << std::endl << riscV << std::endl;
+    SPDLOG_LOGGER_INFO(SCLOG, "[RISCV]:\n{}", riscV);
   }
 
   return 0;

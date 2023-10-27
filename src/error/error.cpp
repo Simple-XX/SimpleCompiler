@@ -15,6 +15,7 @@
  */
 
 #include "error.h"
+#include "log.h"
 
 Pos::Pos(unsigned int _l, unsigned int _c) : line(_l), col(_c) { return; }
 
@@ -53,8 +54,7 @@ int Error::get_err_no() const { return err_no; }
 Pos *Error::get_pos() const { return pos; }
 
 void Error::display_err() const {
-  std::cout << "\033[;31mErr:\033[0m " << err_no << ", \033[;31mFile:\033[0m "
-            << filename << ", \033[;31mLine:\033[0m " << pos->line
-            << ", \033[;31mCOL:\033[0m " << pos->col << std::endl;
+  SPDLOG_LOGGER_ERROR(SCLOG, "[ERROR] File: {}, Line: {}, Pos: {}", filename,
+                      pos->line, pos->col);
   return;
 }

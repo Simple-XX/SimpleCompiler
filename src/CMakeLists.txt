@@ -18,6 +18,7 @@ add_executable(SimpleCompiler
         scanner/scanner.cpp
         typechecker/eval.cpp
         typechecker/typechecker.cpp
+        log.cpp
         init.cpp
         main.cpp
 )
@@ -31,5 +32,5 @@ target_compile_options(SimpleCompiler PRIVATE
 )
 
 target_link_libraries(SimpleCompiler PRIVATE
-        ${DEFAULT_COMPILE_OPTIONS}
+        ${DEFAULT_LINK_LIB}
 )
