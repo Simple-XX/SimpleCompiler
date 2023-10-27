@@ -31,9 +31,10 @@ auto token_base_t::to_string() const -> const std::string {
   return tokenName[tag];
 }
 
-Id::Id(std::string _name) : token_base_t(ID), name(_name) {}
+token_identifier_t::token_identifier_t(std::string _name)
+    : token_base_t(ID), name(_name) {}
 
-const std::string Id::to_string() const {
+const std::string token_identifier_t::to_string() const {
   return token_base_t::to_string() + "(" + name + ")";
 }
 
@@ -71,6 +72,7 @@ keywords_t::keywords_t() {
   keywords["return"] = KW_RETURN;
 }
 
-Tag keywords_t::get_tag(std::string _name) {
+Tag keywords_t::get_tag(const std::string &_name) {
+  // 如果没有在关键字表中则说明是一个标识符
   return keywords.find(_name) != keywords.end() ? keywords[_name] : ID;
 }

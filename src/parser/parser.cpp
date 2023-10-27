@@ -68,7 +68,7 @@ ASTPtr Parser::program() {
         error->display_err();
         exit(3);
       }
-      Id *token_casted = (Id *)token;
+      token_identifier_t *token_casted = (token_identifier_t *)token;
       std::string name = token_casted->name;
       next(); // id
 
@@ -89,7 +89,7 @@ ASTPtr Parser::program() {
               exit(998);
             }
             // arg name
-            Id *token_casted = (Id *)token;
+            token_identifier_t *token_casted = (token_identifier_t *)token;
             std::string arg_name = token_casted->name;
             next();                         // id
             if (match_token(Tag::LBRACKET)) // [
@@ -288,10 +288,10 @@ ASTPtr Parser::unary() {
     }
     return std::make_unique<UnaryAST>(std::move(exp), Operator::not_op);
   } else if (match_token(Tag::ID)) {
-    Id *token_casted = (Id *)token;
+    token_identifier_t *token_casted = (token_identifier_t *)token;
     std::string id_name = token_casted->name;
     next();
-    // Function call: Id (params)
+    // Function call: token_identifier_t (params)
     if (match_token(Tag::LPAREN)) {
       next();
       // id(): no params
@@ -569,7 +569,7 @@ ASTPtr Parser::var_def(bool _isConst) {
   if (!match_token(Tag::ID)) {
     exit(452);
   }
-  Id *token_casted = (Id *)token;
+  token_identifier_t *token_casted = (token_identifier_t *)token;
   std::string id_name = token_casted->name;
   ASTPtrList dims;
   next(); // id
@@ -648,7 +648,7 @@ ASTPtr Parser::function_def() {
     exit(999);
   }
   // function name
-  Id *token_casted = (Id *)token;
+  token_identifier_t *token_casted = (token_identifier_t *)token;
   std::string id_name = token_casted->name;
   next(); // id
   if (!match_token(Tag::LPAREN)) {
@@ -667,7 +667,7 @@ ASTPtr Parser::function_def() {
         exit(998);
       }
       // arg name
-      Id *token_casted = (Id *)token;
+      token_identifier_t *token_casted = (token_identifier_t *)token;
       std::string arg_name = token_casted->name;
       next();                         // id
       if (match_token(Tag::LBRACKET)) // [

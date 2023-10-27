@@ -70,7 +70,7 @@ void Lexer::identifier() {
     Tag tag = keywords.get_tag(name);
     // 如果不是，则为标识符
     if (tag == ID) {
-      t = new Id(name);
+      t = new token_identifier_t(name);
     }
     // 如果是
     else {

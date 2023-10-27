@@ -160,9 +160,9 @@ public:
 };
 
 /**
- * 标识符
+ * 标识符(变量名)
  */
-class Id : public token_base_t {
+class token_identifier_t : public token_base_t {
 public:
   /// 标识符名称
   std::string name;
@@ -171,16 +171,18 @@ public:
    * 构造函数
    * @param _name 标识符名称
    */
-  explicit Id(std::string _name);
+  explicit token_identifier_t(std::string _name);
 
   /// @name 默认构造/析构函数
   /// @{
-  Id() = default;
-  Id(const Id &_id) = default;
-  Id(Id &&_id) = default;
-  auto operator=(const Id &_id) -> Id & = default;
-  auto operator=(Id &&_id) -> Id & = default;
-  ~Id() = default;
+  token_identifier_t() = default;
+  token_identifier_t(const token_identifier_t &_token_identifier) = default;
+  token_identifier_t(token_identifier_t &&_token_identifier) = default;
+  auto operator=(const token_identifier_t &_token_identifier)
+      -> token_identifier_t & = default;
+  auto operator=(token_identifier_t &&_token_identifier)
+      -> token_identifier_t & = default;
+  ~token_identifier_t() = default;
   /// @}
 
   /**
@@ -288,6 +290,9 @@ public:
  */
 class keywords_t {
 public:
+  /**
+   * 构造函数
+   */
   keywords_t();
 
   /// @name 默认构造/析构函数
@@ -299,9 +304,15 @@ public:
   ~keywords_t() = default;
   /// @}
 
-  Tag get_tag(std::string _name);
+  /**
+   * 通过字符串获取 tag
+   * @param _name 字符串
+   * @return Tag tag 名
+   */
+  Tag get_tag(const std::string &_name);
 
 private:
+  /// 关键字-tag 表
   std::unordered_map<std::string, Tag, std::hash<std::string>> keywords;
 };
 
