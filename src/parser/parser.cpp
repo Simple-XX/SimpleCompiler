@@ -260,7 +260,7 @@ ASTPtr Parser::unary() {
   } else if (match_token(Tag::NUM)) {
     // NUM
     token_num_t *token_casted = (token_num_t *)token;
-    ASTPtr num = std::make_unique<NumAST>(token_casted->val);
+    ASTPtr num = std::make_unique<NumAST>(token_casted->num_val);
     next();
     return num;
   } else if (match_token(Tag::ADD)) {
