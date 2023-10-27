@@ -164,6 +164,7 @@ public:
  */
 class Id : public token_base_t {
 public:
+  /// 标识符名称
   std::string name;
 
   explicit Id(std::string _n);
@@ -190,6 +191,7 @@ public:
  */
 class token_num_t : public token_base_t {
 public:
+  /// 数值
   int val;
 
   explicit token_num_t(int _val);
@@ -216,6 +218,7 @@ public:
  */
 class token_char_t : public token_base_t {
 public:
+  /// 字符值
   char ch;
 
   explicit token_char_t(char _ch);
@@ -242,6 +245,7 @@ public:
  */
 class token_string_t : public token_base_t {
 public:
+  /// 字符串值
   std::string str;
 
   explicit token_string_t(const std::string &_string);
