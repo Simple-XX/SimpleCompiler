@@ -40,7 +40,7 @@ private:
   // 获取下一个 token
   void next();
   // 匹配指定 token_base_t
-  bool match_token(Tag _tag);
+  bool match_token(tag_t _tag);
 
   // 程序
   ASTPtr program();

@@ -16,7 +16,7 @@
 
 #include "token.h"
 
-/// 与 Tag 对应的 token 名称
+/// 与 tag_t 对应的 token 名称
 static const std::string tokenName[] = {
     "INT",    "CHAR",   "VOID",     "CONST",    "IF",    "ELSE",   "WHILE",
     "FOR",    "BREAK",  "CONTINUE", "RETURN",   "ID",    "NUM",    "CH",
@@ -26,7 +26,7 @@ static const std::string tokenName[] = {
     "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
 };
 
-token_base_t::token_base_t(Tag _tag) : tag(_tag) {}
+token_base_t::token_base_t(tag_t _tag) : tag(_tag) {}
 
 auto token_base_t::to_string() const -> const std::string {
   return tokenName[tag];
@@ -73,7 +73,7 @@ keywords_t::keywords_t() {
   keywords["return"] = KW_RETURN;
 }
 
-Tag keywords_t::get_tag(const std::string &_name) {
+tag_t keywords_t::get_tag(const std::string &_name) {
   // 如果没有在关键字表中则说明是一个标识符
   return keywords.find(_name) != keywords.end() ? keywords[_name] : ID;
 }

@@ -18,41 +18,41 @@
 
 // convert tag to operator
 
-Operator tag_to_op(Tag _t) {
+Operator tag_to_op(tag_t _t) {
   switch (_t) {
-  case Tag::ADD:
+  case tag_t::ADD:
     return add_op;
-  case Tag::SUB:
+  case tag_t::SUB:
     return sub_op;
-  case Tag::MUL:
+  case tag_t::MUL:
     return mul_op;
-  case Tag::DIV:
+  case tag_t::DIV:
     return div_op;
-  case Tag::MOD:
+  case tag_t::MOD:
     return mod_op;
-  case Tag::ORBIT:
+  case tag_t::ORBIT:
     return orbit_op;
-  case Tag::ANDBIT:
+  case tag_t::ANDBIT:
     return andbit_op;
-  case Tag::EORBIT:
+  case tag_t::EORBIT:
     return eorbit_op;
-  case Tag::AND:
+  case tag_t::AND:
     return and_op;
-  case Tag::OR:
+  case tag_t::OR:
     return or_op;
-  case Tag::NOT:
+  case tag_t::NOT:
     return not_op;
-  case Tag::GT:
+  case tag_t::GT:
     return gt_op;
-  case Tag::GE:
+  case tag_t::GE:
     return ge_op;
-  case Tag::LT:
+  case tag_t::LT:
     return lt_op;
-  case Tag::LE:
+  case tag_t::LE:
     return le_op;
-  case Tag::EQU:
+  case tag_t::EQU:
     return equ_op;
-  case Tag::NEQU:
+  case tag_t::NEQU:
     return nequ_op;
   default:
     return ERROR;

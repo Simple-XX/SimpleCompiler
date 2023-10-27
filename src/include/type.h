@@ -46,7 +46,7 @@ enum Operator {
 
 enum Control { continue_c, break_c, return_c };
 
-Operator tag_to_op(Tag _t);
+Operator tag_to_op(tag_t _t);
 
 std::string op_to_string(Operator _p);
 

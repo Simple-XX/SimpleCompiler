@@ -26,6 +26,7 @@
 #include "ast.h"
 #include "token.h"
 #include "utils.h"
+
 class TypeCheck {
 private:
   int currentBlock;

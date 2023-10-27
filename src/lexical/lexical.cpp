@@ -67,7 +67,7 @@ void Lexer::identifier() {
       scan();
     } while (COND_IDENTIFIER || (ch >= '0' && ch <= '9'));
     // 判断是不是关键字
-    Tag tag = keywords.get_tag(name);
+    tag_t tag = keywords.get_tag(name);
     // 如果不是，则为标识符
     if (tag == ID) {
       t = new token_identifier_t(name);

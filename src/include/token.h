@@ -24,7 +24,7 @@
 /**
  * 支持的类型枚举
  */
-enum Tag : ssize_t {
+enum tag_t : ssize_t {
   // 错误
   ERR = -2,
   // 结束标识
@@ -134,13 +134,13 @@ enum Tag : ssize_t {
 class token_base_t {
 public:
   /// 保存的 tag
-  Tag tag;
+  tag_t tag;
 
   /**
    * 构造函数
    * @param _tag tag
    */
-  explicit token_base_t(Tag _tag);
+  explicit token_base_t(tag_t _tag);
 
   /// @name 默认构造/析构函数
   /// @{
@@ -307,13 +307,13 @@ public:
   /**
    * 通过字符串获取 tag
    * @param _name 字符串
-   * @return Tag tag 名
+   * @return tag_t tag 名
    */
-  Tag get_tag(const std::string &_name);
+  tag_t get_tag(const std::string &_name);
 
 private:
   /// 关键字-tag 表
-  std::unordered_map<std::string, Tag, std::hash<std::string>> keywords;
+  std::unordered_map<std::string, tag_t, std::hash<std::string>> keywords;
 };
 
 #endif /* SIMPLECOMPILER_TOKEN_H */
