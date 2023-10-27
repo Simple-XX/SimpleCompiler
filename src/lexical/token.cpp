@@ -16,6 +16,7 @@
 
 #include "token.h"
 
+/// 与 Tag 对应的 token 名称
 static const std::string tokenName[] = {
     "INT",    "CHAR",   "VOID",     "CONST",    "IF",    "ELSE",   "WHILE",
     "FOR",    "BREAK",  "CONTINUE", "RETURN",   "ID",    "NUM",    "CH",
@@ -25,7 +26,7 @@ static const std::string tokenName[] = {
     "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "COLON",  "SEMICON",
 };
 
-token_base_t::token_base_t(Tag _t) : tag(_t) {}
+token_base_t::token_base_t(Tag _tag) : tag(_tag) {}
 
 auto token_base_t::to_string() const -> const std::string {
   return tokenName[tag];
