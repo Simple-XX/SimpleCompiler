@@ -22,6 +22,7 @@
 #include "ir.h"
 #include "irast.h"
 #include "irparser.h"
+#include "log.h"
 
 void IRParser::NextIRToken() { current = lexer.NextIRToken(); }
 
@@ -422,6 +423,8 @@ IRPtr IRParser::ParseAssign() {
     return std::make_unique<AssignIR>(std::move(lhs), std::move(rhs),
                                       lexer.getLineno() - 1);
   }
+  SPDLOG_LOGGER_WARN(SCLOG, "NOT HANDLE");
+  return {};
 }
 
 /*

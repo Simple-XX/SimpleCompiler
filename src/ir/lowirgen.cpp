@@ -25,35 +25,54 @@ std::string LowIRGenerator::op2char(Operator _op) {
   case Operator::sub_op:
     c = "-";
     break;
+  case Operator::mul_op:
+    c = "*";
+    break;
   case Operator::div_op:
     c = "/";
     break;
   case Operator::mod_op:
     c = "%";
     break;
-  case Operator::mul_op:
-    c = "*";
+  case Operator::orbit_op:
+    c = "|";
     break;
-  case Operator::equ_op:
-    c = "==";
+  case Operator::andbit_op:
+    c = "&";
     break;
-  case Operator::ge_op:
-    c = ">=";
+  case Operator::eorbit_op:
+    c = "^";
     break;
-  case Operator::nequ_op:
-    c = "!=";
+  case Operator::and_op:
+    c = "&&";
     break;
-  case Operator::le_op:
-    c = "<=";
+  case Operator::or_op:
+    c = "||";
     break;
-  case Operator::lt_op:
-    c = "<";
+  case Operator::not_op:
+    c = "!";
     break;
   case Operator::gt_op:
     c = ">";
     break;
-  case NOT:
-    c = "!";
+  case Operator::ge_op:
+    c = ">=";
+    break;
+
+  case Operator::lt_op:
+    c = "<";
+    break;
+  case Operator::le_op:
+    c = "<=";
+    break;
+  case Operator::equ_op:
+    c = "==";
+    break;
+  case Operator::nequ_op:
+    c = "!=";
+    break;
+  case ERROR:
+    c = "";
     break;
   }
   return c;
@@ -433,7 +452,7 @@ std::string LowIRGenerator::GenReturn(ReturnIR &_ret, std::string &_code) {
 
 std::string LowIRGenerator::GenParamList(ParamListIR &_params,
                                          std::string &_code) {
-  for (int i = 0; i < _params.getParams().size(); i++) {
+  for (size_t i = 0; i < _params.getParams().size(); i++) {
     std::string param = _params.getParams()[i]->Generate(*this, _code);
     _code += "\ta" + std::to_string(i) + " = " + param + "\n";
   }

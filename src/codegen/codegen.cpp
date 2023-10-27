@@ -226,8 +226,8 @@ void CodeGen::Generate(std::string &_code) {
             _code += "\tneg " + lhs + ", " + var1 + "\n";
           }
         } else {
-          int llidx = lhs.find("[");
-          int rlidx = var1.find("[");
+          auto llidx = lhs.find("[");
+          auto rlidx = var1.find("[");
           if (llidx == std::string::npos && rlidx == std::string::npos) {
             if (!(var1[0] >= 'a' && var1[0] <= 'z')) {
               _code += "\tli " + lhs + ", " + var1 + "\n";

@@ -202,7 +202,8 @@ std::string IRGenerator::GenBinaryExp(BinaryAST &_exp, std::string &_code) {
   return res;
 }
 
-std::string IRGenerator::GenNumber(NumAST &_num, std::string &_code) {
+std::string IRGenerator::GenNumber(NumAST &_num,
+                                   [[maybe_unused]] std::string &_code) {
   return std::to_string(_num.getVal());
 }
 
@@ -232,7 +233,8 @@ std::string IRGenerator::GenVarDef(VarDefAST &_varDef, std::string &_code) {
   return {};
 }
 
-std::string IRGenerator::GenId(ProcessedIdAST &_id, std::string &_code) {
+std::string IRGenerator::GenId(ProcessedIdAST &_id,
+                               [[maybe_unused]] std::string &_code) {
   std::map<std::string, GenVar>::iterator iter;
   int tmpCurrentBlock = currentBlock;
   while (tmpCurrentBlock != -1) {
@@ -419,7 +421,7 @@ std::string IRGenerator::GenLVal(LValAST &_lval, std::string &_code) {
         }
         _code += ("t" + std::to_string(t_num) + " = " + var + " * " +
                   std::to_string(dim[i + 1]) + "\n");
-        for (int k = i + 2; k < _lval.getPosition().size(); k++) {
+        for (size_t k = i + 2; k < _lval.getPosition().size(); k++) {
           for (int j = 0; j < currentDepth; j++) {
             _code += "\t";
           }
@@ -728,7 +730,8 @@ std::string NumAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
   return _gen.GenNumber(*this, _code);
 }
 
-std::string IdAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+std::string IdAST::GenerateIR([[maybe_unused]] IRGenerator &_gen,
+                              [[maybe_unused]] std::string &_code) {
   return this->getName();
 }
 
@@ -775,7 +778,8 @@ std::string InitValAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
   return _gen.GenInitVal(*this, _code);
 }
 
-std::string EmptyAST::GenerateIR(IRGenerator &_gen, std::string &_code) {
+std::string EmptyAST::GenerateIR([[maybe_unused]] IRGenerator &_gen,
+                                 [[maybe_unused]] std::string &_code) {
   return {};
 }
 

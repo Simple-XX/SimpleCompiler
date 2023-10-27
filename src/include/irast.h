@@ -51,9 +51,9 @@ public:
   DeclIR(VarType _type, int _size, std::string _name, int _line)
       : BaseIR(_line), varType(_type), size(_size), name(std::move(_name)) {}
 
-  const VarType getType() const { return varType; }
-  const int getSize() const { return size; }
-  const std::string getName() const { return name; }
+  VarType getType() const { return varType; }
+  int getSize() const { return size; }
+  const std::string &getName() const { return name; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -69,10 +69,10 @@ public:
       : BaseIR(_line), varType(_type), name(std::move(_name)), pos(_p),
         val(_v) {}
 
-  const VarType getType() const { return varType; }
-  const int getPos() const { return pos; }
-  const int getVal() const { return val; }
-  const std::string getName() const { return name; }
+  VarType getType() const { return varType; }
+  int getPos() const { return pos; }
+  int getVal() const { return val; }
+  const std::string &getName() const { return name; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -87,8 +87,8 @@ public:
       : BaseIR(_line), name(std::move(_name)), paramNum(_param),
         body(std::move(_body)) {}
 
-  const std::string getName() const { return name; }
-  const int getParamNum() const { return paramNum; }
+  const std::string &getName() const { return name; }
+  int getParamNum() const { return paramNum; }
   const IRPtr &getBody() const { return body; }
 
   virtual std::string Generate(LowIRGenerator &generator, std::string &code);
@@ -117,7 +117,7 @@ public:
 
   const IRPtr &getLHS() const { return lhs; }
   const IRPtr &getRHS() const { return rhs; }
-  const Operator getOp() const { return op; }
+  const Operator &getOp() const { return op; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -128,7 +128,7 @@ class UnaryExpIR : public BaseIR {
 
 public:
   UnaryExpIR(IRPtr _exp, Operator _op, int _line)
-      : BaseIR(_line), exp(std::move(_exp)), op(_op) {}
+      : BaseIR(_line), op(_op), exp(std::move(_exp)) {}
 
   const IRPtr &getExp() const { return exp; }
   const Operator &getOp() const { return op; }
@@ -159,7 +159,7 @@ public:
       : BaseIR(_line), cond(std::move(_cond)), labelNum(_num) {}
 
   const IRPtr &getCond() const { return cond; }
-  const int getLabel() const { return labelNum; }
+  int getLabel() const { return labelNum; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -173,9 +173,9 @@ public:
   LValIR(VarType _var, std::string _n, int _line, IRPtr _p = nullptr)
       : BaseIR(_line), varType(_var), name(std::move(_n)), pos(std::move(_p)) {}
 
-  const VarType getType() const { return varType; }
+  VarType getType() const { return varType; }
   const IRPtr &getPos() const { return pos; }
-  const std::string getName() const { return name; }
+  const std::string &getName() const { return name; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -186,7 +186,7 @@ class GotoIR : public BaseIR {
 public:
   GotoIR(int _l, int _line) : BaseIR(_line), label(_l) {}
 
-  const int getLabel() const { return label; }
+  int getLabel() const { return label; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -197,7 +197,7 @@ class Label : public BaseIR {
 public:
   Label(int _n, int _line) : BaseIR(_line), num(_n) {}
 
-  const int getNum() const { return num; }
+  int getNum() const { return num; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -220,7 +220,7 @@ public:
   FuncCallIR(std::string _name, int _line)
       : BaseIR(_line), funcName(std::move(_name)) {}
 
-  const std::string getName() const { return funcName; }
+  const std::string &getName() const { return funcName; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };
@@ -247,9 +247,9 @@ public:
   RightValIR(IRToken _t, int val, int line)
       : BaseIR(line), type(_t), value(val) {}
 
-  const IRToken getType() const { return type; }
-  const int getVal() const { return value; }
-  const std::string getName() const { return name; }
+  const IRToken &getType() const { return type; }
+  int getVal() const { return value; }
+  const std::string &getName() const { return name; }
 
   virtual std::string Generate(LowIRGenerator &_generator, std::string &_code);
 };

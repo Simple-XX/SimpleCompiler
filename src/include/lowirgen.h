@@ -43,7 +43,7 @@ private:
     std::string func;
     StackVar() {}
     StackVar(int _p_min, int _p_max, std::string _f, VarType _t)
-        : pos_min(_p_min), pos_max(_p_max), func(std::move(_f)), type(_t) {}
+        : pos_min(_p_min), pos_max(_p_max), type(_t), func(std::move(_f)) {}
   };
 
   std::map<std::string, Variable> globalVars;
